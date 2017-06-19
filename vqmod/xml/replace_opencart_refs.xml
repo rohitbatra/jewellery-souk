@@ -1,0 +1,93 @@
+<modification>
+    <id>Replace References to OpenCart</id>
+    <version>1.0.0</version>
+    <vqmver>2.1.5</vqmver>
+    <author>rohit@rohitbatra.in</author>
+
+    <!-- Admin / Seller View -->
+    <file name="admin/language/en-gb/common/footer.php">
+        <operation error="skip">
+            <search position="replace"><![CDATA[
+			$_['text_footer']  = '<a href="http://www.opencart.com">OpenCart</a> &copy; 2009-' . date('Y') . ' All Rights Reserved.';
+			]]></search>
+            <add><![CDATA[
+			$_['text_footer']  = '<a href="https://sezplus.com/cad/">SEZPLUS</a> &copy; ' . date('Y') . ' All Rights Reserved.';
+			]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/view/template/common/footer.tpl">
+        <operation error="skip">
+            <search position="replace"><![CDATA[
+            <?php echo $text_version; ?>
+            ]]></search>
+            <add trim="true"><![CDATA[
+
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/view/template/common/header.tpl">
+        <operation error="skip">
+            <search position="replace"><![CDATA[
+            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-life-ring fa-lg"></i></a>
+            ]]></search>
+            <add><![CDATA[
+            <li class="dropdown" style="display:none;"><a class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-life-ring fa-lg"></i></a>
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[
+                <a href="<?php echo $home; ?>" class="navbar-brand"><img src="view/image/logo.png" alt="<?php echo $heading_title; ?>" title="<?php echo $heading_title; ?>" /></a></div>
+            ]]></search>
+            <add><![CDATA[
+                <a href="<?php echo $home; ?>" class="navbar-brand"><img width="121px" height="auto" src="../image/catalog/logo cad.png" alt="<?php echo $heading_title; ?>" title="<?php echo $heading_title; ?>" /></a></div>
+            ]]></add>
+        </operation>
+
+    </file>
+    <!-- Admin / Seller View ENDS-->
+
+    <file name="catalog/view/theme/default/template/common/footer.tpl">
+        <operation error="skip">
+            <search position="replace" offset="7"><![CDATA[
+            </footer>
+            ]]></search>
+            <add trim="true"> <![CDATA[
+            </footer>
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search position="replace"><![CDATA[
+                <p><?php echo $powered; ?></p>
+            ]]></search>
+            <add><![CDATA[
+                <div class="pull-left"> <p><?php echo $powered; ?></p> </div>
+                <div class="pull-right" style="padding-bottom:10px" ><a href="https://www.facebook.com/Sezplus-979750005440187/" target="_blank"><img src="image/fb_logo_footer.png" /></a></div>
+            ]]></add>
+        </operation>
+    </file>
+    <file name="catalog/language/en-gb/common/footer.php">
+        <operation error="skip">
+            <search position="replace"><![CDATA[
+                $_['text_powered']      = 'Powered By <a href="http://www.opencart.com">OpenCart</a><br /> %s &copy; %s';
+            ]]></search>
+            <add trim="true"><![CDATA[
+                $_['text_powered']      = '%s &copy; %s';
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/view/template/common/column_left.tpl">
+        <operation>
+            <search position="replace"><![CDATA[
+                fa-opencart
+            ]]></search>
+            <add><![CDATA[
+
+            ]]></add>
+        </operation>
+    </file>
+
+</modification>

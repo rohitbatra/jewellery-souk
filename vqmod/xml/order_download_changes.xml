@@ -1,0 +1,199 @@
+<modification>
+    <id>Order Digital Download Changes</id>
+    <version>2.0.0</version>
+    <vqmver>2.3.0</vqmver>
+    <update>0.0.1</update>
+    <author>Rohit Batra</author>
+
+    <!-- Add Download Links to Order E-Mail -->
+
+    <file name="catalog/model/checkout/order.php">
+
+        <operation>
+
+            <search position="after">
+                <![CDATA[
+                    'quantity' => $product['quantity'],
+                ]]>
+            </search>
+            <add><![CDATA[
+                'download' => $download_url,
+            ]]></add>
+
+        </operation>
+
+        <operation>
+
+            <search position="before">
+                <![CDATA[
+                    $data['products'][] = array(
+                ]]>
+            </search>
+            <add><![CDATA[
+                    $order_download_query = $this->db->query("SELECT d.download_id as download_id FROM order_product AS op LEFT OUTER JOIN product_to_download ptd ON (op.product_id = ptd.product_id) LEFT OUTER JOIN download d ON (d.download_id = ptd.download_id) WHERE op.order_id = '".(int)$order_id."' AND ptd.product_id = '".$product['product_id']."' LIMIT 1;");
+                    $download_id = $order_download_query->row['download_id'];
+                    $download_url = $this->url->link('account/download/download', 'download_id=' . $download_id, true);
+
+            ]]></add>
+
+        </operation>
+
+    </file>
+
+    <file name="catalog/view/theme/default/template/mail/order.tpl">
+
+        <operation>
+            <search position="replace" offset="-1">
+                <![CDATA[
+                    <td style="font-size: 12px;	border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD; text-align: left; padding: 7px;"><?php echo $product['model']; ?></td>
+                ]]>
+            </search>
+            <add><![CDATA[
+                <?php } ?>
+                <!-- Check for Download URL -->
+                <?php if(isset($product['download']) && !empty($product['download'])) { ?> &nbsp; - <a href="<?php echo $product['download']; ?>" > Download Design </a> <?php } ?>
+                </td>
+                <td style="font-size: 12px;	border-right: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD; text-align: left; padding: 7px;"><?php echo $product['model']; ?></td>
+            ]]></add>
+        </operation>
+
+    </file>
+
+
+    <!-- Add Download Links to Order E-Mail ENDS-->
+
+
+    <!-- Change Download Links in Account/Downloads Section to point to DROPBOX -->
+
+    <file name="catalog/model/account/download.php">
+        <operation>
+            <search position="replace"><![CDATA[
+                d.filename
+            ]]></search>
+            <add><![CDATA[
+                d.filename, d.remote_url, d.user_id
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/controller/account/download.php">
+        <operation>
+            <search position="replace"><![CDATA[
+                public function download() {
+            ]]></search>
+            <add><![CDATA[
+
+            public function download()
+            {
+                if (!$this->customer->isLogged())
+                {
+                    $this->session->data['redirect'] = $this->url->link('account/download', '', true);
+
+                    $this->response->redirect($this->url->link('account/login', '', true));
+                }
+
+                $this->load->model('account/download');
+
+                if (isset($this->request->get['download_id']))
+                {
+                    $download_id = $this->request->get['download_id'];
+                } else {
+                    $download_id = 0;
+                }
+
+                $download_info = $this->model_account_download->getDownload($download_id);
+
+                if ($download_info)
+                {
+                    $file = DIR_DOWNLOAD . $download_info['filename'];
+                    $mask = basename($download_info['mask']);
+
+                    if(!empty($download_info['remote_url']))
+                    {
+                        // Generate Dropbox Download Link & Trigger Download on that.
+
+                        $dropbox_config = array(
+                            'key'    => APP_KEY,
+                            'secret' => APP_SECRET
+                        );
+
+                        $appInfo = dbx\AppInfo::loadFromJson($dropbox_config);
+                        $accessToken = APP_ACCESS_TOKEN;
+                        $dbxClient = new dbx\Client($accessToken, "PHP-Example/1.0");
+
+
+                        // Get file info
+                        $fileM = $dbxClient->getMetadata(urldecode($download_info['remote_url']));
+
+                        // sending the direct link:
+                        $dropboxPath = $fileM['path'];
+                        $pathError = dbx\Path::findError($dropboxPath);
+                        if ($pathError !== null)
+                        {
+                            fwrite(STDERR, "Invalid <dropbox-path>: $pathError\n");
+                            die;
+                        }
+
+                        // The $link is an array!
+                        $link = $dbxClient->createTemporaryDirectLink($dropboxPath);
+                        // adding ?dl=1 to the link will force the file to be downloaded by the client.
+                        $dw_link = $link[0]."?dl=1";
+
+                        header("Location: {$dw_link}");
+                        exit;
+                    }else{
+
+                        if (!headers_sent())
+                        {
+                            if (file_exists($file))
+                            {
+                                header('Content-Type: application/octet-stream');
+                                header('Content-Disposition: attachment; filename="' . ($mask ? $mask : basename($file)) . '"');
+                                header('Expires: 0');
+                                header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+                                header('Pragma: public');
+                                header('Content-Length: ' . filesize($file));
+
+                                if (ob_get_level())
+                                {
+                                    ob_end_clean();
+                                }
+
+                                readfile($file, 'rb');
+
+                                exit();
+                            } else
+                            {
+                                exit('Error: Could not find file ' . $file . '!');
+                            }
+                        } else
+                        {
+                            exit('Error: Headers already sent out!');
+                        }
+                    }
+                } else
+                {
+                    $this->response->redirect($this->url->link('account/download', '', true));
+                }
+            }
+
+
+            public function downloadOld() {
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[
+                class ControllerAccountDownload extends Controller {
+            ]]></search>
+            <add><![CDATA[
+                require_once('dropbox-sdk/Dropbox/autoload.php');
+                use \Dropbox as dbx;
+            ]]></add>
+        </operation>
+    </file>
+    <!-- Change Download Links in Account/Downloads Section to point to DROPBOX ENDS-->
+
+
+
+
+</modification>

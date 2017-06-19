@@ -1,0 +1,38 @@
+<modification>
+	<id>VQMod Manager Menu Shortcut</id>
+	<version>2.0.0</version>
+	<vqmver>2.3.0</vqmver>
+    <update>0.0.1</update>
+	<author>Jason Clark (mithereal@gmail.com)</author>
+    <updatedBy>Rohit Batra</updatedBy>
+
+    <file name="admin/controller/common/column_left.php">
+        <operation error="skip">
+            <search position="before"><![CDATA[
+                if ($this->user->hasPermission('access', 'extension/event')) {
+            ]]></search>
+            <add><![CDATA[
+                if ($this->user->hasPermission('access', 'extension/module/vqmod_manager')) {
+                    $extension[] = array(
+                        'name'	   => $this->language->get('text_vqmod_manager'),
+                        'href'     => $this->url->link('extension/module/vqmod_manager', 'token=' . $this->session->data['token'], true),
+                        'children' => array()
+                    );
+                }
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/language/en-gb/common/column_left.php">
+        <operation error="skip">
+            <search position="after"> <![CDATA[
+                $_['text_other_status']              = 'Other Statuses';
+            ]]></search>
+            <add><![CDATA[
+                $_['text_vqmod_manager']               = 'VQMod Manager';
+            ]]></add>
+        </operation>
+    </file>
+
+
+</modification>

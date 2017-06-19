@@ -1,0 +1,42 @@
+<modification>
+    <id>Order History Module Changes</id>
+    <version>2.0.0</version>
+    <vqmver>2.3.0</vqmver>
+    <update>0.0.1</update>
+    <author>Rohit Batra</author>
+
+
+    <file name="catalog/view/theme/default/template/account/order_info.tpl">
+
+        <operation>
+            <search position="replace"><![CDATA[
+                <a href="<?php echo $product['return']; ?>" data-toggle="tooltip" title="<?php echo $button_return; ?>" class="btn btn-danger"><i class="fa fa-reply"></i></a></td>
+            ]]></search>
+            <add><![CDATA[
+                <a href="<?php echo $product['return']; ?>" data-toggle="tooltip" title="<?php echo $button_return; ?>" class="btn btn-danger hidden"><i class="fa fa-reply"></i></a></td>
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search position="replace"><![CDATA[
+                <td class="text-left"><?php echo $product['name']; ?>
+            ]]></search>
+            <add><![CDATA[
+                <td class="text-left"><?php echo $product['name']; ?> || <a href="<?php echo $product['product_href']; ?>" target="_blank">Product Link</a>
+            ]]></add>
+        </operation>
+
+    </file>
+
+    <file name="catalog/controller/account/order.php">
+        <operation>
+            <search position="after"><![CDATA[
+                'name'     => $product['name'],
+            ]]></search>
+            <add><![CDATA[
+                'product_href'     => $this->url->link('product/product','&product_id=' . $product['product_id'], true),
+            ]]></add>
+        </operation>
+    </file>
+
+</modification>

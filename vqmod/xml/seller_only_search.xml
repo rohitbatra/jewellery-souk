@@ -1,0 +1,490 @@
+<modification>
+    <id>Seller AutoComplete Restrictions</id>
+    <version>1.0.0</version>
+    <vqmver>2.1.5</vqmver>
+    <author>rohit@rohitbatra.in</author>
+
+    <!-- Image Upload Box Restrictions -->
+    <file name="admin/model/tool/image.php">
+        <operation error="skip">
+            <search position="before"><![CDATA[
+			    public function resize($filename, $width, $height) {
+			]]></search>
+            <add><![CDATA[
+			    public function getImages($seller_id) {
+
+                    $res = $this->db->query("SELECT * FROM `image` WHERE user_id = '{$seller_id}' ;");
+                    return $res->rows;
+			    }
+
+			    public function addImages($data) {
+
+			        $this->db->query("INSERT into `image` (image_path,name,size,user_id) VALUES ('".$this->db->escape(urlencode($data['filepath']))."','".$this->db->escape($data['filename'])."','{$data['size']}','{$data['user_id']}') ;");
+
+			    }
+
+			    public function deleteImage($data) {
+			        $this->db->query("DELETE FROM `image` WHERE image_path LIKE '".urlencode($data['path'])."' AND user_id ='{$data['user_id']}' ;");
+			    }
+			]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/controller/common/filemanager.php">
+        <operation>
+            <search position="replace"><![CDATA[
+                move_uploaded_file($file['tmp_name'], $directory . '/' . $filename);
+            ]]></search>
+            <add><![CDATA[
+                $res = move_uploaded_file($file['tmp_name'], $directory . '/' . $filename);
+                if($res !== false)
+                {
+                    $this->load->model('tool/image');
+                    // Add this Image to DB Table
+                    $user_id = $this->user->getId();
+                    if($this->user->isSeller())
+                    {
+                        // Seller Uploads
+                        $this->model_tool_image->addImages(array('filepath' => ($directory . '/' . $filename), 'filename' => $file['name'], 'size' => $file['size'], 'user_id' => $user_id ));
+                    }else{
+                        // Admin Uploads
+                        //$this->model_tool_image->addImages(array('filepath' => ($directory . '/' . $filename), 'filename' => $file['name'], 'size' => $file['size'], 'user_id' => $user_id ));
+
+                    }
+                }
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search position="after"><![CDATA[
+                $images = array_merge($directories, $files);
+            ]]></search>
+            <add><![CDATA[
+                $data['user_type'] = "admin";
+                if($this->user->isSeller())
+                {
+                    $data['user_type'] = 'seller';
+                    $this->load->model('tool/image');
+                    $user_id = $this->user->getId();
+                    $imagez = $this->model_tool_image->getImages($user_id);
+                    $images = array();
+                    foreach($imagez as $image)
+                    {
+                        $images[] = urldecode($image['image_path']);
+                    }
+                }
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search position="replace"><![CDATA[
+                unlink($path);
+            ]]></search>
+            <add><![CDATA[
+                unlink($path);
+                if($this->user->isSeller())
+                {
+                    $this->load->model('tool/image');
+                    $this->model_tool_image->deleteImage(array('path'=>$path,'user_id' => $this->user->getId()));
+                }
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/view/template/common/filemanager.tpl">
+        <operation error="log">
+            <search position="replace"><![CDATA[
+          <button type="button" data-toggle="tooltip" title="<?php echo $button_folder; ?>" id="button-folder" class="btn btn-default"><i class="fa fa-folder"></i></button>
+            ]]></search>
+            <add><![CDATA[
+                <?php if($user_type !== "seller") { ?>
+                    <button type="button" data-toggle="tooltip" title="<?php echo $button_folder; ?>" id="button-folder" class="btn btn-default"><i class="fa fa-folder"></i></button>
+                <?php } ?>
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- Image Upload Box Restrictions ENDS-->
+
+
+    <!-- Downloads Upload & Auto-Complete Restriction -->
+
+    <file name="admin/controller/catalog/download.php">
+        <operation>
+            <search position="replace" offset="5"><![CDATA[
+                move_uploaded_file($this->request->files['file']['tmp_name'], DIR_DOWNLOAD . $file);
+            ]]></search>
+            <add><![CDATA[
+                if($this->user->isSeller())
+                {
+                    $user_id = $this->user->getId();
+                    $this->load->model('catalog/download');
+                    $cnt = $this->model_catalog_download->getTotalDownloads($user_id);
+
+                    if($cnt > '120000')
+                    {
+                        $json['error'] = "You've Reached the maximum file uploads limit. Please write to us at support@sezplus.com to raise this limit.";
+
+                    }else{
+                        move_uploaded_file($this->request->files['file']['tmp_name'], DIR_DOWNLOAD . $file);
+
+                        $json['filename'] = $file;
+                        $json['mask'] = $filename;
+
+                        $json['success'] = 'Your file was successfully uploaded!';
+
+                    }
+                }else{
+
+                   // Admin Users
+                   move_uploaded_file($this->request->files['file']['tmp_name'], DIR_DOWNLOAD . $file);
+
+                   $json['filename'] = $file;
+                   $json['mask'] = $filename;
+
+                   $json['success'] = 'Your file was successfully uploaded!';
+
+                }
+
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA[
+                protected function getList() {
+            ]]></search>
+            <add><![CDATA[
+                $user_id = $this->user->getId();
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[
+                $download_total = $this->model_catalog_download->getTotalDownloads();
+            ]]></search>
+            <add><![CDATA[
+                if($this->user->isSeller())
+                {
+                    $download_total = $this->model_catalog_download->getTotalDownloads($user_id);
+                    $filter_data['filter_user_id'] = $user_id;
+
+                }else{
+                    $download_total = $this->model_catalog_download->getTotalDownloads();
+                }
+
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search position="after" offset="3"><![CDATA[
+                'filter_name' => $this->request->get['filter_name'],
+            ]]></search>
+            <add><![CDATA[
+               if($this->user->isSeller())
+                {
+                    $filter_data['filter_user_id'] = $this->user->getId();
+
+                }
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search position="before"><![CDATA[
+                if (!in_array(strtolower(substr(strrchr($filename, '.'), 1)), $allowed)) {
+            ]]></search>
+            <add><![CDATA[
+                $allowed = array('zip','rar');
+            ]]></add>
+        </operation>
+        <!--
+        <operation>
+            <search position="before"><![CDATA[
+                if (!in_array($this->request->files['file']['type'], $allowed)) {
+            ]]></search>
+            <add><![CDATA[
+
+                 $allowed = array('application/x-zip','application/rar','application/zip','application/x-rar-compressed');
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="before" offset="-1"><![CDATA[
+                $file = $filename . '.' . token(32);
+            ]]></search>
+            <add><![CDATA[
+                print_r($json);
+                var_dump(!$json);
+                exit;
+            ]]></add>
+        </operation>
+                -->
+
+    </file>
+
+    <file name="admin/model/catalog/download.php">
+        <operation>
+            <search position="replace" offset="3"><![CDATA[
+                public function getTotalDownloads() {
+            ]]>
+            </search>
+            <add><![CDATA[
+                public function getTotalDownloads($user_id = null) {
+
+                    if(is_null($user_id))
+                    {
+                        $whereStr = "";
+                    } else {
+                        $whereStr = " WHERE user_id = '{$user_id}' ";
+                    }
+
+                    $query = $this->db->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "download` {$whereStr} ");
+
+                    return $query->row['total'];
+
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search position="before"><![CDATA[
+                if (!empty($data['filter_name'])) {
+            ]]></search>
+            <add><![CDATA[
+                if (!empty($data['filter_user_id'])) {
+			        $sql .= " AND d.user_id = '{$data['filter_user_id']}' ";
+                }
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search position="after"><![CDATA[
+                $download_id = $this->db->getLastId();
+            ]]></search>
+            <add><![CDATA[
+                if($this->user->isSeller())
+                {
+                    $this->db->query("UPDATE `" . DB_PREFIX . "download` SET user_id = '".$this->user->getId()."' WHERE download_id = '{$download_id}' ;");
+                }
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search position="after"><![CDATA[
+                public function editDownload($download_id, $data) {
+            ]]></search>
+            <add><![CDATA[
+                if($this->user->isSeller())
+                {
+                  $this->db->query("UPDATE " . DB_PREFIX . "download SET user_id = '" . $this->user->getId() . "' WHERE download_id = '" . (int)$download_id . "'");
+                }
+            ]]></add>
+        </operation>
+
+    </file>
+
+    <file name="admin/view/template/catalog/download_form.tpl">
+        <operation>
+            <search position="replace"><![CDATA[
+            	$('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" name="file" /></form>');
+            ]]></search>
+            <add><![CDATA[
+                $('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" name="file" accept=".zip,.rar|application/zip,application/rar,application/x-zip,application/x-rar-compressed" /></form>');
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- Downloads Upload & Auto-Complete Restriction ENDS-->
+
+
+    <!-- Dashboard Elements Restrict Data Calculations based on Seller -->
+
+    <file name="admin/controller/extension/dashboard/order.php">
+        <operation>
+            <search position="replace" offset="2"><![CDATA[
+                $today = $this->model_sale_order->getTotalOrders(array('filter_date_added' => date('Y-m-d', strtotime('-1 day'))));
+            ]]></search>
+            <add><![CDATA[
+                     if($this->user->isSeller())
+                     {
+
+                         $today = $this->model_sale_order->getTotalOrdersOfSeller(array('filter_date_added' => date('Y-m-d', strtotime('-1 day'))));
+
+                         $yesterday = $this->model_sale_order->getTotalOrdersOfSeller(array('filter_date_added' => date('Y-m-d', strtotime('-2 day'))));
+
+                     }else{
+
+                        $today = $this->model_sale_order->getTotalOrders(array('filter_date_added' => date('Y-m-d', strtotime('-1 day'))));
+
+		                $yesterday = $this->model_sale_order->getTotalOrders(array('filter_date_added' => date('Y-m-d', strtotime('-2 day'))));
+
+                     }
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[
+                $order_total = $this->model_sale_order->getTotalOrders();
+            ]]></search>
+            <add><![CDATA[
+                if($this->user->isSeller())
+                {
+                    $order_total = $this->model_sale_order->getTotalOrdersOfSeller();
+                }else{
+                    $order_total = $this->model_sale_order->getTotalOrders();
+                }
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/model/sale/order.php">
+        <operation>
+            <search position="before"><![CDATA[
+            	public function getOrderTotals($order_id) {
+            ]]></search>
+            <add><![CDATA[
+                public function getTotalOrdersOfSeller($data = array())
+                {
+                    $sql = "SELECT COUNT(DISTINCT(o.order_id)) AS total FROM `" . DB_PREFIX . "order` AS o LEFT OUTER JOIN " . DB_PREFIX . "order_product op ON (op.order_id = o.order_id) LEFT OUTER JOIN " . DB_PREFIX . "product p ON (p.product_id = op.product_id)";
+
+                    if (isset($data['filter_order_status'])) {
+                        $implode = array();
+
+                        $order_statuses = explode(',', $data['filter_order_status']);
+
+                        foreach ($order_statuses as $order_status_id) {
+                            $implode[] = "o.order_status_id = '" . (int)$order_status_id . "'";
+                        }
+
+                        if ($implode) {
+                            $sql .= " WHERE (" . implode(" OR ", $implode) . ")";
+                        }
+                    } else {
+                        $sql .= " WHERE o.order_status_id > '0'";
+                    }
+
+                    if (!empty($data['filter_order_id'])) {
+                        $sql .= " AND o.order_id = '" . (int)$data['filter_order_id'] . "'";
+                    }
+
+                    if (!empty($data['filter_customer'])) {
+                        $sql .= " AND CONCAT(o.firstname, ' ', o.lastname) LIKE '%" . $this->db->escape($data['filter_customer']) . "%'";
+                    }
+
+                    if (!empty($data['filter_date_added'])) {
+                        $sql .= " AND DATE(o.date_added) = DATE('" . $this->db->escape($data['filter_date_added']) . "')";
+                    }
+
+                    if (!empty($data['filter_date_modified'])) {
+                        $sql .= " AND DATE(o.date_modified) = DATE('" . $this->db->escape($data['filter_date_modified']) . "')";
+                    }
+
+                    if (!empty($data['filter_total'])) {
+                        $sql .= " AND o.total = '" . (float)$data['filter_total'] . "'";
+                    }
+
+                    $sql .= " AND p.seller_id = '".$this->user->getId()."' ";
+
+                    $query = $this->db->query($sql);
+
+                    return $query->row['total'];
+                }
+            ]]></add>
+        </operation>
+    </file>
+
+
+
+    <file name="admin/controller/extension/dashboard/sale.php">
+        <operation>
+            <search position="replace" offset="2"><![CDATA[
+                $today = $this->model_report_sale->getTotalSales(array('filter_date_added' => date('Y-m-d', strtotime('-1 day'))));
+            ]]></search>
+            <add><![CDATA[
+                     if($this->user->isSeller())
+                     {
+                         $today = $this->model_report_sale->getTotalSalesOfSeller(array('filter_date_added' => date('Y-m-d', strtotime('-1 day'))));
+
+                         $yesterday = $this->model_report_sale->getTotalSalesOfSeller(array('filter_date_added' => date('Y-m-d', strtotime('-2 day'))));
+
+                     }else{
+
+                        $today = $this->model_report_sale->getTotalSales(array('filter_date_added' => date('Y-m-d', strtotime('-1 day'))));
+
+                        $yesterday = $this->model_report_sale->getTotalSales(array('filter_date_added' => date('Y-m-d', strtotime('-2 day'))));
+
+                     }
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[
+                $sale_total = $this->model_report_sale->getTotalSales();
+            ]]></search>
+            <add><![CDATA[
+                if($this->user->isSeller())
+                {
+                    $sale_total = $this->model_report_sale->getTotalSalesOfSeller();
+                }else{
+                    $sale_total = $this->model_report_sale->getTotalSales();
+                }
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/model/report/sale.php">
+        <operation>
+            <search position="before"><![CDATA[
+            	public function getTotalSales($data = array()) {
+            ]]></search>
+            <add><![CDATA[
+                public function getTotalSalesOfSeller($data = array())
+                {
+                    $sql = "SELECT SUM(o.total) AS total FROM `" . DB_PREFIX . "order` AS o
+                            LEFT OUTER JOIN " . DB_PREFIX . "order_product op ON (op.order_id = o.order_id)
+                            LEFT OUTER JOIN " . DB_PREFIX . "product p ON (p.product_id = op.product_id)
+                            WHERE o.order_status_id > '0'";
+
+                    if (!empty($data['filter_date_added'])) {
+                        $sql .= " AND DATE(o.date_added) = DATE('" . $this->db->escape($data['filter_date_added']) . "')";
+                    }
+
+                    $sql .= " AND p.seller_id = '".$this->user->getId()."'";
+
+                    $query = $this->db->query($sql);
+
+                    return $query->row['total'];
+
+                }
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/view/template/common/column_left.tpl">
+        <operation>
+            <search position="replace">
+                <![CDATA[
+                     <div id="stats">
+                ]]>
+            </search>
+            <add><![CDATA[
+                    <div id="stats" class="<?php if($is_seller) { ?>hidden<?php } ?> ">
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/controller/common/column_left.php">
+        <operation>
+            <search position="after">
+                <![CDATA[
+                    // Stats
+                ]]>
+            </search>
+            <add><![CDATA[
+                    if($this->user->isSeller())
+                    {
+                        $data['is_seller'] = true;
+                    }else{
+                        $data['is_seller'] = false;
+                    }
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- Dashboard Elements Restrict Data Calculations based on Seller ENDS-->
+
+
+</modification>
