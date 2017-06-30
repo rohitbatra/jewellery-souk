@@ -11,7 +11,7 @@
 			$_['text_footer']  = '<a href="http://www.opencart.com">OpenCart</a> &copy; 2009-' . date('Y') . ' All Rights Reserved.';
 			]]></search>
             <add><![CDATA[
-			$_['text_footer']  = '<a href="https://sezplus.com/cad/">SEZPLUS</a> &copy; ' . date('Y') . ' All Rights Reserved.';
+			$_['text_footer']  = '<a href="https://sezplus.com/">SEZPLUS</a> &copy; ' . date('Y') . ' All Rights Reserved.';
 			]]></add>
         </operation>
     </file>
@@ -41,7 +41,7 @@
                 <a href="<?php echo $home; ?>" class="navbar-brand"><img src="view/image/logo.png" alt="<?php echo $heading_title; ?>" title="<?php echo $heading_title; ?>" /></a></div>
             ]]></search>
             <add><![CDATA[
-                <a href="<?php echo $home; ?>" class="navbar-brand"><img width="121px" height="auto" src="../image/catalog/logo cad.png" alt="<?php echo $heading_title; ?>" title="<?php echo $heading_title; ?>" /></a></div>
+                <a href="<?php echo $home; ?>" class="navbar-brand"><img width="121px" height="auto" src="../image/catalog/sezplus_logo.png" alt="<?php echo $heading_title; ?>" title="<?php echo $heading_title; ?>" /></a></div>
             ]]></add>
         </operation>
 
@@ -64,7 +64,7 @@
             ]]></search>
             <add><![CDATA[
                 <div class="pull-left"> <p><?php echo $powered; ?></p> </div>
-                <div class="pull-right" style="padding-bottom:10px" ><a href="https://www.facebook.com/Sezplus-979750005440187/" target="_blank"><img src="image/fb_logo_footer.png" /></a></div>
+                <div class="pull-right" style="padding-bottom:10px" ><a href="https://www.facebook.com/rksezplus/" target="_blank"><img src="image/fb_logo_footer.png" /></a></div>
             ]]></add>
         </operation>
     </file>

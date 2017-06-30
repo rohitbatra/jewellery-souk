@@ -1,0 +1,6 @@
+@include breakpoint(lg){
+	.container {
+	    width: 1200px;
+	}
+	.container-megamenu.vertical .vertical-wrapper{ position: absolute;}
+}

@@ -1,0 +1,151 @@
+                      1775572612<div class="responsive megamenu-style-dev ">
+	<div class="cl-padding">		<nav class="navbar-default">
+	<div class=" container-megamenu  vertical ">
+				<div id="menuHeading" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
+			<div class="megamenuToogle-wrapper hidden-sm hidden-xs">
+				<div class="megamenuToogle-pattern font-ct">
+					<div class="container">
+							<div><span></span><span></span><span></span></div>
+							<span class="title-mega">Categories</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="navbar-header">
+			<span class="title-navbar hidden-lg hidden-md">Categories</span>
+			<button type="button" id="show-verticalmenu" data-toggle="collapse"  class="navbar-toggle">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		</div>
+		
+					<div class="vertical-wrapper" aria-labelledby="menuHeading">
+		
+							<span id="remove-verticalmenu" class="fa fa-times"></span>
+			
+			<div class="megamenu-pattern">
+				<div class="container">
+					<ul class="megamenu"
+					data-transition="slide" data-animationtime="300">
+
+						
+						<li class='item-vertical style1' ><p class='close-menu'></p><a href='http://sezplus.dev/jewellery-souk/component' class='clearfix' >
+										<span><strong>
+											<i class='icon icon1'></i><img src="http://sezplus.dev/jewellery-souk/image/catalog/demo/menu/icon/icon-1.png" alt="">Hot Deal
+										</strong></span>
+										 <span class='label'> </span>
+										</a></li>
+<li class='item-vertical vertical-style2 with-sub-menu hover' ><p class='close-menu'></p><a href='http://sezplus.dev/jewellery-souk/index.php?route=product/category&amp;path=72' class='clearfix' >
+										<span><strong>
+											<img src="http://sezplus.dev/jewellery-souk/image/catalog/demo/menu/icon/icon-2.png" alt="">Electronics
+										</strong></span>
+										 
+										<b class='fa fa-caret-right' ></b>
+										</a><div class="sub-menu" style="width:890px"><div class="content"><div class="row"><div class="col-sm-8"><div class="html item-1"></div></div><div class="col-sm-4"><div class="html "><div class="row img-banner"><a href="#"><img src="image/catalog/demo/menu/img-static-megamenu-h.jpg" alt="banner"></a></div></div></div></div></div></div></li>
+<li class='item-vertical vertical-style3 with-sub-menu hover' ><p class='close-menu'></p><a href='http://sezplus.dev/jewellery-souk/component' class='clearfix' >
+										<span><strong>
+											<img src="http://sezplus.dev/jewellery-souk/image/catalog/demo/menu/icon/icon-4.png" alt="">Travel &amp; Vacation
+										</strong></span>
+										 
+										<b class='fa fa-caret-right' ></b>
+										</a><div class="sub-menu" style="width:495px"><div class="content"><div class="row"><div class="col-sm-5"><div class="html item-1"></div></div><div class="col-sm-7"><div class="html "></div></div></div></div></div></li>
+<li class='item-vertical' ><p class='close-menu'></p><a href='http://sezplus.dev/jewellery-souk/laptop-notebook' class='clearfix' >
+										<span><strong>
+											<i class='icon icon7'></i><img src="http://sezplus.dev/jewellery-souk/image/catalog/demo/menu/icon/icon-7.png" alt="">Book Stationery
+										</strong></span>
+										 <span class='label'> </span>
+										</a></li>
+<li class='item-vertical item-style3 with-sub-menu hover' ><p class='close-menu'></p><a href='http://sezplus.dev/jewellery-souk/software' class='clearfix' >
+										<span><strong>
+											<i class='icon icon3'></i><img src="http://sezplus.dev/jewellery-souk/image/catalog/demo/menu/icon/icon-3.png" alt="">Fashion
+										</strong></span>
+										 <span class='label'> </span>
+										<b class='fa fa-caret-right' ></b>
+										</a><div class="sub-menu" style="width:650px"><div class="content"><div class="row"><div class="col-sm-4"><div class="categories "></div></div><div class="col-sm-4"><div class="categories "></div></div><div class="col-sm-4"><div class="categories "></div></div></div><div class="border"></div><div class="row"><div class="col-sm-12"><div class="link banner-full"><img src="http://sezplus.dev/jewellery-souk/image/catalog/demo/menu/menu_bg2.jpg" alt="" style="width: 100%;"></div></div></div></div></div></li>
+<li class='item-vertical' ><p class='close-menu'></p><a href='http://sezplus.dev/jewellery-souk/mp3-players' class='clearfix' >
+										<span><strong>
+											<i class='icon icon6'></i><img src="http://sezplus.dev/jewellery-souk/image/catalog/demo/menu/icon/icon-6.png" alt="">Sport &amp; Entertaiment
+										</strong></span>
+										 <span class='label'> </span>
+										</a></li>
+<li class='item-vertical css-menu with-sub-menu hover' ><p class='close-menu'></p><a href='' class='clearfix' >
+										<span><strong>
+											<i class='icon icon5'></i><img src="http://sezplus.dev/jewellery-souk/image/catalog/demo/menu/icon/icon-5.png" alt="">Spa &amp; Massage
+										</strong></span>
+										 <span class='label'> </span>
+										<b class='fa fa-caret-right' ></b>
+										</a><div class="sub-menu" style="width:250px"><div class="content"><div class="row"><div class="col-sm-12"><div class="categories "></div></div></div></div></div></li>
+<li class='item-vertical' ><p class='close-menu'></p><a href='http://sezplus.dev/jewellery-souk/index.php?route=product/category&amp;path=84' class='clearfix' >
+										<span><strong>
+											<i class='icon icon8'></i><img src="http://sezplus.dev/jewellery-souk/image/catalog/demo/menu/icon/icon-8.png" alt="">Real House
+										</strong></span>
+										 <span class='label'> </span>
+										</a></li>
+<li class='item-vertical' ><p class='close-menu'></p><a href='http://sezplus.dev/jewellery-souk/macs' class='clearfix' >
+										<span><strong>
+											<i class='icon icon9'></i><img src="http://sezplus.dev/jewellery-souk/image/catalog/demo/menu/icon/icon-9.png" alt="">Mom &amp; Baby
+										</strong></span>
+										 <span class='label'> </span>
+										</a></li>
+<li class='item-vertical' ><p class='close-menu'></p><a href='http://sezplus.dev/jewellery-souk/tablet' class='clearfix' >
+										<span><strong>
+											<img src="http://sezplus.dev/jewellery-souk/image/catalog/demo/menu/icon/icon-10.png" alt="">Food &amp; Restaurant
+										</strong></span>
+										 
+										</a></li>
+<li class='item-vertical' ><p class='close-menu'></p><a href='http://sezplus.dev/jewellery-souk/macs' class='clearfix' >
+										<span><strong>
+											<img src="http://sezplus.dev/jewellery-souk/image/catalog/demo/menu/icon/icon-7.png" alt="">Jewelry &amp; Watches
+										</strong></span>
+										 
+										</a></li>
+<li class='item-vertical' ><p class='close-menu'></p><a href='http://sezplus.dev/jewellery-souk/macs' class='clearfix' >
+										<span><strong>
+											<img src="http://sezplus.dev/jewellery-souk/image/catalog/demo/menu/icon/icon-9.png" alt="">Battereries &amp; Chargers
+										</strong></span>
+										 
+										</a></li>
+					</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</nav>
+	</div></div>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		var itemver =  10 ;
+		if(itemver <= $( ".vertical ul.megamenu >li" ).length)
+			$('.vertical ul.megamenu').append('<li class="loadmore"><i class="fa fa-plus"></i><span class="more-view"> More Categories</span></li>');
+		$('.horizontal ul.megamenu li.loadmore').remove();
+
+		var show_itemver = itemver-1 ;
+		$('ul.megamenu > li.item-vertical').each(function(i){
+			if(i>show_itemver){
+					$(this).css('display', 'none');
+			} 
+		});
+		$(".megamenu .loadmore").click(function(){
+			if($(this).hasClass('open')){
+				$('ul.megamenu li.item-vertical').each(function(i){
+						if(i>show_itemver){
+								$(this).slideUp(200);
+								$(this).css('display', 'none');
+						}
+				});
+				$(this).removeClass('open');
+				$('.loadmore').html('<i class="fa fa-plus"></i><span class="more-view">More Categories</span>');
+			}else{
+				$('ul.megamenu li.item-vertical').each(function(i){
+						if(i>show_itemver){
+								$(this).slideDown(200);
+						}
+				});
+				$(this).addClass('open');
+				$('.loadmore').html('<i class="fa fa-minus"></i><span class="more-view">Close Categories</span>');
+			}
+		});
+	});
+</script>

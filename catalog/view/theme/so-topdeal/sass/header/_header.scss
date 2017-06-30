@@ -1,0 +1,176 @@
+
+/*============ HEADER  ==================*/
+.horizontal{
+    ul.megamenu > li > .sub-menu{border-top: 2px solid darken($background,10%);}
+    ul.megamenu > li > a{padding: 10px 15px; text-transform: uppercase;
+        .fa{padding-#{$right}: 10px;}
+        
+    }
+    ul.megamenu > li{margin-#{$right}: 1px;float: $left;}
+    ul.megamenu li .sub-menu .content .fa{margin: 0 10px;
+        @include if-rtl {
+            &.fa-angle-right:before{content: "\f104";}
+        }
+    }
+    ul.megamenu > li.active > a, ul.megamenu > li.home > a, ul.megamenu > li:hover > a{
+        background: transparent;
+        color: $linkColor;
+    }
+    .subcategory li a{@include linkGray();}
+}
+.header-top .header-top-left .welcome-msg .owl2-carousel .owl2-stage-outer{ direction: ltr; }
+.mega-horizontal .navbar-default{border: none;background: transparent;}
+@media (max-width: 991px){
+    .responsive ul.megamenu > li.click:before,
+    .responsive ul.megamenu > li.hover:before {
+        #{$right}: 0;
+        #{$left}: auto;
+    }
+    .responsive ul.megamenu > li.active .close-menu{
+        #{$right}: 0;
+        #{$left}: auto;
+    }
+}
+
+.header-bottom .content_menu .container{overflow: visible;}
+.btn-shopping-cart {
+    .dropdown-menu{
+        min-width: 350px;
+        border: none;
+        &:before{
+            content:"";
+            background: darken($background,10%);
+            height: 3px;
+            width: 100%;
+            left: 0;
+            right: 0;
+            top: 0;
+            position: absolute;
+        }
+        .cart_product_name{@include linkGray();}
+        .empty{padding: 15px;}
+    }
+    .table>tbody>tr>td{border: none;border-bottom: 1px solid $gray-lighter;vertical-align: middle;}
+    .checkout{padding: 0 20px 10px;}
+    .added_items{padding: 10px;}
+}   
+
+.megamenu-style-dev{position: relative;
+    .vertical{
+        ul.megamenu{position: relative; z-index: 3;
+            > li > a{font-size: 14px;}
+        } 
+        .vertical ul.megamenu > li{margin: 0; border-right: 0; background: #222;
+            strong i{display: none;}
+                    >a {padding-left: 15px;padding-right: 12px; color: #fff;
+                                    &:hover{color: #fff;}
+            }
+            &.css-menu{
+                .sub-menu .content{padding: 0;}
+                .hover-menu .menu >ul{padding: 0; margin: 0;
+                    li{
+                        border-bottom: 1px solid #eee;
+                        &:hover{background: #eee;
+                            > a{color: $linkColor;}
+                        }
+                        a{line-height: 37px;
+                            b{line-height: 37px; font-size: 16px;margin: 0 20px;}
+                        }
+                        &:last-child{border: none;}
+                    }
+                    ul{padding: 0; left: 100%;margin: 0;box-shadow: none;border: 1px solid #eee;min-width: 200px;
+                        &:before, &:after{display: none;}
+                    }
+                } 
+            }
+            &.item-style3{
+                        .sub-menu .content{padding-right: 0;}
+            }
+            &.with-sub-menu{
+                > a:after{content: "\f105";color: #fff;font-family: Fontawesome; font-size: 13px; float: right; margin: 0;}
+                
+                &:hover > a:after{position: static; border-color: transparent;}
+                
+            }
+            &:hover{background-color: #444;
+                >a{color: #fff;}
+            }
+            &.active > a{background: transparent !important;}
+            
+            &.style1 .content:after{
+            }       
+            .sub-menu .content{border-top: 1px solid #ddd;
+                .banner{margin-top: -21px; margin-bottom: -22px; margin-right: -1px;}
+                .static-menu .menu ul a.main-menu{padding: 0;}
+            }
+        }
+        ul.megamenu .sub-menu .content .static-menu .menu ul {padding-bottom: 0;
+            li >a{line-height: inherit; padding-bottom: 0; border-bottom: none; min-height: auto;
+                 &:hover{color: $linkColor;}
+            }
+            ul a{padding: 0;
+                 &:hover{color: $linkColor;} 
+            }
+        }
+    }
+}
+
+header.typeheader-1{
+    .header-form .button-user .user-info a,
+    .header-form .button-header,
+    .header-center {
+        background: $background;
+    }
+    .shopping_cart .handle{ background-color: $background; }
+    .shopping_cart .btn-shopping-cart .cart-info .total-shopping-cart .items_cart2{ color: $linkColor; }
+    .megamenu-style-dev .horizontal ul.megamenu > li.active > a, 
+    .megamenu-style-dev .horizontal ul.megamenu > li:hover > a{
+        background: darken($background,10%)!important;
+    }
+} 
+footer.typefooter-1{
+    .footer--top .module.news-letter .block_content .form-inline .form-group button{
+        background: $background!important;
+        &:hover{
+            background: darken($background,10%)!important;
+        }
+    }
+    .footer--top .footer-social .socials a .fa:hover,
+    .footer--bottom a,
+    .footer--link ul.links li a:hover{ color: $linkColor!important; }
+    .footer--center{ border-color: $background!important; }
+    .footer--link h3.title-footer:before {
+        background: $background!important;
+    }
+} 
+
+
+header.typeheader-2{
+    .header-bottom {
+        background: $background;
+    }
+    .header-top .header-top-right ul.top-link > li > a:hover{
+        color: $linkColor;
+    }
+}
+footer.typefooter-2{
+    .section_4 .footer-social .socials a .fa:hover{
+        background: $background!important;
+        border-color: $background!important;
+    }
+    .section_2,
+    .section_3 .footer-links h4.title-footer:before{
+        background: $background!important;
+    }
+    #sosearchpro.so-search .button-search i,
+    .section_3 .module.footer_lastestblog .post_content .media-heading a:hover,
+    .section_3 .footer-links ul.links li a:hover,
+    .footer--bottom .copyright a,
+    .section_5 .footer-toplinks ul li a:hover{
+        color: $linkColor!important;
+    }
+} 
+
+header.typeheader-3{
+    .header-top{ background: $background; }
+}

@@ -1,0 +1,19 @@
+.product-thumb .image, .thumbnails > li {position: relative;}
+.so_sticker img {position: absolute; z-index: 99;}
+.so_sticker img.ps-topleft {top: 0; left: 0;}
+.so_sticker img.ps-topright {top: 0; right: 0;}
+.so_sticker img.ps-bottomleft {bottom: 0; left: 0;}
+.so_sticker img.ps-bottomright {bottom: 0; right: 0;}
+.so_sticker img.ps-topcenter {top: 0; left: 50%; margin-left: -20px;}
+.so_sticker img.ps-bottomcenter {bottom: 0; left: 50%; margin-left: -20px;}
+.so_sticker img.ps-leftcenter {top: 50%; margin-top: -20px; left: 0;}
+.so_sticker img.ps-rightcenter {top: 50%; margin-top: -20px; right: 0;}
+.so_sticker .label-text {padding: 4px 6px; position: absolute; display: inline-block; z-index: 99;}
+.so_sticker .label-text.ps-topleft {top: 0; left: 0;}
+.so_sticker .label-text.ps-topright {top: 0; right: 0;}
+.so_sticker .label-text.ps-bottomleft {bottom: 0; left: 0;}
+.so_sticker .label-text.ps-bottomright {bottom: 0; right: 0;}
+.so_sticker .label-text.ps-topcenter {top: 0; left: 50%; margin-left: -20px;}
+.so_sticker .label-text.ps-bottomcenter {bottom: 0; left: 50%; margin-left: -20px;}
+.so_sticker .label-text.ps-leftcenter {left: 0; top: 50%; margin-top: -20px;}
+.so_sticker .label-text.ps-rightcenter {right: 0; top: 50%; margin-top: -20px;}
