@@ -1,0 +1,147 @@
+<modification>
+    <id>Map Categories to User Groups</id>
+    <version>1.0.0</version>
+    <vqmver>2.1.5</vqmver>
+    <author>Rohit Batra (rohit@rohitbatra.in)</author>
+
+    <!-- Category Add/Edit Module -->
+
+    <file name="admin/language/en-gb/en-gb.php">
+
+        <operation error="skip">
+            <search position="before"><![CDATA[
+			    $_['tab_data']                      = 'Data';
+			]]></search>
+            <add><![CDATA[
+                $_['tab_extra']                      = 'Extra';
+			]]></add>
+        </operation>
+
+    </file>
+
+    <file name="admin/language/en-gb/catalog/category.php">
+
+        <operation error="skip">
+            <search position="before"><![CDATA[
+			    $_['entry_layout']           = 'Layout Override';
+			]]></search>
+            <add><![CDATA[
+                $_['entry_user_group']           = 'User Group';
+                $_['error_user_group']           = 'Warning: Please select at-least one User Group!';
+			]]></add>
+        </operation>
+
+    </file>
+
+    <file name="admin/view/template/catalog/category_form.tpl">
+
+        <operation error="skip">
+            <search position="before"><![CDATA[
+                <li><a href="#tab-design" data-toggle="tab"><?php echo $tab_design; ?></a></li>
+            ]]></search>
+            <add trim="true"><![CDATA[
+                <li><a href="#tab-extra" data-toggle="tab"><?php echo $tab_extra; ?></a></li>
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search position="before"><![CDATA[
+                <div class="tab-pane" id="tab-design">
+            ]]></search>
+            <add trim="true"><![CDATA[
+                <div class="tab-pane" id="tab-extra">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="select-usergroup"><?php echo $entry_user_group; ?></label>
+                        <div class="well well-sm" style="height: 150px; overflow: auto;">
+                            <div class="col-sm-10">
+                                <?php foreach ($user_groups as $user_group) { ?>
+                                    <div class="checkbox">
+                                    <?php if($user_group['user_group_id'] == "1") { ?>
+                                      <label>
+                                        <input type="checkbox" name="user_group[]" value="<?php echo $user_group['user_group_id']; ?>" checked="checked" disabled/>
+                                        <?php echo ucwords($user_group['name']); ?>
+                                      </label>
+                                    <?php } else { ?>
+                                      <label>
+                                        <input type="checkbox" name="user_group[]" value="<?php echo $user_group['user_group_id']; ?>" />
+                                        <?php echo ucwords($user_group['name']); ?>
+                                      </label>
+                                    <?php } ?>
+                                    </div>
+                                <?php } ?>
+                              <?php if ($error_user_group) { ?>
+                                <div class="text-danger"><?php echo $error_user_group; ?></div>
+                              <?php } ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            ]]></add>
+        </operation>
+
+    </file>
+
+    <file name="admin/controller/catalog/category.php">
+
+        <operation error="skip">
+            <search position="after"><![CDATA[
+                $data['tab_general'] = $this->language->get('tab_general');
+            ]]></search>
+            <add><![CDATA[
+                $data['tab_extra'] = $this->language->get('tab_extra');
+                $data['entry_user_group'] = $this->language->get('entry_user_group');
+                //$data['error_user_group'] = $this->language->get('error_user_group');
+                $data['error_user_group'] = false;
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search position="after"><![CDATA[
+                $data['stores'] = $this->model_setting_store->getStores();
+            ]]></search>
+            <add><![CDATA[
+                $data['user_groups'] = $this->model_catalog_category->getAllUserGroups();
+            ]]></add>
+        </operation>
+
+    </file>
+
+    <file name="admin/model/catalog/category.php">
+
+        <operation error="skip">
+            <search position="before"><![CDATA[
+                public function getTotalCategoriesByLayoutId($layout_id) {
+            ]]></search>
+            <add><![CDATA[
+                public function getAllUserGroups() {
+                    $query = $this->db->query("SELECT user_group_id, name FROM " . DB_PREFIX . "user_group ");
+
+                    return $query->rows;
+                }
+
+                public function getUserGroups($category_id) {
+                    $query = $this->db->query("SELECT ctug.user_group_id, ug.name  FROM " . DB_PREFIX . "category_to_user_group AS ctug LEFT JOIN user_group ug ON (ug.user_group_id = ctug.user_group_id) WHERE ctug.category_id = '" . (int)$category_id . "'");
+
+                    return $query->rows;
+                }
+            ]]></add>
+        </operation>
+
+        <operation error="skip">
+            <search position="after"><![CDATA[
+                $category_id = $this->db->getLastId();
+            ]]></search>
+            <add><![CDATA[
+                if (isset($data['user_group'])) {
+                    foreach($data['user_group'] as $ug) {
+                        $this->db->query("INSERT into " . DB_PREFIX . "category_to_user_group (category_id, user_group_id) VALUES  ('" . (int)$category_id . "', '" . (int)$ug . "')");
+                    }
+                }
+            ]]></add>
+        </operation>
+
+    </file>
+
+    <!-- Category Add/Edit Module ENDS-->
+
+</modification>
