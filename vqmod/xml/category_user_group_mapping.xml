@@ -1,5 +1,5 @@
 <modification>
-    <id>Map Categories to User Groups</id>
+    <id>Map Categories to User Groups - SOUK</id>
     <version>1.0.0</version>
     <vqmver>2.1.5</vqmver>
     <author>Rohit Batra (rohit@rohitbatra.in)</author>
@@ -8,12 +8,12 @@
 
     <file name="admin/language/en-gb/en-gb.php">
 
-        <operation error="skip">
+        <operation>
             <search position="before"><![CDATA[
-			    $_['tab_data']                      = 'Data';
+              $_['tab_data']                      = 'Data';
 			]]></search>
             <add><![CDATA[
-                $_['tab_extra']                      = 'Extra';
+              $_['tab_extra']                      = 'Extra';
 			]]></add>
         </operation>
 
@@ -21,13 +21,13 @@
 
     <file name="admin/language/en-gb/catalog/category.php">
 
-        <operation error="skip">
+        <operation>
             <search position="before"><![CDATA[
-			    $_['entry_layout']           = 'Layout Override';
+              $_['entry_layout']           = 'Layout Override';
 			]]></search>
             <add><![CDATA[
-                $_['entry_user_group']           = 'User Group';
-                $_['error_user_group']           = 'Warning: Please select at-least one User Group!';
+              $_['entry_user_group']           = 'User Group';
+              $_['error_user_group']           = 'Warning: Please select at-least one User Group!';
 			]]></add>
         </operation>
 
@@ -35,7 +35,7 @@
 
     <file name="admin/view/template/catalog/category_form.tpl">
 
-        <operation error="skip">
+        <operation>
             <search position="before"><![CDATA[
                 <li><a href="#tab-design" data-toggle="tab"><?php echo $tab_design; ?></a></li>
             ]]></search>
@@ -44,7 +44,7 @@
             ]]></add>
         </operation>
 
-        <operation error="skip">
+        <operation>
             <search position="before"><![CDATA[
                 <div class="tab-pane" id="tab-design">
             ]]></search>
@@ -56,14 +56,20 @@
                             <div class="col-sm-10">
                                 <?php foreach ($user_groups as $user_group) { ?>
                                     <div class="checkbox">
-                                    <?php if($user_group['user_group_id'] == "1") { ?>
+                                    <?php
+                                        /* This is a condition to get Admin/Moderator UG Selected always : just for UI purpose no actual back-end logic involved */
+                                        if($user_group['user_group_id'] == "1" || $user_group['user_group_id'] == "2") { ?>
                                       <label>
                                         <input type="checkbox" name="user_group[]" value="<?php echo $user_group['user_group_id']; ?>" checked="checked" disabled/>
                                         <?php echo ucwords($user_group['name']); ?>
                                       </label>
                                     <?php } else { ?>
                                       <label>
-                                        <input type="checkbox" name="user_group[]" value="<?php echo $user_group['user_group_id']; ?>" />
+                                        <?php if(in_array($user_group['user_group_id'],$ctug)) { ?>
+                                          <input type="checkbox" name="user_group[]" value="<?php echo $user_group['user_group_id']; ?>" checked="checked" />
+                                        <?php } else { ?>
+                                          <input type="checkbox" name="user_group[]" value="<?php echo $user_group['user_group_id']; ?>" />
+                                        <?php } ?>
                                         <?php echo ucwords($user_group['name']); ?>
                                       </label>
                                     <?php } ?>
@@ -83,7 +89,7 @@
 
     <file name="admin/controller/catalog/category.php">
 
-        <operation error="skip">
+        <operation>
             <search position="after"><![CDATA[
                 $data['tab_general'] = $this->language->get('tab_general');
             ]]></search>
@@ -95,7 +101,7 @@
             ]]></add>
         </operation>
 
-        <operation error="skip">
+        <operation>
             <search position="after"><![CDATA[
                 $data['stores'] = $this->model_setting_store->getStores();
             ]]></search>
@@ -104,11 +110,36 @@
             ]]></add>
         </operation>
 
+        <operation>
+          <search position="after"><![CDATA[
+              $category_info = $this->model_catalog_category->getCategory($this->request->get['category_id']);
+          ]]></search>
+          <add><![CDATA[
+              $ctug_info = $this->model_catalog_category->getUserGroups($this->request->get['category_id']);
+          ]]></add>
+        </operation>
+
+        <operation>
+          <search position="before"><![CDATA[
+              $data['category_filters'] = array();
+          ]]></search>
+          <add><![CDATA[
+            $data['ctug'] = array();
+
+            if(isset($ctug_info))
+            {
+              foreach ($ctug_info as $ctug) {
+                  $data['ctug'][] = $ctug['user_group_id'];
+              }
+            }
+          ]]></add>
+        </operation>
+
     </file>
 
     <file name="admin/model/catalog/category.php">
 
-        <operation error="skip">
+        <operation>
             <search position="before"><![CDATA[
                 public function getTotalCategoriesByLayoutId($layout_id) {
             ]]></search>
@@ -127,12 +158,16 @@
             ]]></add>
         </operation>
 
-        <operation error="skip">
-            <search position="after"><![CDATA[
-                $category_id = $this->db->getLastId();
+        <operation>
+            <search position="before"><![CDATA[
+                if (isset($data['image'])) {
             ]]></search>
             <add><![CDATA[
                 if (isset($data['user_group'])) {
+                    // Delete Query to remove all existing links between User Group & Category
+                    $this->db->query("DELETE FROM " . DB_PREFIX . "category_to_user_group WHERE category_id = '" . (int)$category_id . "'");
+
+                    // Insert the new relation records
                     foreach($data['user_group'] as $ug) {
                         $this->db->query("INSERT into " . DB_PREFIX . "category_to_user_group (category_id, user_group_id) VALUES  ('" . (int)$category_id . "', '" . (int)$ug . "')");
                     }
@@ -143,5 +178,36 @@
     </file>
 
     <!-- Category Add/Edit Module ENDS-->
+
+    <!-- Category DELETE Module -->
+    <file name="admin/model/catalog/category.php">
+
+        <operation>
+            <search position="before"><![CDATA[
+                public function getTotalCategoriesByLayoutId($layout_id) {
+            ]]></search>
+            <add><![CDATA[
+                public function deleteCategoryToUserGroup($category_id) {
+                  $this->db->query("DELETE FROM " . DB_PREFIX . "category_to_user_group WHERE category_id = '" . (int)$category_id . "'");
+                }
+            ]]></add>
+        </operation>
+
+    </file>
+
+    <file name="admin/controller/catalog/category.php">
+
+        <operation>
+            <search position="after"><![CDATA[
+                $this->model_catalog_category->deleteCategory($category_id);
+            ]]></search>
+            <add><![CDATA[
+                $this->model_catalog_category->deleteCategoryToUserGroup($category_id);
+            ]]></add>
+        </operation>
+
+    </file>
+
+    <!-- Category DELETE Module ENDS-->
 
 </modification>
