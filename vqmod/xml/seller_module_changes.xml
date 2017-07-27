@@ -1,5 +1,5 @@
 <modification>
-    <id>Seller Module Changes</id>
+    <id>Seller Module Changes - SOUK</id>
     <version>2.0.0</version>
     <vqmver>2.3.0</vqmver>
     <update>0.0.1</update>
@@ -24,7 +24,7 @@
             ]]></search>
             <add trim="true"><![CDATA[
                 $data['is_seller'] = false;
-                if($this->user->getGroupId() == '11')
+                if($this->user->getGroupId() !== '1' && $this->user->getGroupId() !== '2')
                 {
                     $data['is_seller'] = true;
                 }
@@ -41,7 +41,7 @@
             ]]></search>
             <add><![CDATA[
                 $data['is_seller'] = false;
-                if($this->user->getGroupId() == '11')
+                if($this->user->getGroupId() !== '1' && $this->user->getGroupId() !== '2')
                 {
                     $data['is_seller'] = true;
                 }
@@ -91,7 +91,7 @@
             ]]></search>
             <add><![CDATA[
                 $data['is_seller'] = false;
-                if($this->user->getGroupId() == '11')
+                if($this->user->getGroupId() !== '1' && $this->user->getGroupId() !== '2')
                 {
                     $data['is_seller'] = true;
                 }
@@ -101,7 +101,7 @@
     <!-- Remove Search functions from Seller/Product pane ENDS-->
 
 
-    <!-- Restrict the Product List w.r.t Seller -->
+    <!-- Restrict the Product List w.r.t Seller
     <file name="admin/controller/catalog/product.php">
         <operation>
             <search position="after"><![CDATA[
@@ -120,7 +120,7 @@
             ]]></add>
         </operation>
 
-    </file>
+    </file>-->
 
     <file name="admin/model/catalog/product.php">
         <operation>
@@ -180,7 +180,7 @@
             ]]></search>
             <add><![CDATA[
                 $data['is_seller'] = false;
-                if($this->user->getGroupId() == '11')
+                if($this->user->getGroupId() !== '1' && $this->user->getGroupId() !== '2')
                 {
                     $data['is_seller'] = true;
                 }
@@ -192,7 +192,7 @@
             ]]></search>
             <add><![CDATA[
                 $data['is_seller'] = false;
-                if($this->user->getGroupId() == '11')
+                if($this->user->getGroupId() !== '1' && $this->user->getGroupId() !== '2')
                 {
                     $data['is_seller'] = true;
                 }
@@ -202,7 +202,7 @@
     <!-- Remove Search functions from Sales Order pane ENDS-->
 
 
-    <!-- Restrict the Sales Order List w.r.t Seller -->
+    <!-- Restrict the Sales Order List w.r.t Seller
 
     <file name="admin/controller/sale/order.php">
         <operation>
@@ -227,7 +227,7 @@
                 }
             ]]></add>
         </operation>
-    </file>
+    </file>-->
 
     <file name="admin/model/sale/order.php">
         <operation>
@@ -472,7 +472,7 @@
                 'order' => 'DESC',
             ]]></search>
             <add><![CDATA[
-                 'filter_seller'    => (($this->user->getGroupId() == '11') ? $this->user->getId() : '0') ,
+                 'filter_seller'    => ((($this->user->getGroupId() !== '1' && $this->user->getGroupId() !== '2')) ? $this->user->getId() : '0') ,
             ]]></add>
         </operation>
     </file>
@@ -661,7 +661,7 @@
             <add><![CDATA[
                 public function getSellers() {
 
-                    $query = $this->db->query("SELECT u.user_id, u.username, u.firstname, u.lastname, u.email, u.status, ug.name as user_group_name FROM `" . DB_PREFIX . "user` AS u LEFT OUTER JOIN `" . DB_PREFIX . "user_group` ug ON (ug.user_group_id = u.user_group_id) WHERE ug.user_group_id = '11' ");
+                    $query = $this->db->query("SELECT u.user_id, u.username, u.firstname, u.lastname, u.email, u.status, ug.name as user_group_name FROM `" . DB_PREFIX . "user` AS u LEFT OUTER JOIN `" . DB_PREFIX . "user_group` ug ON (ug.user_group_id = u.user_group_id) WHERE ug.user_group_id <> '1' AND ug.user_group_id <> '2'  ");
 
                     return $query->rows;
                 }
