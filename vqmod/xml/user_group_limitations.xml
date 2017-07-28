@@ -463,4 +463,478 @@
 
     <!-- Dashboard Elements Restrict Data Calculations based on Seller ENDS-->
 
+    <!-- Removed the Notification Drop-down from Admin Page for Seller -->
+    <file name="admin/view/template/common/header.tpl">
+        <operation>
+            <search position="replace"><![CDATA[
+                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown"><?php if($alerts > 0) { ?><span class="label label-danger pull-left"><?php echo $alerts; ?></span><?php } ?> <i class="fa fa-bell fa-lg"></i></a>
+            ]]></search>
+            <add trim="true"><![CDATA[
+                <?php $styleStr = "";  if($is_seller) { $styleStr="style='display:none;'"; } ?><li class="dropdown" <?php echo $styleStr; ?> ><a class="dropdown-toggle" data-toggle="dropdown"><?php if($alerts > 0) { ?><span class="label label-danger pull-left"><?php echo $alerts; ?></span><?php } ?> <i class="fa fa-bell fa-lg"></i></a>
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/controller/common/header.php">
+        <operation>
+            <search position="before"><![CDATA[
+                // Online Stores
+            ]]></search>
+            <add trim="true"><![CDATA[
+                $data['is_seller'] = false;
+                if($this->user->getGroupId() !== '1' && $this->user->getGroupId() !== '2')
+                {
+                    $data['is_seller'] = true;
+                }
+            ]]></add>
+        </operation>
+    </file>
+    <!-- Removed the Notification Drop-down from Admin Page for Seller ENDS-->
+
+
+    <!-- Remove Edit/Delete functionality from Categories -->
+    <file name="admin/controller/catalog/category.php">
+        <operation>
+            <search position="after"><![CDATA[
+                $data['order'] = $order;
+            ]]></search>
+            <add><![CDATA[
+                $data['is_seller'] = false;
+                if($this->user->getGroupId() !== '1' && $this->user->getGroupId() !== '2')
+                {
+                    $data['is_seller'] = true;
+                }
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/view/template/catalog/category_list.tpl">
+        <operation>
+            <search position="repalce"><![CDATA[
+                <div class="pull-right">
+            ]]></search>
+            <add><![CDATA[
+                <div class="pull-right"> <?php if(!$is_seller) { ?>
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search position="after"><![CDATA[
+                <button type="button" data-toggle="tooltip" title="<?php echo $button_delete; ?>" class="btn btn-danger" onclick="confirm('<?php echo $text_confirm; ?>') ? $('#form-category').submit() : false;"><i class="fa fa-trash-o"></i></button>
+            ]]></search>
+            <add><![CDATA[
+                <?php } ?>
+            ]]></add>
+        </operation>
+
+
+        <operation>
+            <search position="replace"><![CDATA[
+                <td class="text-right"><a href="<?php echo $category['edit']; ?>" data-toggle="tooltip" title="<?php echo $button_edit; ?>" class="btn btn-primary"><i class="fa fa-pencil"></i></a></td>
+            ]]></search>
+            <add><![CDATA[
+                <td class="text-right"> <a href="<?php echo $category['edit']; ?>" data-toggle="tooltip" title="<?php echo $button_edit; ?>" class="btn btn-primary <?php if($is_seller) { ?> disabled <?php } ?>"><i class="fa fa-pencil"></i></a></td>
+            ]]></add>
+        </operation>
+
+    </file>
+
+    <!-- Remove Edit/Delete functionality from Categories ENDS-->
+
+    <!-- Remove Search functions from Seller/Product pane -->
+
+    <file name="admin/controller/catalog/product.php">
+        <operation>
+            <search position="after"><![CDATA[
+                $data['order'] = $order;
+            ]]></search>
+            <add><![CDATA[
+                $data['is_seller'] = false;
+                if($this->user->getGroupId() !== '1' && $this->user->getGroupId() !== '2')
+                {
+                    $data['is_seller'] = true;
+                }
+            ]]></add>
+        </operation>
+    </file>
+    <!-- Remove Search functions from Seller/Product pane ENDS-->
+
+    <!-- Restrict the Product List w.r.t Seller -->
+    <file name="admin/controller/catalog/product.php">
+        <operation>
+            <search position="after"><![CDATA[
+                'filter_image'    => $filter_image,
+            ]]></search>
+            <add><![CDATA[
+                'filter_seller'    => (($this->user->getGroupId() !== '1' || $this->user->getGroupId() !== '2') ? $this->user->getId() : (isset($this->request->get['filter_seller']) ? $this->request->get['filter_seller'] : '0')) ,
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA[
+                'filter_model' => $filter_model,
+            ]]></search>
+            <add><![CDATA[
+                'filter_seller'    => (($this->user->getGroupId() !== '1' || $this->user->getGroupId() !== '2') ? $this->user->getId() : (isset($this->request->get['filter_seller']) ? $this->request->get['filter_seller'] : '0')) ,
+            ]]></add>
+        </operation>
+
+    </file>
+
+    <file name="admin/model/catalog/product.php">
+        <operation>
+            <search position="before"><![CDATA[
+                if (isset($data['filter_image']) && !is_null($data['filter_image'])) {
+            ]]></search>
+            <add><![CDATA[
+                if (isset($data['filter_seller']) && !empty($data['filter_seller'])) {
+                        $sql .= " AND p.seller_id = '" . (int)$data['filter_seller'] . "'";
+                }
+            ]]></add>
+        </operation>
+
+    </file>
+
+    <!-- Restrict the Product List w.r.t Seller ENDS-->
+
+
+    <!-- Remove Search functions from Sales Order pane -->
+
+    <file name="admin/view/template/sale/order_list.tpl">
+        <operation>
+            <search position="before"><![CDATA[
+                <?php echo $footer; ?>
+            ]]></search>
+
+            <add><![CDATA[
+                    <?php if($is_seller) { ?>
+                         <script type="text/javascript"><!--
+                            $(window).load(function() {
+
+                                // array of fields to not show
+                                var fields = ['input-customer','input-date-modified','input-total'];
+                                $.each(fields, function (index, value) {
+                                    $('#'+value).parents('div.form-group').hide();
+                                });
+
+                            });
+                        //--></script>
+                    <?php } ?>
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[
+                <td class="text-right"><?php echo $order['total']; ?></td>
+            ]]></search>
+            <add><![CDATA[
+                <td class="text-right"><?php echo (($is_seller) ? '****' : $order['total']); ?></td>
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/controller/sale/order.php">
+        <operation>
+            <search position="after"><![CDATA[
+                $data['order'] = $order;
+            ]]></search>
+            <add><![CDATA[
+                $data['is_seller'] = false;
+                if($this->user->getGroupId() !== '1' && $this->user->getGroupId() !== '2')
+                {
+                    $data['is_seller'] = true;
+                }
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[
+                $data['products'] = array();
+            ]]></search>
+            <add><![CDATA[
+                $data['is_seller'] = false;
+                if($this->user->getGroupId() !== '1' && $this->user->getGroupId() !== '2')
+                {
+                    $data['is_seller'] = true;
+                }
+            ]]></add>
+        </operation>
+    </file>
+    <!-- Remove Search functions from Sales Order pane ENDS-->
+
+    <!-- Restrict the Sales Order List w.r.t Seller -->
+
+    <file name="admin/controller/sale/order.php">
+        <operation>
+            <search position="after"><![CDATA[
+                'filter_date_modified' => $filter_date_modified,
+            ]]></search>
+            <add><![CDATA[
+                'filter_seller'    => (($this->user->getGroupId() !== '1' || $this->user->getGroupId() !== '2') ? $this->user->getId() : '0') ,
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[
+                $order_total = $this->model_sale_order->getTotalOrders($filter_data);
+            ]]></search>
+            <add><![CDATA[
+                if($this->user->isSeller())
+                {
+                    $order_total = $this->model_sale_order->getTotalOrdersOfSeller($filter_data);
+                }else{
+                    $order_total = $this->model_sale_order->getTotalOrders($filter_data);
+
+                }
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/model/sale/order.php">
+        <operation>
+            <search position="replace"><![CDATA[
+                $sql = "SELECT o.order_id, CONCAT(o.firstname, ' ', o.lastname) AS customer, (SELECT os.name FROM " . DB_PREFIX . "order_status os WHERE os.order_status_id = o.order_status_id AND os.language_id = '" . (int)$this->config->get('config_language_id') . "') AS order_status, o.shipping_code, o.total, o.currency_code, o.currency_value, o.date_added, o.date_modified FROM `" . DB_PREFIX . "order` o";
+            ]]></search>
+            <add><![CDATA[
+                $sql = "SELECT DISTINCT(o.order_id), CONCAT(o.firstname, ' ', o.lastname) AS customer, (SELECT os.name FROM " . DB_PREFIX . "order_status os WHERE os.order_status_id = o.order_status_id AND os.language_id = '" . (int)$this->config->get('config_language_id') . "') AS order_status, o.shipping_code, o.total, o.currency_code, o.currency_value, o.date_added, o.date_modified FROM `" . DB_PREFIX . "order` o
+                        LEFT OUTER JOIN `order_product` AS op
+                        ON (o.order_id = op.order_id)
+                        LEFT OUTER JOIN `product` AS p
+                        ON (p.product_id = op.product_id)
+                    ";
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search position="replace"><![CDATA[
+                public function getTotalOrders($data = array()) {
+            ]]></search>
+            <add><![CDATA[
+                public function getTotalOrdersOld($data = array()) {
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search position="before"><![CDATA[
+                public function getOrderTotals($order_id) {
+            ]]></search>
+            <add><![CDATA[
+                public function getTotalOrders($data = array())
+                {
+                    $sql = "SELECT COUNT(DISTINCT(o.order_id)) AS total FROM `" . DB_PREFIX . "order` AS o
+                            /* LEFT OUTER JOIN `" . DB_PREFIX . "order_product` op
+                            ON (op.order_id = o.order_id)
+                            LEFT OUTER JOIN `" . DB_PREFIX . "product` p
+                            ON (p.product_id = op.product_id)
+                            */
+                            ";
+
+                    if (isset($data['filter_order_status'])) {
+                        $implode = array();
+
+                        $order_statuses = explode(',', $data['filter_order_status']);
+
+                        foreach ($order_statuses as $order_status_id) {
+                            $implode[] = "o.order_status_id = '" . (int)$order_status_id . "'";
+                        }
+
+                        if ($implode) {
+                            $sql .= " WHERE (" . implode(" OR ", $implode) . ")";
+                        }
+                    } else {
+                        $sql .= " WHERE o.order_status_id > '0'";
+                    }
+
+                    if (!empty($data['filter_order_id'])) {
+                        $sql .= " AND o.order_id = '" . (int)$data['filter_order_id'] . "'";
+                    }
+
+                    if (!empty($data['filter_customer'])) {
+                        $sql .= " AND CONCAT(o.firstname, ' ', o.lastname) LIKE '%" . $this->db->escape($data['filter_customer']) . "%'";
+                    }
+
+                    if (!empty($data['filter_date_added'])) {
+                        $sql .= " AND DATE(o.date_added) = DATE('" . $this->db->escape($data['filter_date_added']) . "')";
+                    }
+
+                    if (!empty($data['filter_date_modified'])) {
+                        $sql .= " AND DATE(o.date_modified) = DATE('" . $this->db->escape($data['filter_date_modified']) . "')";
+                    }
+
+                    if (!empty($data['filter_total'])) {
+                        $sql .= " AND o.total = '" . (float)$data['filter_total'] . "'";
+                    }
+
+                    $query = $this->db->query($sql);
+
+                    return $query->row['total'];
+                }
+
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search position="before"><![CDATA[
+                if (!empty($data['filter_total'])) {
+            ]]></search>
+            <add><![CDATA[
+                if (!empty($data['filter_seller'])) {
+                        $sql .= " AND p.seller_id = '" . (int)$data['filter_seller'] . "'";
+                }
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search position="replace"><![CDATA[
+                $sql .= " AND DATE(date_added) = DATE('" . $this->db->escape($data['filter_date_added']) . "')";
+            ]]></search>
+            <add><![CDATA[
+                $sql .= " AND DATE(o.date_added) = DATE('" . $this->db->escape($data['filter_date_added']) . "')";
+            ]]></add>
+        </operation>
+    </file>
+    <!-- Restrict the Sales Order List w.r.t Seller ENDS-->
+
+
+    <!-- Hiding Customer Info from Order List/Info -->
+    <file name="admin/view/template/sale/order_list.tpl">
+
+        <operation>
+            <search position="replace"><![CDATA[
+              <td class="text-left"><?php if ($sort == 'customer') { ?>
+            ]]></search>
+            <add><![CDATA[
+            <td class="text-left <?php if($is_seller) { ?> hidden <?php } ?>"><?php if ($sort == 'customer') { ?>
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search position="replace"><![CDATA[
+              <td class="text-left"><?php echo $order['customer']; ?></td>
+            ]]></search>
+            <add><![CDATA[
+              <td class="text-left <?php if($is_seller) { ?> hidden <?php } ?>"><?php echo $order['customer']; ?></td>
+            ]]></add>
+        </operation>
+
+        <!-- Disabled Edit of Sales Orders by Sellers -->
+        <operation>
+            <search position="replace"><![CDATA[
+                <a href="<?php echo $order['edit']; ?>" data-toggle="tooltip" title="<?php echo $button_edit; ?>" class="btn btn-primary"><i class="fa fa-pencil"></i></a>
+            ]]></search>
+            <add><![CDATA[
+                <a href="<?php echo $order['edit']; ?>" data-toggle="tooltip" title="<?php echo $button_edit; ?>" class="btn btn-primary <?php if($is_seller) { ?> disabled <?php } ?>"><i class="fa fa-pencil"></i></a>
+            ]]></add>
+        </operation>
+
+        <!-- Disable New / Delete Sales Order by Seller -->
+        <operation>
+            <search position="replace"><![CDATA[
+                <a href="<?php echo $add; ?>" data-toggle="tooltip" title="<?php echo $button_add; ?>" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+            ]]></search>
+            <add><![CDATA[
+                <a href="<?php echo $add; ?>" data-toggle="tooltip" title="<?php echo $button_add; ?>" class="btn btn-primary <?php if($is_seller) { ?> disabled <?php } ?>"><i class="fa fa-plus"></i></a>
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search position="replace"><![CDATA[
+                <button type="button" id="button-delete" form="form-order" formaction="<?php echo $delete; ?>" data-toggle="tooltip" title="<?php echo $button_delete; ?>" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
+            ]]></search>
+            <add><![CDATA[
+                <button type="button" id="button-delete" form="form-order" formaction="<?php echo $delete; ?>" data-toggle="tooltip" title="<?php echo $button_delete; ?>" class="btn btn-danger <?php if($is_seller) { ?> disabled <?php } ?>"><i class="fa fa-trash-o"></i></button>
+            ]]></add>
+        </operation>
+
+    </file>
+
+    <file name="admin/view/template/sale/order_info.tpl">
+
+        <operation>
+            <search position="replace" index="2"><![CDATA[
+              <div class="col-md-4">
+            ]]></search>
+            <add><![CDATA[
+            <div class="col-md-4 <?php if($is_seller) { ?> hidden <?php } ?>">
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search position="replace" index="2"><![CDATA[
+              <div class="col-md-4">
+            ]]></search>
+            <add><![CDATA[
+            <div class="col-md-4 <?php if($is_seller) { ?> hidden <?php } ?>">
+            ]]></add>
+        </operation>
+
+
+        <operation>
+            <search position="replace" index="1"><![CDATA[
+              <table class="table table-bordered">
+            ]]></search>
+            <add><![CDATA[
+              <table class="table table-bordered <?php if($is_seller) { ?> hidden <?php } ?>">
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search position="replace"><![CDATA[
+                <div class="pull-right"><a href="<?php echo $invoice; ?>" target="_blank" data-toggle="tooltip" title="<?php echo $button_invoice_print; ?>" class="btn btn-info"><i class="fa fa-print"></i></a> <a href="<?php echo $shipping; ?>" target="_blank" data-toggle="tooltip" title="<?php echo $button_shipping_print; ?>" class="btn btn-info"><i class="fa fa-truck"></i></a> <a href="<?php echo $edit; ?>" data-toggle="tooltip" title="<?php echo $button_edit; ?>" class="btn btn-primary"><i class="fa fa-pencil"></i></a> <a href="<?php echo $cancel; ?>" data-toggle="tooltip" title="<?php echo $button_cancel; ?>" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+            ]]></search>
+            <add><![CDATA[
+                <div class="pull-right">
+                    <a href="<?php echo $invoice; ?>" target="_blank" data-toggle="tooltip" title="<?php echo $button_invoice_print; ?>" class="btn btn-info <?php if($is_seller) { ?> disabled <?php } ?>"><i class="fa fa-print"></i></a>
+                    <a href="<?php echo $shipping; ?>" target="_blank" data-toggle="tooltip" title="<?php echo $button_shipping_print; ?>" class="btn btn-info <?php if($is_seller) { ?> disabled <?php } ?>"><i class="fa fa-truck"></i></a>
+                    <a href="<?php echo $edit; ?>" data-toggle="tooltip" title="<?php echo $button_edit; ?>" class="btn btn-primary <?php if($is_seller) { ?> disabled <?php } ?>"><i class="fa fa-pencil"></i></a>
+                    <a href="<?php echo $cancel; ?>" data-toggle="tooltip" title="<?php echo $button_cancel; ?>" class="btn btn-default"><i class="fa fa-reply"></i></a>
+                </div>
+            ]]></add>
+        </operation>
+
+        <!-- Comment the openbay section to avoid errors -->
+        <operation error="skip">
+            <search position="replace"><![CDATA[
+                changeStatus();
+            ]]></search>
+            <add><![CDATA[
+
+                    ]]></add>
+        </operation>
+        <!-- Comment the openbay section to avoid errors ENDS-->
+
+        <operation>
+            <search position="replace"><![CDATA[
+                <button id="button-history" data-loading-text="<?php echo $text_loading; ?>" class="btn btn-primary"><i class="fa fa-plus-circle"></i> <?php echo $button_history_add; ?></button>
+            ]]></search>
+            <add><![CDATA[
+                <button id="button-history" data-loading-text="<?php echo $text_loading; ?>" class="btn btn-primary <?php if($is_seller) { ?> disabled <?php } ?>"><i class="fa fa-plus-circle"></i> <?php echo $button_history_add; ?></button>
+            ]]></add>
+        </operation>
+
+    </file>
+    <!-- Hiding Customer Info from Order List/Info ENDS-->
+
+    <!-- Hide Customer Info on Seller Dashboard -->
+    <file name="admin/view/template/extension/dashboard/recent_info.tpl">
+        <operation>
+            <search position="replace"><![CDATA[
+                <td><?php echo $order['customer']; ?></td>
+            ]]></search>
+            <add><![CDATA[
+                <td>*****</td>
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/controller/extension/dashboard/recent.php">
+        <operation>
+            <search position="after"><![CDATA[
+                'order' => 'DESC',
+            ]]></search>
+            <add><![CDATA[
+                 'filter_seller'    => ((($this->user->getGroupId() !== '1' && $this->user->getGroupId() !== '2')) ? $this->user->getId() : '0') ,
+            ]]></add>
+        </operation>
+    </file>
+    <!-- Hide Customer Info on Seller Dashboard ENDS-->
+
+    <!-- Restrict the Sales Order List w.r.t Seller ENDS-->
+
 </modification>

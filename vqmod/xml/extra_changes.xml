@@ -1,0 +1,110 @@
+<modification>
+    <id>Extra Changes - SOUK</id>
+    <version>2.0.0</version>
+    <vqmver>2.3.0</vqmver>
+    <update>0.0.1</update>
+    <author>Rohit Batra</author>
+
+    <!-- Add a new Filter on Product List page for ADMIN -->
+
+    <file name="admin/controller/catalog/product.php">
+        <operation>
+            <search position="before"><![CDATA[
+            $pagination = new Pagination();
+            ]]></search>
+            <add><![CDATA[
+                $data['entry_seller'] = $this->language->get('entry_seller');
+                // Get Seller List
+                $this->load->model('user/user');
+                $data['sellers'] = $this->model_user_user->getSellers();
+                $data['is_seller'] = false;
+                if($this->user->isSeller())
+                {
+                    $data['is_seller'] = true;
+                }
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA[
+                $data['filter_image'] = $filter_image;
+            ]]></search>
+            <add><![CDATA[
+                if (isset($this->request->get['filter_seller'])) {
+                    $filter_seller = $this->request->get['filter_seller'];
+                } else {
+                    $filter_seller = null;
+                }
+
+                $data['filter_seller'] = $filter_seller;
+            ]]></add>
+        </operation>
+
+    </file>
+
+    <file name="admin/model/user/user.php">
+        <operation>
+            <search position="before"><![CDATA[
+                public function getTotalUsers() {
+            ]]></search>
+            <add><![CDATA[
+                public function getSellers() {
+
+                    $query = $this->db->query("SELECT u.user_id, u.username, u.firstname, u.lastname, u.email, u.status, ug.name as user_group_name FROM `" . DB_PREFIX . "user` AS u LEFT OUTER JOIN `" . DB_PREFIX . "user_group` ug ON (ug.user_group_id = u.user_group_id) WHERE ug.user_group_id <> '1' AND ug.user_group_id <> '2'  ");
+
+                    return $query->rows;
+                }
+            ]]></add>
+        </operation>
+    </file>
+    <!-- Add a new Filter on Product List page for ADMIN ENDS-->
+
+    <!-- Show Seller Username on Sales Order Info Page per product ADMIN -->
+    <file name="admin/view/template/sale/order_info.tpl">
+        <operation>
+            <search position="after"><![CDATA[
+            <td class="text-left"><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a>
+            ]]></search>
+            <add><![CDATA[
+            <?php if(!$is_seller) { if(!empty($product['seller_username'])) { ?>  <small>  -||-  <a href="<?php echo $product['seller_href']; ?>"><?php echo $product['seller_username']; ?></a></small>  <?php } } ?>
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/model/sale/order.php">
+        <operation>
+            <search position="before"><![CDATA[
+            public function getTotalEmailsByProductsOrdered($products) {
+            ]]></search>
+            <add><![CDATA[
+            public function getSellerDetails($data) {
+
+                $sql = "SELECT u.{$data['searchFor']} FROM `" . DB_PREFIX . "user` as u LEFT OUTER JOIN `" . DB_PREFIX . "product` p ON (p.seller_id = u.user_id) WHERE p.product_id = '" . (int)$data['product_id'] . "'";
+
+                $query = $this->db->query($sql);
+
+                if($this->db->countAffected() > 0)
+                {
+                    return ($query->row[$data['searchFor']]);
+                } else {
+                    return 0;
+                }
+            }
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/controller/sale/order.php">
+        <operation>
+            <search position="before"><![CDATA[
+            'href'     		   => $this->url->link('catalog/product/edit', 'token=' . $this->session->data['token'] . '&product_id=' . $product['product_id'], true)
+            ]]></search>
+            <add><![CDATA[
+            'seller_username' => $this->model_sale_order->getSellerDetails(array('product_id' => $product['product_id'], 'searchFor' => 'username')),
+            'seller_href' => $this->url->link('user/user/edit', 'token=' . $this->session->data['token'] . '&user_id=' . $this->model_sale_order->getSellerDetails(array('product_id' => $product['product_id'], 'searchFor' => 'user_id')), true),
+            ]]></add>
+        </operation>
+    </file>
+    <!-- Show Seller Username on Sales Order Info Page per product ADMIN ENDS-->
+
+
+</modification>
