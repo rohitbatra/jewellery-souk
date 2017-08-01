@@ -1,5 +1,5 @@
 <?php
-class ModelAccountSeller extends Model {
+class ModelSellerSeller extends Model {
     public function addSeller($data) {
 
         $this->db->query("INSERT INTO " . DB_PREFIX . "user SET user_group_id = '11', username = '" . $this->db->escape($data['username']) . "', firstname = '" . $this->db->escape($data['firstname']) . "', lastname = '" . $this->db->escape($data['lastname']) . "', email = '" . $this->db->escape($data['email']) . "', salt = '" . $this->db->escape($salt = token(9)) . "', password = '" . $this->db->escape(sha1($salt . sha1($salt . sha1($data['password'])))) . "',  ip = '" . $this->db->escape($this->request->server['REMOTE_ADDR']) . "', status = '0',  date_added = NOW()");

@@ -1,12 +1,12 @@
 <?php
-class ControllerAccountSeller extends Controller {
+class ControllerSellerSeller extends Controller {
     private $error = array();
 
     public function index()
     {
-        $this->load->model('account/seller');
+        $this->load->model('seller/seller');
 
-        $this->load->language('account/seller');
+        $this->load->language('seller/seller');
 
         $this->document->setTitle($this->language->get('splash_heading_title'));
 
@@ -19,7 +19,7 @@ class ControllerAccountSeller extends Controller {
 
         $data['breadcrumbs'][] = array(
             'text' => $this->language->get('text_account'),
-            'href' => $this->url->link('account/seller', '', true)
+            'href' => $this->url->link('seller/seller', '', true)
         );
 
         $data['heading_title'] = $this->language->get('splash_heading_title');
@@ -45,8 +45,8 @@ class ControllerAccountSeller extends Controller {
             $data['error_warning'] = '';
         }
 
-        $data['login'] = $this->url->link('account/seller/login', '', true);
-        $data['register'] = $this->url->link('account/seller/register', '', true);
+        $data['login'] = $this->url->link('seller/seller/login', '', true);
+        $data['register'] = $this->url->link('seller/seller/register', '', true);
 
         // Added strpos check to pass McAfee PCI compliance test (http://forum.opencart.com/viewtopic.php?f=10&t=12043&p=151494#p151295)
         if (isset($this->request->post['redirect']) && (strpos($this->request->post['redirect'], $this->config->get('config_url')) !== false || strpos($this->request->post['redirect'], $this->config->get('config_ssl')) !== false)) {
@@ -74,12 +74,12 @@ class ControllerAccountSeller extends Controller {
         $data['footer'] = $this->load->controller('common/footer');
         $data['header'] = $this->load->controller('common/header');
 
-        $this->response->setOutput($this->load->view('account/seller', $data));
+        $this->response->setOutput($this->load->view('seller/seller', $data));
     }
 
     public function login()
     {
-        $this->load->language('account/seller');
+        $this->load->language('seller/seller');
 
         $this->document->setTitle($this->language->get('heading_title'));
 
@@ -99,7 +99,7 @@ class ControllerAccountSeller extends Controller {
 
     public function register() {
 
-        $this->load->language('account/seller');
+        $this->load->language('seller/seller');
 
         $this->document->setTitle($this->language->get('heading_title'));
 
@@ -107,11 +107,11 @@ class ControllerAccountSeller extends Controller {
         $this->document->addScript('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.js');
         $this->document->addStyle('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.css');
 
-        $this->load->model('account/seller');
+        $this->load->model('seller/seller');
 
         if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate())
         {
-            $seller_id = $this->model_account_seller->addSeller($this->request->post);
+            $seller_id = $this->model_seller_seller->addSeller($this->request->post);
            
             echo $seller_id;
             return;
@@ -131,12 +131,12 @@ class ControllerAccountSeller extends Controller {
 
         $data['breadcrumbs'][] = array(
             'text' => $this->language->get('text_register'),
-            'href' => $this->url->link('account/seller/register', '', true)
+            'href' => $this->url->link('seller/seller/register', '', true)
         );
 
         $data['heading_title'] = $this->language->get('heading_title');
 
-        $data['text_account_already'] = sprintf($this->language->get('text_account_already'), $this->url->link('account/seller/login', '', true));
+        $data['text_account_already'] = sprintf($this->language->get('text_account_already'), $this->url->link('seller/seller/login', '', true));
         $data['text_your_details'] = $this->language->get('text_your_details');
         $data['text_your_address'] = $this->language->get('text_your_address');
         $data['text_your_password'] = $this->language->get('text_your_password');
@@ -290,7 +290,7 @@ class ControllerAccountSeller extends Controller {
             $data['error_bank_ifsc_code'] = '';
         }
 
-        $data['action'] = $this->url->link('account/seller/register', '', true);
+        $data['action'] = $this->url->link('seller/seller/register', '', true);
 
         if (isset($this->request->post['username'])) {
             $data['username'] = $this->request->post['username'];
@@ -516,10 +516,10 @@ class ControllerAccountSeller extends Controller {
         $postData['user_id'] = str_replace('SEZCAD','',$postData['orderNo']);
 
         // Now call the Model & Store all the Data with Status
-        $this->load->model('account/seller');
+        $this->load->model('seller/seller');
         $this->load->language('account/seller_success');
 
-        $this->model_account_seller->addPaymentInfo($postData);
+        $this->model_seller_seller->addPaymentInfo($postData);
 
         // Redirect to Page w.r.t $postData['order_status']
         $this->load->language('account/seller_success');
@@ -533,8 +533,8 @@ class ControllerAccountSeller extends Controller {
 
         if($postData['order_status'] == "Success")
         {
-            $this->model_account_seller->approveSeller(array('user_id' => $postData['user_id']));
-            $this->model_account_seller->sendEmail($postData);
+            $this->model_seller_seller->approveSeller(array('user_id' => $postData['user_id']));
+            $this->model_seller_seller->sendEmail($postData);
             
             // To Seller Success TPL
             $this->document->setTitle($data['heading_title']);
@@ -543,7 +543,7 @@ class ControllerAccountSeller extends Controller {
             $this->document->addScript('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.js');
             $this->document->addStyle('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.css');
 
-            $data['continue'] = $this->url->link('account/seller/login');
+            $data['continue'] = $this->url->link('seller/seller/login');
             $data['column_left'] = $this->load->controller('common/column_left');
             $data['column_right'] = $this->load->controller('common/column_right');
             $data['content_top'] = $this->load->controller('common/content_top');
@@ -555,7 +555,7 @@ class ControllerAccountSeller extends Controller {
             
         }else{
 
-            $this->model_account_seller->sendEmail($postData);
+            $this->model_seller_seller->sendEmail($postData);
 
             // To Seller Error TPL
             $this->load->language('account/seller_success');
