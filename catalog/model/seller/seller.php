@@ -17,12 +17,12 @@ class ModelSellerSeller extends Model {
 
     public function addPaymentInfo($data)
     {
-        $this->db->query("INSERT into " . DB_PREFIX . "seller_payment_status (user_id,amount,status,payment_id,extra_data) 
-                            VALUES 
+        $this->db->query("INSERT into " . DB_PREFIX . "seller_payment_status (user_id,amount,status,payment_id,extra_data)
+                            VALUES
                             ('{$data['user_id']}','{$data['amount']}','{$data['order_status']}','{$data['tracking_id']}','".json_encode($data)."') ");
-        
+
     }
-    
+
     public function approveSeller($data)
     {
         $this->db->query("UPDATE " . DB_PREFIX . "user SET status = '1'  WHERE user_id = '{$data['user_id']}' ");
@@ -119,5 +119,11 @@ class ModelSellerSeller extends Model {
                 }
             }
         }
+    }
+
+    public function getUserByUsername($username)
+    {
+      $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "user WHERE LOWER(username) = '" . $this->db->escape(utf8_strtolower($username)) . "'");
+      return $query->row;
     }
 }
