@@ -44,7 +44,7 @@
         </div>
         <div class="col-sm-6">
           <div class="well">
-            <h2><?php echo $text_returning_customer; ?></h2
+            <h2><?php echo $text_returning_customer; ?></h2>
             <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data">
               <div class="form-group">
                 <label class="control-label" for="input-username"><?php echo $entry_username; ?></label>

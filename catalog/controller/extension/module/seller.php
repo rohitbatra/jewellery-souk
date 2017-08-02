@@ -19,7 +19,7 @@ class ControllerExtensionModuleSeller extends Controller {
     $data['faq'] = $this->url->link('seller/faq', '', true);
     $data['pricing'] = $this->url->link('seller/pricing', '', true);
     $data['terms'] = $this->url->link('seller/terms', '', true);
-		$data['terms'] = $this->url->link('seller/contact', '', true);
+		$data['contact'] = $this->url->link('seller/contact', '', true);
 
 		return $this->load->view('extension/module/seller', $data);
 	}

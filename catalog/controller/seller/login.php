@@ -8,13 +8,6 @@ class ControllerSellerLogin extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-
-			// POST the Login Variables to ADMIN LOGIN Module
-
-
-		}
-
 		$data['breadcrumbs'] = array();
 
 		$data['breadcrumbs'][] = array(
@@ -55,7 +48,7 @@ class ControllerSellerLogin extends Controller {
 			$data['error_warning'] = '';
 		}
 
-		$data['action'] = $this->url->link('seller/login', '', true);
+		$data['action'] = HTTP_SERVER.'admin/index.php?route=common/login';
 		$data['register'] = $this->url->link('seller/register', '', true);
 		$data['forgotten'] = $this->url->link('seller/forgotten', '', true);
 
@@ -81,16 +74,4 @@ class ControllerSellerLogin extends Controller {
 		$this->response->setOutput($this->load->view('seller/login', $data));
 	}
 
-	protected function validate() {
-
-		// Check if user has been approved.
-		$this->load->model('seller/seller');
-		$user_info = $this->model_seller_seller->getUserByUsername($this->request->post['username']);
-
-		if ($user_info && !$user_info['status']) {
-			$this->error['warning'] = $this->language->get('error_approved');
-		}
-
-		return $this->error;
-	}
 }
