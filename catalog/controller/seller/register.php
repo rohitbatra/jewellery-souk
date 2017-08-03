@@ -46,6 +46,7 @@ class ControllerSellerRegister extends Controller {
         $data['text_company_details'] = $this->language->get('text_company_details');
         $data['text_account_details'] = $this->language->get('text_account_details');
         $data['text_your_address'] = $this->language->get('text_your_address');
+        $data['text_company_address'] = $this->language->get('text_company_address');
         $data['text_your_password'] = $this->language->get('text_your_password');
         $data['text_your_payment'] = $this->language->get('text_your_payment');
         $data['text_subscription_fees'] = $this->language->get('text_subscription_fees');
@@ -66,6 +67,13 @@ class ControllerSellerRegister extends Controller {
         $data['entry_password'] = $this->language->get('entry_password');
         $data['entry_confirm'] = $this->language->get('entry_confirm');
         $data['entry_subscription_amount'] = $this->language->get('entry_subscription_amount');
+        $data['entry_seller_type'] = $this->language->get('entry_seller_type');
+
+        $data['entry_company_name'] = $this->language->get('entry_company_name');
+        $data['entry_company_pan'] = $this->language->get('entry_company_pan');
+        $data['entry_company_tin'] = $this->language->get('entry_company_tin');
+        $data['entry_your_pan'] = $this->language->get('entry_your_pan');
+
 
         // Payment Entries
         $data['entry_bank_name'] = $this->language->get('entry_bank_name');
@@ -112,7 +120,7 @@ class ControllerSellerRegister extends Controller {
         } else {
             $data['error_telephone'] = '';
         }
-/* Not Using Address for Seller Registration
+
         if (isset($this->error['address_1'])) {
             $data['error_address_1'] = $this->error['address_1'];
         } else {
@@ -137,18 +145,6 @@ class ControllerSellerRegister extends Controller {
             $data['error_country'] = '';
         }
 
-        if (isset($this->error['zone'])) {
-            $data['error_zone'] = $this->error['zone'];
-        } else {
-            $data['error_zone'] = '';
-        }
-
-        if (isset($this->error['custom_field'])) {
-            $data['error_custom_field'] = $this->error['custom_field'];
-        } else {
-            $data['error_custom_field'] = array();
-        }
-*/
         if (isset($this->error['password'])) {
             $data['error_password'] = $this->error['password'];
         } else {
@@ -161,37 +157,19 @@ class ControllerSellerRegister extends Controller {
             $data['error_confirm'] = '';
         }
 
-        if (isset($this->error['bank_name'])) {
-            $data['error_bank_name'] = $this->error['bank_name'];
+        if (isset($this->error['seller_type'])) {
+            $data['error_seller_type'] = $this->error['seller_type'];
         } else {
-            $data['error_bank_name'] = '';
+            $data['error_seller_type'] = '';
         }
 
-        if (isset($this->error['bank_branch'])) {
-            $data['error_bank_branch'] = $this->error['bank_branch'];
+        if (isset($this->error['company_name'])) {
+            $data['error_company_name'] = $this->error['company_name'];
         } else {
-            $data['error_bank_branch'] = '';
+            $data['error_company_name'] = '';
         }
 
-        if (isset($this->error['bank_account_number'])) {
-            $data['error_bank_account_number'] = $this->error['bank_account_number'];
-        } else {
-            $data['error_bank_account_number'] = '';
-        }
-
-        if (isset($this->error['bank_payee_name'])) {
-            $data['error_bank_payee_name'] = $this->error['bank_payee_name'];
-        } else {
-            $data['error_bank_payee_name'] = '';
-        }
-
-        if (isset($this->error['bank_ifsc_code'])) {
-            $data['error_bank_ifsc_code'] = $this->error['bank_ifsc_code'];
-        } else {
-            $data['error_bank_ifsc_code'] = '';
-        }
-
-        $data['action'] = $this->url->link('seller/seller/register', '', true);
+        $data['action'] = $this->url->link('seller/register', '', true);
 
         if (isset($this->request->post['username'])) {
             $data['username'] = $this->request->post['username'];
@@ -263,12 +241,30 @@ class ControllerSellerRegister extends Controller {
             $data['country_id'] = $this->config->get('config_country_id');
         }
 
-        if (isset($this->request->post['zone_id'])) {
-            $data['zone_id'] = (int)$this->request->post['zone_id'];
-        } elseif (isset($this->session->data['shipping_address']['zone_id'])) {
-            $data['zone_id'] = $this->session->data['shipping_address']['zone_id'];
+
+        // Custom Details
+        if (isset($this->request->post['pan_number'])) {
+            $data['pan_number'] = $this->request->post['pan_number'];
         } else {
-            $data['zone_id'] = '';
+            $data['pan_number'] = '';
+        }
+
+        if (isset($this->request->post['company_pan'])) {
+            $data['company_pan'] = $this->request->post['company_pan'];
+        } else {
+            $data['company_pan'] = '';
+        }
+
+        if (isset($this->request->post['company_tin'])) {
+            $data['company_tin'] = $this->request->post['company_tin'];
+        } else {
+            $data['company_tin'] = '';
+        }
+
+        if (isset($this->request->post['company_name'])) {
+            $data['company_name'] = $this->request->post['company_name'];
+        } else {
+            $data['company_name'] = '';
         }
 
         $this->load->model('localisation/country');
@@ -287,41 +283,10 @@ class ControllerSellerRegister extends Controller {
             $data['confirm'] = '';
         }
 
-        // Payment Data
-        if (isset($this->request->post['bank_name'])) {
-            $data['bank_name'] = $this->request->post['bank_name'];
+        if (isset($this->request->post['subscription_fees'])) {
+            $data['subscription_fees'] = $this->request->post['subscription_fees'];
         } else {
-            $data['bank_name'] = '';
-        }
-
-        if (isset($this->request->post['bank_branch'])) {
-            $data['bank_branch'] = $this->request->post['bank_branch'];
-        } else {
-            $data['bank_branch'] = '';
-        }
-
-        if (isset($this->request->post['bank_account_number'])) {
-            $data['bank_account_number'] = $this->request->post['bank_account_number'];
-        } else {
-            $data['bank_account_number'] = '';
-        }
-
-        if (isset($this->request->post['bank_payee_name'])) {
-            $data['bank_payee_name'] = $this->request->post['bank_payee_name'];
-        } else {
-            $data['bank_payee_name'] = '';
-        }
-
-        if (isset($this->request->post['bank_ifsc_code'])) {
-            $data['bank_ifsc_code'] = $this->request->post['bank_ifsc_code'];
-        } else {
-            $data['bank_ifsc_code'] = '';
-        }
-
-        if (isset($this->request->post['selling_fees'])) {
-            $data['selling_fees'] = $this->request->post['selling_fees'];
-        } else {
-            $data['selling_fees'] = '500';
+            $data['subscription_fees'] = $this->config->get('subscription_fees');
         }
 
 
@@ -362,7 +327,12 @@ class ControllerSellerRegister extends Controller {
         $this->response->setOutput($this->load->view('seller/register', $data));
     }
 
-    private function validate() {
+    /**
+    * Required Fields - Email, Password, Confirm Password, username, address_1, country, city, postcode, telephone
+    * Conditional Required Fields - company_name, firstname, lastname
+    */
+    private function validate()
+    {
         if ((utf8_strlen(trim($this->request->post['firstname'])) < 1) || (utf8_strlen(trim($this->request->post['firstname'])) > 32)) {
             $this->error['firstname'] = $this->language->get('error_firstname');
         }

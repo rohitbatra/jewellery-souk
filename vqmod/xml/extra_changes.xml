@@ -106,5 +106,26 @@
     </file>
     <!-- Show Seller Username on Sales Order Info Page per product ADMIN ENDS-->
 
+    <!-- Show Drop-down on Header for SELLER -->
+    <file name="catalog/view/theme/so-topdeal/template/header/header2.tpl">
+      <operation error="log">
+        <search position="before"><![CDATA[
+            <li class="login" >
+          ]]></search>
+        <add><![CDATA[
+          <li class="login" id="seller_drop">
+            <a href="javascript:void(1);" class="btn-xs dropdown-toggle" data-toggle="dropdown">
+              <span><?php echo 'Seller'; ?></span>
+              <span class="fa fa-angle-down"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="<?php echo $seller_login; ?>"><?php echo $text_seller_login; ?></a></li>
+              <li><a href="<?php echo $seller_register; ?>"><?php echo $text_seller_register; ?></a></li>
+            </ul>
+          </li>
+          ]]></add>
+      </operation>
+    </file>
+    <!-- Show Drop-down on Header for SELLER ENDS-->
 
 </modification>
