@@ -58,6 +58,7 @@ class ControllerSellerRegister extends Controller {
         $data['entry_username'] = $this->language->get('entry_username');
         $data['entry_telephone'] = $this->language->get('entry_telephone');
         $data['entry_company'] = $this->language->get('entry_company');
+        $data['entry_individual'] = $this->language->get('entry_individual');
         $data['entry_address_1'] = $this->language->get('entry_address_1');
         $data['entry_address_2'] = $this->language->get('entry_address_2');
         $data['entry_postcode'] = $this->language->get('entry_postcode');
@@ -72,6 +73,8 @@ class ControllerSellerRegister extends Controller {
         $data['entry_company_name'] = $this->language->get('entry_company_name');
         $data['entry_company_pan'] = $this->language->get('entry_company_pan');
         $data['entry_company_tin'] = $this->language->get('entry_company_tin');
+        $data['entry_company_p_firstname'] = $this->language->get('entry_company_p_firstname');
+        $data['entry_company_p_lastname'] = $this->language->get('entry_company_p_lastname');
         $data['entry_your_pan'] = $this->language->get('entry_your_pan');
 
 
@@ -107,6 +110,18 @@ class ControllerSellerRegister extends Controller {
             $data['error_lastname'] = $this->error['lastname'];
         } else {
             $data['error_lastname'] = '';
+        }
+
+        if (isset($this->error['company_p_firstname'])) {
+            $data['error_company_p_firstname'] = $this->error['company_p_firstname'];
+        } else {
+            $data['error_company_p_firstname'] = '';
+        }
+
+        if (isset($this->error['company_p_lastname'])) {
+            $data['error_company_p_lastname'] = $this->error['company_p_lastname'];
+        } else {
+            $data['error_company_p_lastname'] = '';
         }
 
         if (isset($this->error['email'])) {
@@ -330,25 +345,30 @@ class ControllerSellerRegister extends Controller {
     /**
     * Required Fields - Email, Password, Confirm Password, username, address_1, country, city, postcode, telephone
     * Conditional Required Fields - company_name, firstname, lastname
+    * email & username should be unique
     */
     private function validate()
     {
-        if ((utf8_strlen(trim($this->request->post['firstname'])) < 1) || (utf8_strlen(trim($this->request->post['firstname'])) > 32)) {
-            $this->error['firstname'] = $this->language->get('error_firstname');
-        }
-
-        if ((utf8_strlen(trim($this->request->post['lastname'])) < 1) || (utf8_strlen(trim($this->request->post['lastname'])) > 32)) {
-            $this->error['lastname'] = $this->language->get('error_lastname');
+        // Check for Exist
+        if($this->emailExists($this->request->post['email']))
+        {
+            $this->error['email'] = $this->language->get('error_exists');
         }
 
         if ((utf8_strlen($this->request->post['email']) > 96) || !filter_var($this->request->post['email'], FILTER_VALIDATE_EMAIL)) {
             $this->error['email'] = $this->language->get('error_email');
         }
 
-        if ((utf8_strlen($this->request->post['telephone']) < 3) || (utf8_strlen($this->request->post['telephone']) > 32)) {
-            $this->error['telephone'] = $this->language->get('error_telephone');
+        if($this->usernameExists($this->request->post['username']))
+        {
+            $this->error['username'] = $this->language->get('error_username_exists');
         }
 
+        if ((utf8_strlen($this->request->post['username']) < 3) || (utf8_strlen($this->request->post['username']) > 25)) {
+            $this->error['username'] = $this->language->get('error_username');
+        }
+
+        // Mandatory Conditions
         if ((utf8_strlen($this->request->post['password']) < 4) || (utf8_strlen($this->request->post['password']) > 20)) {
             $this->error['password'] = $this->language->get('error_password');
         }
@@ -356,6 +376,39 @@ class ControllerSellerRegister extends Controller {
         if ($this->request->post['confirm'] != $this->request->post['password']) {
             $this->error['confirm'] = $this->language->get('error_confirm');
         }
+
+        if ((utf8_strlen($this->request->post['telephone']) < 3) || (utf8_strlen($this->request->post['telephone']) > 32)) {
+            $this->error['telephone'] = $this->language->get('error_telephone');
+        }
+
+        if($this->request->post['seller_type'] == 'individual')
+        {
+            // Individual Fields Validation
+            if ((utf8_strlen(trim($this->request->post['firstname'])) < 1) || (utf8_strlen(trim($this->request->post['firstname'])) > 32)) {
+                $this->error['firstname'] = $this->language->get('error_firstname');
+            }
+
+            if ((utf8_strlen(trim($this->request->post['lastname'])) < 1) || (utf8_strlen(trim($this->request->post['lastname'])) > 32)) {
+                $this->error['lastname'] = $this->language->get('error_lastname');
+            }
+        }
+
+        if($this->request->post['seller_type'] == 'company')
+        {
+            // Company Fields Validation
+            if ((utf8_strlen(trim($this->request->post['company_name'])) < 1) ) {
+                $this->error['company_name'] = $this->language->get('error_company_name');
+            }
+
+            if ((utf8_strlen(trim($this->request->post['company_p_firstname'])) < 1) || (utf8_strlen(trim($this->request->post['company_p_firstname'])) > 32)) {
+                $this->error['company_p_firstname'] = $this->language->get('error_company_p_firstname');
+            }
+
+            if ((utf8_strlen(trim($this->request->post['company_p_lastname'])) < 1) || (utf8_strlen(trim($this->request->post['company_p_lastname'])) > 32)) {
+                $this->error['company_p_lastname'] = $this->language->get('error_company_p_lastname');
+            }
+        }
+
 
         // Captcha
         if ($this->config->get($this->config->get('config_captcha') . '_status') && in_array('register', (array)$this->config->get('config_captcha_page'))) {
@@ -378,6 +431,34 @@ class ControllerSellerRegister extends Controller {
         }
 
         return !$this->error;
+    }
+
+    protected function emailExists($email)
+    {
+        $emailArr = array();
+        $this->load->model('seller/seller');
+        $emailArr =  $this->model_seller_seller->checkForEmail($email);
+
+        if(!empty($emailArr))
+        {
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    protected function usernameExists($username)
+    {
+        $usernameArr = array();
+        $this->load->model('seller/seller');
+        $usernameArr =  $this->model_seller_seller->checkForUsername($username);
+
+        if(!empty($usernameArr))
+        {
+            return true;
+        }else {
+            return false;
+        }
     }
 
 

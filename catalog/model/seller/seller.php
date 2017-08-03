@@ -2,14 +2,10 @@
 class ModelSellerSeller extends Model {
     public function addSeller($data) {
 
-        $this->db->query("INSERT INTO " . DB_PREFIX . "user SET user_group_id = '11', username = '" . $this->db->escape($data['username']) . "', firstname = '" . $this->db->escape($data['firstname']) . "', lastname = '" . $this->db->escape($data['lastname']) . "', email = '" . $this->db->escape($data['email']) . "', salt = '" . $this->db->escape($salt = token(9)) . "', password = '" . $this->db->escape(sha1($salt . sha1($salt . sha1($data['password'])))) . "',  ip = '" . $this->db->escape($this->request->server['REMOTE_ADDR']) . "', status = '0',  date_added = NOW()");
+        $this->db->query("INSERT INTO " . DB_PREFIX . "user SET username = '" . $this->db->escape($data['username']) . "', firstname = '" . $this->db->escape($data['firstname']) . "', lastname = '" . $this->db->escape($data['lastname']) . "', email = '" . $this->db->escape($data['email']) . "', salt = '" . $this->db->escape($salt = token(9)) . "', password = '" . $this->db->escape(sha1($salt . sha1($salt . sha1($data['password'])))) . "',  ip = '" . $this->db->escape($this->request->server['REMOTE_ADDR']) . "', status = '0',  date_added = NOW()");
 
         $seller_id = $this->db->getLastId();
 
-        // update Seller_details table for bank details.
-        $sql_seller_details = "INSERT INTO " . DB_PREFIX . "seller_details (user_id, phone, address, bank_name, bank_account_number, bank_branch, bank_payee_name, bank_ifsc_code, comments)
-                                VALUES( '{$seller_id}', '".$this->db->escape($data['telephone'])."', '', '".$this->db->escape($data['bank_name'])."','".$this->db->escape($data['bank_account_number'])."','".$this->db->escape($data['bank_branch'])."','".$this->db->escape($data['bank_payee_name'])."','".$this->db->escape($data['bank_ifsc_code'])."', '') ;";
-        $this->db->query($sql_seller_details);
 
         return $seller_id;
     }
@@ -124,6 +120,22 @@ class ModelSellerSeller extends Model {
     public function getUserByUsername($username)
     {
       $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "user WHERE LOWER(username) = '" . $this->db->escape(utf8_strtolower($username)) . "'");
+
       return $query->row;
     }
+
+    public function checkForEmail($email)
+    {
+        $query = $this->db->query("SELECT user_id FROM " . DB_PREFIX . "user WHERE email LIKE '" . $this->db->escape($email) . "'");
+
+        return $query->rows;
+    }
+
+    public function checkForUsername($username)
+    {
+        $query = $this->db->query("SELECT user_id FROM " . DB_PREFIX . "user WHERE LOWER(username) LIKE '" . $this->db->escape(utf8_strtolower($username)) . "'");
+
+        return $query->rows;
+    }
+
 }
