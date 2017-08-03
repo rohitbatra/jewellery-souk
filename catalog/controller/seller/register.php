@@ -31,7 +31,7 @@ class ControllerSellerRegister extends Controller {
 
         $data['breadcrumbs'][] = array(
             'text' => $this->language->get('text_account'),
-            'href' => $this->url->link('seller/account', '', true)
+            'href' => $this->url->link('seller/seller', '', true)
         );
 
         $data['breadcrumbs'][] = array(
@@ -41,24 +41,20 @@ class ControllerSellerRegister extends Controller {
 
         $data['heading_title'] = $this->language->get('heading_title');
 
-        $data['text_account_already'] = sprintf($this->language->get('text_account_already'), $this->url->link('seller/seller/login', '', true));
+        $data['text_account_already'] = sprintf($this->language->get('text_account_already'), $this->url->link('seller/login', '', true));
         $data['text_your_details'] = $this->language->get('text_your_details');
+        $data['text_company_details'] = $this->language->get('text_company_details');
+        $data['text_account_details'] = $this->language->get('text_account_details');
         $data['text_your_address'] = $this->language->get('text_your_address');
         $data['text_your_password'] = $this->language->get('text_your_password');
         $data['text_your_payment'] = $this->language->get('text_your_payment');
-        $data['text_seller_package'] = $this->language->get('text_seller_package');
-        $data['text_newsletter'] = $this->language->get('text_newsletter');
-        $data['text_yes'] = $this->language->get('text_yes');
-        $data['text_no'] = $this->language->get('text_no');
-        $data['text_select'] = $this->language->get('text_select');
-        $data['text_none'] = $this->language->get('text_none');
-        $data['text_loading'] = $this->language->get('text_loading');
+        $data['text_subscription_fees'] = $this->language->get('text_subscription_fees');
 
-        $data['entry_customer_group'] = $this->language->get('entry_customer_group');
         $data['entry_username'] = $this->language->get('entry_username');
         $data['entry_firstname'] = $this->language->get('entry_firstname');
         $data['entry_lastname'] = $this->language->get('entry_lastname');
         $data['entry_email'] = $this->language->get('entry_email');
+        $data['entry_username'] = $this->language->get('entry_username');
         $data['entry_telephone'] = $this->language->get('entry_telephone');
         $data['entry_company'] = $this->language->get('entry_company');
         $data['entry_address_1'] = $this->language->get('entry_address_1');
@@ -69,6 +65,7 @@ class ControllerSellerRegister extends Controller {
         $data['entry_zone'] = $this->language->get('entry_zone');
         $data['entry_password'] = $this->language->get('entry_password');
         $data['entry_confirm'] = $this->language->get('entry_confirm');
+        $data['entry_subscription_amount'] = $this->language->get('entry_subscription_amount');
 
         // Payment Entries
         $data['entry_bank_name'] = $this->language->get('entry_bank_name');
@@ -79,7 +76,6 @@ class ControllerSellerRegister extends Controller {
         $data['entry_selling_fees'] = $this->language->get('entry_selling_fees');
 
         $data['button_continue'] = $this->language->get('button_continue');
-        $data['button_upload'] = $this->language->get('button_upload');
 
         if (isset($this->error['warning'])) {
             $data['error_warning'] = $this->error['warning'];
@@ -363,7 +359,7 @@ class ControllerSellerRegister extends Controller {
         $data['footer'] = $this->load->controller('common/footer');
         $data['header'] = $this->load->controller('common/header');
 
-        $this->response->setOutput($this->load->view('account/seller_register', $data));
+        $this->response->setOutput($this->load->view('seller/register', $data));
     }
 
     private function validate() {

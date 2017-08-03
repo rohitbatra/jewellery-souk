@@ -21,125 +21,25 @@
 <p><?php echo $text_account_already; ?></p>
 <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" class="form-horizontal" id="form-seller-register">
 <fieldset id="account">
-<legend><?php echo $text_your_details; ?></legend>
-<div class="form-group required">
-    <label class="col-sm-2 control-label" for="input-username"><?php echo $entry_username; ?></label>
-    <div class="col-sm-10">
-        <input type="text" name="username" value="<?php echo $username; ?>" placeholder="<?php echo $entry_username; ?>" id="input-username" class="form-control" />
-        <?php if ($error_username) { ?>
-        <div class="text-danger"><?php echo $error_username; ?></div>
-        <?php } ?>
-    </div>
-</div>
-<div class="form-group required">
-    <label class="col-sm-2 control-label" for="input-firstname"><?php echo $entry_firstname; ?></label>
-    <div class="col-sm-10">
-        <input type="text" name="firstname" value="<?php echo $firstname; ?>" placeholder="<?php echo $entry_firstname; ?>" id="input-firstname" class="form-control" />
-        <?php if ($error_firstname) { ?>
-        <div class="text-danger"><?php echo $error_firstname; ?></div>
-        <?php } ?>
-    </div>
-</div>
-<div class="form-group required">
-    <label class="col-sm-2 control-label" for="input-lastname"><?php echo $entry_lastname; ?></label>
-    <div class="col-sm-10">
-        <input type="text" name="lastname" value="<?php echo $lastname; ?>" placeholder="<?php echo $entry_lastname; ?>" id="input-lastname" class="form-control" />
-        <?php if ($error_lastname) { ?>
-        <div class="text-danger"><?php echo $error_lastname; ?></div>
-        <?php } ?>
-    </div>
-</div>
-<div class="form-group required">
-    <label class="col-sm-2 control-label" for="input-email"><?php echo $entry_email; ?></label>
-    <div class="col-sm-10">
-        <input type="email" name="email" value="<?php echo $email; ?>" placeholder="<?php echo $entry_email; ?>" id="input-email" class="form-control" />
-        <?php if ($error_email) { ?>
-        <div class="text-danger"><?php echo $error_email; ?></div>
-        <?php } ?>
-    </div>
-</div>
-<div class="form-group required">
-    <label class="col-sm-2 control-label" for="input-telephone"><?php echo $entry_telephone; ?></label>
-    <div class="col-sm-10">
-        <input type="tel" name="telephone" value="<?php echo $telephone; ?>" placeholder="<?php echo $entry_telephone; ?>" id="input-telephone" class="form-control" />
-        <?php if ($error_telephone) { ?>
-        <div class="text-danger"><?php echo $error_telephone; ?></div>
-        <?php } ?>
-    </div>
-</div>
-</fieldset>
-<fieldset id="address" style="display: none;">
-<legend><?php echo $text_your_address; ?></legend>
-<div class="form-group">
-    <label class="col-sm-2 control-label" for="input-company"><?php echo $entry_company; ?></label>
-    <div class="col-sm-10">
-        <input type="text" name="company" value="<?php echo $company; ?>" placeholder="<?php echo $entry_company; ?>" id="input-company" class="form-control" />
-    </div>
-</div>
-<div class="form-group required">
-    <label class="col-sm-2 control-label" for="input-address-1"><?php echo $entry_address_1; ?></label>
-    <div class="col-sm-10">
-        <input type="text" name="address_1" value="<?php echo $address_1; ?>" placeholder="<?php echo $entry_address_1; ?>" id="input-address-1" class="form-control" />
-        <?php if ($error_address_1) { ?>
-        <div class="text-danger"><?php echo $error_address_1; ?></div>
-        <?php } ?>
-    </div>
-</div>
-<div class="form-group">
-    <label class="col-sm-2 control-label" for="input-address-2"><?php echo $entry_address_2; ?></label>
-    <div class="col-sm-10">
-        <input type="text" name="address_2" value="<?php echo $address_2; ?>" placeholder="<?php echo $entry_address_2; ?>" id="input-address-2" class="form-control" />
-    </div>
-</div>
-<div class="form-group required">
-    <label class="col-sm-2 control-label" for="input-city"><?php echo $entry_city; ?></label>
-    <div class="col-sm-10">
-        <input type="text" name="city" value="<?php echo $city; ?>" placeholder="<?php echo $entry_city; ?>" id="input-city" class="form-control" />
-        <?php if ($error_city) { ?>
-        <div class="text-danger"><?php echo $error_city; ?></div>
-        <?php } ?>
-    </div>
-</div>
-<div class="form-group required">
-    <label class="col-sm-2 control-label" for="input-postcode"><?php echo $entry_postcode; ?></label>
-    <div class="col-sm-10">
-        <input type="text" name="postcode" value="<?php echo $postcode; ?>" placeholder="<?php echo $entry_postcode; ?>" id="input-postcode" class="form-control" />
-        <?php if ($error_postcode) { ?>
-        <div class="text-danger"><?php echo $error_postcode; ?></div>
-        <?php } ?>
-    </div>
-</div>
-<div class="form-group required">
-    <label class="col-sm-2 control-label" for="input-country"><?php echo $entry_country; ?></label>
-    <div class="col-sm-10">
-        <select name="country_id" id="input-country" class="form-control">
-            <option value=""><?php echo $text_select; ?></option>
-            <?php foreach ($countries as $country) { ?>
-            <?php if ($country['country_id'] == $country_id) { ?>
-            <option value="<?php echo $country['country_id']; ?>" selected="selected"><?php echo $country['name']; ?></option>
-            <?php } else { ?>
-            <option value="<?php echo $country['country_id']; ?>"><?php echo $country['name']; ?></option>
+    <legend><?php echo $text_your_details; ?></legend>
+    <div class="form-group required">
+        <label class="col-sm-2 control-label" for="input-email"><?php echo $entry_email; ?></label>
+        <div class="col-sm-10">
+            <input type="email" name="email" value="<?php echo $email; ?>" placeholder="<?php echo $entry_email; ?>" id="input-email" class="form-control" />
+            <?php if ($error_email) { ?>
+            <div class="text-danger"><?php echo $error_email; ?></div>
             <?php } ?>
+        </div>
+    </div>
+    <div class="form-group required">
+        <label class="col-sm-2 control-label" for="input-username"><?php echo $entry_username; ?></label>
+        <div class="col-sm-10">
+            <input type="text" name="username" value="<?php echo $username; ?>" placeholder="<?php echo $entry_username; ?>" id="input-username" class="form-control" />
+            <?php if ($error_username) { ?>
+            <div class="text-danger"><?php echo $error_username; ?></div>
             <?php } ?>
-        </select>
-        <?php if ($error_country) { ?>
-        <div class="text-danger"><?php echo $error_country; ?></div>
-        <?php } ?>
+        </div>
     </div>
-</div>
-<div class="form-group required">
-    <label class="col-sm-2 control-label" for="input-zone"><?php echo $entry_zone; ?></label>
-    <div class="col-sm-10">
-        <select name="zone_id" id="input-zone" class="form-control">
-        </select>
-        <?php if ($error_zone) { ?>
-        <div class="text-danger"><?php echo $error_zone; ?></div>
-        <?php } ?>
-    </div>
-</div>
-</fieldset>
-<fieldset>
-    <legend><?php echo $text_your_password; ?></legend>
     <div class="form-group required">
         <label class="col-sm-2 control-label" for="input-password"><?php echo $entry_password; ?></label>
         <div class="col-sm-10">
@@ -150,7 +50,7 @@
         </div>
     </div>
     <div class="form-group required">
-        <label class="col-sm-2 control-label" for="input-confirm"><?php echo $entry_confirm; ?></label>
+        <label class="col-sm-2 control-label"><?php echo $entry_confirm; ?></label>
         <div class="col-sm-10">
             <input type="password" name="confirm" value="<?php echo $confirm; ?>" placeholder="<?php echo $entry_confirm; ?>" id="input-confirm" class="form-control" />
             <?php if ($error_confirm) { ?>
@@ -159,63 +59,61 @@
         </div>
     </div>
 </fieldset>
-<fieldset>
-    <legend><?php echo $text_your_payment; ?></legend>
+<fieldset id="" style="display: block;">
+    <legend></legend>
     <div class="form-group required">
-        <label class="col-sm-2 control-label" for="input-bank_name"><?php echo $entry_bank_name; ?></label>
+        <label class="col-sm-2 control-label"><?php echo 'Select'; ?></label>
         <div class="col-sm-10">
-            <input type="text" name="bank_name" value="<?php echo $bank_name; ?>" placeholder="<?php echo $entry_bank_name; ?>" id="input-bank_name" class="form-control" />
-            <?php if ($error_bank_name) { ?>
-            <div class="text-danger"><?php echo $error_bank_name; ?></div>
+
+            <?php if ($error_confirm) { ?>
+            <div class="text-danger"><?php echo $error_confirm; ?></div>
+            <?php } ?>
+        </div>
+    </div>
+
+</fieldset>
+
+<fieldset id="company_details" style="display: none;">
+    <legend><?php echo $text_company_details; ?></legend>
+
+</fieldset>
+<fieldset id="your_details" style="display: none;">
+    <legend><?php echo $text_your_details; ?></legend>
+    <div class="form-group required">
+        <label class="col-sm-2 control-label" for="input-firstname"><?php echo $entry_firstname; ?></label>
+        <div class="col-sm-10">
+            <input type="text" name="firstname" value="<?php echo $firstname; ?>" placeholder="<?php echo $entry_firstname; ?>" id="input-firstname" class="form-control" />
+            <?php if ($error_firstname) { ?>
+            <div class="text-danger"><?php echo $error_firstname; ?></div>
             <?php } ?>
         </div>
     </div>
     <div class="form-group required">
-        <label class="col-sm-2 control-label" for="input-bank_branch_name"><?php echo $entry_bank_branch; ?></label>
+        <label class="col-sm-2 control-label" for="input-lastname"><?php echo $entry_lastname; ?></label>
         <div class="col-sm-10">
-            <input type="text" name="bank_branch" value="<?php echo $bank_branch; ?>" placeholder="<?php echo $entry_bank_branch; ?>" id="input-bank_branch" class="form-control" />
-            <?php if ($error_bank_branch) { ?>
-            <div class="text-danger"><?php echo $error_bank_branch; ?></div>
+            <input type="text" name="lastname" value="<?php echo $lastname; ?>" placeholder="<?php echo $entry_lastname; ?>" id="input-lastname" class="form-control" />
+            <?php if ($error_lastname) { ?>
+            <div class="text-danger"><?php echo $error_lastname; ?></div>
             <?php } ?>
         </div>
     </div>
     <div class="form-group required">
-        <label class="col-sm-2 control-label" for="input-account_number"><?php echo $entry_bank_account_number; ?></label>
+        <label class="col-sm-2 control-label" for="input-telephone"><?php echo $entry_telephone; ?></label>
         <div class="col-sm-10">
-            <input type="text" name="bank_account_number" value="<?php echo $bank_account_number; ?>" placeholder="<?php echo $entry_bank_account_number; ?>" id="input-account_number" class="form-control" />
-            <?php if ($error_bank_account_number) { ?>
-            <div class="text-danger"><?php echo $error_bank_account_number; ?></div>
-            <?php } ?>
-        </div>
-    </div>
-    <div class="form-group required">
-        <label class="col-sm-2 control-label" for="input-bank_payee_name"><?php echo $entry_bank_payee_name; ?></label>
-        <div class="col-sm-10">
-            <input type="text" name="bank_payee_name" value="<?php echo $bank_payee_name; ?>" placeholder="<?php echo $entry_bank_payee_name; ?>" id="input-bank_payee_name" class="form-control" />
-            <?php if ($error_bank_payee_name) { ?>
-            <div class="text-danger"><?php echo $error_bank_payee_name; ?></div>
-            <?php } ?>
-        </div>
-    </div>
-    <div class="form-group required">
-        <label class="col-sm-2 control-label" for="input-bank_name"><?php echo $entry_bank_ifsc_code; ?></label>
-        <div class="col-sm-10">
-            <input type="text" name="bank_ifsc_code" value="<?php echo $bank_ifsc_code; ?>" placeholder="<?php echo $entry_bank_ifsc_code; ?>" id="input-bank_ifsc_code" class="form-control" />
-            <?php if ($error_bank_ifsc_code) { ?>
-            <div class="text-danger"><?php echo $error_bank_ifsc_code; ?></div>
+            <input type="tel" name="telephone" value="<?php echo $telephone; ?>" placeholder="<?php echo $entry_telephone; ?>" id="input-telephone" class="form-control" />
+            <?php if ($error_telephone) { ?>
+            <div class="text-danger"><?php echo $error_telephone; ?></div>
             <?php } ?>
         </div>
     </div>
 </fieldset>
-<fieldset id="subscription">
-    <legend><?php echo $text_seller_package; ?></legend>
+
+<fieldset id="subscription_fees" style="display: none;">
+    <legend><?php echo $text_subscription_fees; ?></legend>
     <div class="form-group required">
-        <label class="col-sm-2 control-label" for="input-selling_fees"><?php echo $entry_selling_fees; ?></label>
+        <label class="col-sm-2 control-label" for="input-subscription_fees"><?php echo $entry_subscription_amount; ?></label>
         <div class="col-sm-10">
-            <input type="text" name="selling_fees" value="<?php echo $selling_fees; ?>" placeholder="<?php echo $entry_selling_fees; ?>" id="input-selling_fees" class="form-control" />
-            <?php /*if ($error_selling_fees) { */ ?>
-            <!--<div class="text-danger"><?php echo $error_selling_fees; ?></div>-->
-            <?php /* }*/ ?>
+            <input type="text" name="subscription_fees" value="<?php echo $subscription_fees; ?>" placeholder="<?php echo $entry_subscription_fees; ?>" id="input-subscription_fees" class="form-control" />
         </div>
     </div>
 </fieldset>
@@ -245,10 +143,10 @@
     <input type="text" name="tid" id="tid" value="<?php echo strtotime(date('d-m-Y h:m:s')) ?>" readonly />
     <input type="text" name="merchant_id" value="93868"/>
     <input type="text" name="order_id" value=""/>
-    <input type="text" name="amount" value="500.00"/>
+    <input type="text" name="amount" value="<?php echo $subscription_fees; ?>"/>
     <input type="text" name="currency" value="INR"/>
-    <input type="text" name="redirect_url" value="https://sezplus.com/cad/ccavenue/ccavResponseHandler.php"/>
-    <input type="text" name="cancel_url" value="https://sezplus.com/cad/index.php?route=account/seller/register"/>
+    <input type="text" name="redirect_url" value="<?php echo HTTP_SERVER; ?>ccavenue/ccavResponseHandler.php"/>
+    <input type="text" name="cancel_url" value="<?php echo HTTP_SERVER; ?>index.php?route=seller/register"/>
     <input type="text" name="language" value="EN"/>
 </form>
 
@@ -313,7 +211,7 @@
             $('select[name=\'country_id\']').trigger('change');
 
             // Fees Disabled
-            $('#input-selling_fees').prop('disabled',true);
+            $('#input-subscription_fees').prop('disabled',true);
 
             $('#form-seller-register').submit(function(e) {
 
