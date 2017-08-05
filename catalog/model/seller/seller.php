@@ -2,10 +2,35 @@
 class ModelSellerSeller extends Model {
     public function addSeller($data) {
 
-        $this->db->query("INSERT INTO " . DB_PREFIX . "user SET username = '" . $this->db->escape($data['username']) . "', firstname = '" . $this->db->escape($data['firstname']) . "', lastname = '" . $this->db->escape($data['lastname']) . "', email = '" . $this->db->escape($data['email']) . "', salt = '" . $this->db->escape($salt = token(9)) . "', password = '" . $this->db->escape(sha1($salt . sha1($salt . sha1($data['password'])))) . "',  ip = '" . $this->db->escape($this->request->server['REMOTE_ADDR']) . "', status = '0',  date_added = NOW()");
+        // Check for seller_type
+        if(isset($data['seller_type']))
+        {
+            if($data['seller_type'] == 'company')
+            {
+                $firstname = $data['company_p_firstname'];
+                $lastname = $data['company_p_lastname'];
+
+            }else if($data['seller_type'] == 'individual')
+            {
+                $firstname = $data['firstname'];
+                $lastname = $data['lastname'];
+
+            }
+        }
+
+        $this->db->query("INSERT INTO " . DB_PREFIX . "user SET username = '" . $this->db->escape($data['username']) . "', firstname = '" . $this->db->escape($firstname) . "', lastname = '" . $this->db->escape($lastname) . "', email = '" . $this->db->escape($data['email']) . "', salt = '" . $this->db->escape($salt = token(9)) . "', password = '" . $this->db->escape(sha1($salt . sha1($salt . sha1($data['password'])))) . "',  ip = '" . $this->db->escape($this->request->server['REMOTE_ADDR']) . "', status = '0',  date_added = NOW()");
 
         $seller_id = $this->db->getLastId();
 
+        $ignore = ['username', 'firstname', 'lastname', 'email', 'password','confirm','agree'];
+        // Add the Additional Info to Seller Info Table
+        foreach($data as $dt => $dv)
+        {
+            if(!in_array($dt, $ignore))
+            {
+              $this->db->query("INSERT INTO " . DB_PREFIX . "seller_info SET user_id = '{$seller_id}', `key` = '". $this->db->escape($dt) ."' , `value` = '". $this->db->escape($dv) ."' ;");
+            }
+        }
 
         return $seller_id;
     }
@@ -13,10 +38,29 @@ class ModelSellerSeller extends Model {
 
     public function addPaymentInfo($data)
     {
-        $this->db->query("INSERT into " . DB_PREFIX . "seller_payment_status (user_id,amount,status,payment_id,extra_data)
+        $this->db->query("INSERT into " . DB_PREFIX . "seller_payments (user_id,amount,status,payment_id,extra_data)
                             VALUES
                             ('{$data['user_id']}','{$data['amount']}','{$data['order_status']}','{$data['tracking_id']}','".json_encode($data)."') ");
 
+    }
+
+    public function getSellerById($uID)
+    {
+      $retArr = array();
+
+      $sql = "SELECT u.username, u.firstname, u.lastname, u.email, ug.user_group_id, ug.name as user_group_name, ug.permission FROM " . DB_PREFIX . "user AS u LEFT OUTER JOIN user_group ug ON (ug.user_group_id = u.user_group_id) WHERE u.user_id = '{$uID}' ";
+      $query = $this->db->query($sql);
+
+      $retArr = $query->row;
+
+      $sql_info = "SELECT si.key, si.value FROM " . DB_PREFIX . "seller_info AS si WHERE si.user_id = '{$uID}' ";
+      $query_info = $this->db->query($sql_info);
+
+      foreach ($query_info->rows as $row) {
+        $retArr[$row['key']] = $row['value'];
+      }
+
+      return $retArr;
     }
 
     public function approveSeller($data)

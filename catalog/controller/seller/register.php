@@ -18,8 +18,13 @@ class ControllerSellerRegister extends Controller {
         {
             $seller_id = $this->model_seller_seller->addSeller($this->request->post);
 
-            echo $seller_id;
-            return;
+            if(is_numeric($seller_id))
+            {
+                // Redirect to Payment Processing Page -- DUMMY PAGE
+                $this->response->redirect($this->url->link('seller/payment_process', '&uID='. $seller_id, true));
+            }else {
+                $this->session->data['error'] = "There's a problem with your Registration, please email us at <a href='mailto:seller.support@sezplus.com'>seller.support@sezplus.com</a>'";
+            }
        }
 
         $data['breadcrumbs'] = array();
@@ -69,6 +74,7 @@ class ControllerSellerRegister extends Controller {
         $data['entry_confirm'] = $this->language->get('entry_confirm');
         $data['entry_subscription_amount'] = $this->language->get('entry_subscription_amount');
         $data['entry_seller_type'] = $this->language->get('entry_seller_type');
+        $data['entry_category'] = $this->language->get('entry_category');
 
         $data['entry_company_name'] = $this->language->get('entry_company_name');
         $data['entry_company_pan'] = $this->language->get('entry_company_pan');
@@ -178,13 +184,50 @@ class ControllerSellerRegister extends Controller {
             $data['error_seller_type'] = '';
         }
 
+        if (isset($this->error['category'])) {
+            $data['error_category'] = $this->error['category'];
+        } else {
+            $data['error_category'] = '';
+        }
+
         if (isset($this->error['company_name'])) {
             $data['error_company_name'] = $this->error['company_name'];
         } else {
             $data['error_company_name'] = '';
         }
 
+        if (isset($this->error['address_1'])) {
+    			$data['error_address_1'] = $this->error['address_1'];
+    		} else {
+    			$data['error_address_1'] = '';
+    		}
+
+    		if (isset($this->error['city'])) {
+    			$data['error_city'] = $this->error['city'];
+    		} else {
+    			$data['error_city'] = '';
+    		}
+
+    		if (isset($this->error['postcode'])) {
+    			$data['error_postcode'] = $this->error['postcode'];
+    		} else {
+    			$data['error_postcode'] = '';
+    		}
+
         $data['action'] = $this->url->link('seller/register', '', true);
+
+        if (isset($this->request->post['seller_type'])) {
+            $data['seller_type'] = $this->request->post['seller_type'];
+        } else {
+            $data['seller_type'] = '';
+        }
+
+        if (isset($this->request->post['category'])) {
+            $data['category'] = $this->request->post['category'];
+        } else {
+            $data['category'] = '';
+        }
+
 
         if (isset($this->request->post['username'])) {
             $data['username'] = $this->request->post['username'];
@@ -195,13 +238,23 @@ class ControllerSellerRegister extends Controller {
         if (isset($this->request->post['firstname'])) {
             $data['firstname'] = $this->request->post['firstname'];
         } else {
-            $data['firstname'] = '';
+            if(isset($this->request->post['company_p_firstname']) && !empty($this->request->post['company_p_firstname']))
+            {
+              $data['firstname'] = $this->request->post['company_p_firstname'];
+            }else{
+              $data['firstname'] = '';
+            }
         }
 
         if (isset($this->request->post['lastname'])) {
             $data['lastname'] = $this->request->post['lastname'];
         } else {
+          if(isset($this->request->post['company_p_lastname']) && !empty($this->request->post['company_p_lastname']))
+          {
+            $data['lastname'] = $this->request->post['company_p_lastname'];
+          }else{
             $data['lastname'] = '';
+          }
         }
 
         if (isset($this->request->post['email'])) {
@@ -332,6 +385,14 @@ class ControllerSellerRegister extends Controller {
             $data['agree'] = false;
         }
 
+        // User Group Categories
+        $categoryArr = ['jewellery_manufacturer','jewellery_retailer','jewellery_wholeseller','jewellery_institute','cam_processing','freelancer','used_machinery_seller','others'];
+
+        foreach($categoryArr as $cat)
+        {
+            $data['categories'][] = array('name'=> ucwords(str_replace('_', ' ', $cat )), 'value'=> $cat);
+        }
+
         $data['column_left'] = $this->load->controller('common/column_left');
         $data['column_right'] = $this->load->controller('common/column_right');
         $data['content_top'] = $this->load->controller('common/content_top');
@@ -407,6 +468,22 @@ class ControllerSellerRegister extends Controller {
             if ((utf8_strlen(trim($this->request->post['company_p_lastname'])) < 1) || (utf8_strlen(trim($this->request->post['company_p_lastname'])) > 32)) {
                 $this->error['company_p_lastname'] = $this->language->get('error_company_p_lastname');
             }
+        }
+
+        if ((utf8_strlen(trim($this->request->post['address_1'])) < 3) || (utf8_strlen(trim($this->request->post['address_1'])) > 128)) {
+          $this->error['address_1'] = $this->language->get('error_address_1');
+        }
+
+        if ((utf8_strlen(trim($this->request->post['city'])) < 2) || (utf8_strlen(trim($this->request->post['city'])) > 128)) {
+          $this->error['city'] = $this->language->get('error_city');
+        }
+
+        $this->load->model('localisation/country');
+
+        $country_info = $this->model_localisation_country->getCountry($this->request->post['country_id']);
+
+        if ($country_info && $country_info['postcode_required'] && (utf8_strlen(trim($this->request->post['postcode'])) < 2 || utf8_strlen(trim($this->request->post['postcode'])) > 10)) {
+          $this->error['postcode'] = $this->language->get('error_postcode');
         }
 
 

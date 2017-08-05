@@ -113,19 +113,33 @@
             <li class="login" >
           ]]></search>
         <add><![CDATA[
-          <li class="login" id="seller_drop">
+          <li class="account" id="seller_drop">
             <a href="javascript:void(1);" class="btn-xs dropdown-toggle" data-toggle="dropdown">
-              <span><?php echo 'Seller'; ?></span>
+              <span><?php echo 'Seller(s)'; ?></span>
               <span class="fa fa-angle-down"></span>
             </a>
-            <ul class="dropdown-menu">
-              <li><a href="<?php echo $seller_login; ?>"><?php echo $text_seller_login; ?></a></li>
-              <li><a href="<?php echo $seller_register; ?>"><?php echo $text_seller_register; ?></a></li>
+            <ul class="dropdown-menu ">
+              <li><a href="<?php echo $seller_login; ?>"><?php echo $text_login; ?></a></li>
+              <li><a href="<?php echo $seller_register; ?>"><?php echo $text_register; ?></a></li>
             </ul>
           </li>
           ]]></add>
       </operation>
     </file>
+
+
+    <file name="catalog/controller/common/header.php">
+      <operation>
+        <search position="before"><![CDATA[
+            $data['login'] = $this->url->link('account/login', '', true);
+          ]]></search>
+        <add><![CDATA[
+          $data['seller_login'] = $this->url->link('seller/login', '', true);
+          $data['seller_register'] = $this->url->link('seller/register', '', true);
+          ]]></add>
+      </operation>
+    </file>
+
     <!-- Show Drop-down on Header for SELLER ENDS-->
 
 </modification>

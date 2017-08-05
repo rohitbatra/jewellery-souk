@@ -35,7 +35,7 @@
     <div id="content" class="<?php echo $class; ?>"><?php echo $content_top; ?>
         <h1><?php echo $heading_title; ?></h1>
         <p><?php echo $text_account_already; ?></p>
-    <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" class="form-horizontal" id="form-seller-register">
+    <form action="<?php echo $action; ?>" method="post" class="form-horizontal" id="seller_register_form" name="seller_register_form">
         <fieldset id="account">
             <legend><?php echo $text_your_details; ?></legend>
             <div class="form-group required">
@@ -84,6 +84,21 @@
                     <label class="radio-inline"><input type="radio" name="seller_type" value="company" /> A <?php echo $entry_company; ?></label>
                     <?php if ($error_seller_type) { ?>
                     <div class="text-danger"><?php echo $error_seller_type; ?></div>
+                    <?php } ?>
+                </div>
+            </div>
+
+            <div class="form-group required">
+                <label class="col-sm-2 control-label"><?php echo $entry_category; ?></label>
+                <div class="col-sm-10">
+                  <select name="category">
+                    <option value="*">Please Select</option>
+                    <?php foreach ($categories as $category_c) { ?>
+                        <option value="<?php echo $category_c['value']; ?>"><?php echo $category_c['name']; ?></option>
+                    <?php } ?>
+                  </select>
+                    <?php if ($error_category) { ?>
+                    <div class="text-danger"><?php echo $error_category; ?></div>
                     <?php } ?>
                 </div>
             </div>
@@ -234,20 +249,6 @@
                 </div>
             </div>
         </fieldset>
-
-        <div style="display: none;">
-            <form method="post" name="customerData" action="ccavenue/ccavRequestHandler.php">
-                <input type="text" name="tid" id="tid" value="<?php echo strtotime(date('d-m-Y h:m:s')) ?>" readonly />
-                <input type="text" name="merchant_id" value="93868"/>
-                <input type="text" name="order_id" value="<?php echo uniqid('SOUK-'); ?>"/>
-                <input type="text" name="amount" value="<?php echo $subscription_fees; ?>"/>
-                <input type="text" name="currency" value="INR"/>
-                <input type="text" name="redirect_url" value="<?php echo HTTP_SERVER; ?>ccavenue/ccavResponseHandler.php"/>
-                <input type="text" name="cancel_url" value="<?php echo HTTP_SERVER; ?>index.php?route=seller/register"/>
-                <input type="text" name="language" value="EN"/>
-            </form>
-        </div>
-
 <?php echo $captcha; ?>
 <?php if ($text_agree) { ?>
 <div class="buttons">
@@ -258,7 +259,7 @@
         <input type="checkbox" name="agree" value="1" />
         <?php } ?>
         &nbsp;
-        <input type="submit" value="<?php echo $button_continue; ?>" class="btn btn-primary" />
+        <input type="submit" value="<?php echo $button_continue; ?>" id="btn_submit" class="btn btn-primary" />
     </div>
 </div>
 <?php } else { ?>
@@ -272,45 +273,6 @@
 <?php echo $content_bottom; ?></div>
 <?php echo $column_right; ?></div>
 </div>
-<script type="text/javascript"><!--
-    // Sort the custom fields
-    $('#account .form-group[data-sort]').detach().each(function() {
-        if ($(this).attr('data-sort') >= 0 && $(this).attr('data-sort') <= $('#account .form-group').length) {
-            $('#account .form-group').eq($(this).attr('data-sort')).before(this);
-        }
-
-        if ($(this).attr('data-sort') > $('#account .form-group').length) {
-            $('#account .form-group:last').after(this);
-        }
-
-        if ($(this).attr('data-sort') == $('#account .form-group').length) {
-            $('#account .form-group:last').after(this);
-        }
-
-        if ($(this).attr('data-sort') < -$('#account .form-group').length) {
-            $('#account .form-group:first').before(this);
-        }
-    });
-
-    $('#address .form-group[data-sort]').detach().each(function() {
-        if ($(this).attr('data-sort') >= 0 && $(this).attr('data-sort') <= $('#address .form-group').length) {
-            $('#address .form-group').eq($(this).attr('data-sort')).before(this);
-        }
-
-        if ($(this).attr('data-sort') > $('#address .form-group').length) {
-            $('#address .form-group:last').after(this);
-        }
-
-        if ($(this).attr('data-sort') == $('#address .form-group').length) {
-            $('#address .form-group:last').after(this);
-        }
-
-        if ($(this).attr('data-sort') < -$('#address .form-group').length) {
-            $('#address .form-group:first').before(this);
-        }
-    });
-    //--></script>
-
 <script type="text/javascript"><!--
     $('.date').datetimepicker({
         pickTime: false
@@ -375,6 +337,52 @@
             }
         });
 
+        // Submit BTN click
+        $('#btn_submit').click(function(e)
+        {
+          e.preventDefault();
+          e.stopPropagation();
+          $('select[name=\'country_id\']').prop('disabled',false);
+          dryValidateForm();
+
+          $('#seller_register_form').submit();
+        });
+
+        function dryValidateForm()
+        {
+          // Check for Sellery type & category fields only
+          if($('input[name="seller_type"]:checked').val() == "undefined")
+          {
+            // Break error
+            alert('Please Select any one Seller Type!');
+            $('input[name="seller_type"]').focus();
+            throw new Error("Seller Type not selected error");
+          }
+
+          if($('select[name="category"] option:selected').val() == "*")
+          {
+            // Break error
+            alert('Please Select one Category!');
+            $('select[name="category"]').focus();
+            throw new Error("Category not Selected error");
+          }
+        }
+
+        // In Validation Error Conditions
+        var s_t = $.trim("<?php echo $seller_type; ?>");
+        var cat = $.trim("<?php echo $category; ?>");
+
+        if(s_t !== "")
+        {
+            // Seller Type Select & Trigger
+            $('input:radio[name="seller_type"][value="' + $.trim(s_t) + '"]').prop('checked', true).trigger('click');
+        }
+
+        if(cat !== "")
+        {
+            // Category Value
+            $("select[name='category']").val($.trim(cat));
+        }
     });
 </script>
 <?php echo $footer; ?>

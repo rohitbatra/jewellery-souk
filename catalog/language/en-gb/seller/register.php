@@ -30,12 +30,13 @@ $_['entry_postcode']       = 'Post Code';
 $_['entry_city']           = 'City';
 $_['entry_country']        = 'Country';
 $_['entry_subscription_amount']        = 'Amount';
-$_['entry_seller_type']        = 'You\'re ';
+$_['entry_seller_type']        = 'Seller Type ';
 $_['entry_company_name']        = 'Business Name';
 $_['entry_company_pan']        = 'Business PAN Number';
 $_['entry_company_tin']        = 'TIN Number';
 $_['entry_company_p_firstname']        = 'Contact First Name';
 $_['entry_company_p_lastname']        = 'Contact Last Name';
+$_['entry_category']        = 'Category';
 $_['entry_your_pan']        = 'PAN Number';
 
 // Error
@@ -54,3 +55,6 @@ $_['error_company_p_firstname']          = 'Please enter your Contact Person\'s 
 $_['error_company_p_lastname']          = 'Please enter your Contact Person\'s Last Name!';
 $_['error_lastname']          = 'Please enter your Last Name!';
 $_['error_telephone']          = 'Please enter your Telephone Number!';
+$_['error_address_1']      = 'Address 1 must be between 3 and 128 characters!';
+$_['error_city']           = 'City must be between 2 and 128 characters!';
+$_['error_postcode']       = 'Postcode must be between 2 and 10 characters!';
