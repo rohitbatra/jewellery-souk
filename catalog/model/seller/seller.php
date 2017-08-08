@@ -18,7 +18,27 @@ class ModelSellerSeller extends Model {
             }
         }
 
-        $this->db->query("INSERT INTO " . DB_PREFIX . "user SET username = '" . $this->db->escape($data['username']) . "', firstname = '" . $this->db->escape($firstname) . "', lastname = '" . $this->db->escape($lastname) . "', email = '" . $this->db->escape($data['email']) . "', salt = '" . $this->db->escape($salt = token(9)) . "', password = '" . $this->db->escape(sha1($salt . sha1($salt . sha1($data['password'])))) . "',  ip = '" . $this->db->escape($this->request->server['REMOTE_ADDR']) . "', status = '0',  date_added = NOW()");
+        // By-Default 'Others' is the User Group for any new Seller
+        $data['user_group'] = 'others';
+        $data['user_group_id'] = 0;
+        // Check for Category to determine which user_group to choose
+        $associativeUG = array('manufacturer' => array('jewellery_manufacturer'), 'wholeseller' => array('jewellery_wholeseller'), 'retailer' => array('jewellery_retailer'), 'service' => array('jewellery_institute','cam_processing'), 'others' => array('others'), 'freelance' => array('freelancer'), 'used_item_seller' => array('used_machinery_seller'));
+
+        foreach($associativeUG as $user_group => $possibleCategories)
+        {
+          if(in_array($data['category'], $possibleCategories))
+          {
+            $data['user_group'] = str_replace('_', ' ', $user_group);
+          }
+        }
+
+        $query_ug = $this->db->query("SELECT ug.user_group_id FROM " . DB_PREFIX . "user_group AS ug WHERE LOWER(ug.name) LIKE '{$data['user_group']}' ");
+        if($query_ug->countAffected() > 0)
+        {
+          $data['user_group_id'] = $query_ug->row['user_group_id'];
+        }
+
+        $this->db->query("INSERT INTO " . DB_PREFIX . "user SET username = '" . $this->db->escape($data['username']) . "', user_group_id = '". (int)$data['user_group_id'] ."', firstname = '" . $this->db->escape($firstname) . "', lastname = '" . $this->db->escape($lastname) . "', email = '" . $this->db->escape($data['email']) . "', salt = '" . $this->db->escape($salt = token(9)) . "', password = '" . $this->db->escape(sha1($salt . sha1($salt . sha1($data['password'])))) . "',  ip = '" . $this->db->escape($this->request->server['REMOTE_ADDR']) . "', status = '0',  date_added = NOW()");
 
         $seller_id = $this->db->getLastId();
 
