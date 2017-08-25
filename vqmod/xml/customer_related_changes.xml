@@ -1,0 +1,114 @@
+<modification>
+    <id>Customer Related Changes - SOUK</id>
+    <version>2.0.0</version>
+    <vqmver>2.3.0</vqmver>
+    <update>0.0.1</update>
+    <author>Rohit Batra</author>
+
+    <!-- Hide non-required fields from Register -->
+    <file name="catalog/view/theme/so-topdeal/template/account/register.tpl">
+
+      <operation>
+        <search position="replace" offset='-1'><![CDATA[
+            <label class="col-sm-2 control-label" for="input-fax"><?php echo $entry_fax; ?></label>
+          ]]></search>
+        <add><![CDATA[
+            <div class="form-group hidden">
+          ]]></add>
+      </operation>
+
+      <operation>
+        <search position="replace" offset='-1'><![CDATA[
+            <label class="col-sm-2 control-label" for="input-company"><?php echo $entry_company; ?></label>
+          ]]></search>
+        <add><![CDATA[
+            <div class="form-group hidden">
+          ]]></add>
+      </operation>
+
+      <operation>
+        <search position="replace" offset='-1'><![CDATA[
+            <legend><?php echo $text_newsletter; ?></legend>
+          ]]></search>
+        <add><![CDATA[
+            <fieldset class="hidden">
+          ]]></add>
+      </operation>
+
+      <operation>
+        <search position="replace"><![CDATA[
+            <input type="radio" name="newsletter" value="0" checked="checked" />
+          ]]></search>
+        <add><![CDATA[
+            <input type="radio" name="newsletter" value="0" />
+          ]]></add>
+      </operation>
+
+      <operation>
+        <search position="replace"><![CDATA[
+            <input type="radio" name="newsletter" value="1" />
+          ]]></search>
+        <add><![CDATA[
+            <input type="radio" name="newsletter" value="1" checked="checked" />
+          ]]></add>
+      </operation>
+
+    </file>
+
+    <file name="catalog/view/theme/so-topdeal/template/account/edit.tpl">
+
+      <operation>
+        <search position="replace" offset='-1'><![CDATA[
+            <label class="col-sm-2 control-label" for="input-fax"><?php echo $entry_fax; ?></label>
+          ]]></search>
+        <add><![CDATA[
+            <div class="form-group hidden">
+          ]]></add>
+      </operation>
+
+    </file>
+
+    <file name="catalog/view/theme/so-topdeal/template/extension/module/account.tpl">
+
+      <operation>
+        <search position="replace" offset="8"><![CDATA[
+            <li><a href="<?php echo $address; ?>"><?php echo $text_address; ?></a></li>
+          ]]></search>
+        <add><![CDATA[
+            <li><a href="<?php echo $order; ?>"><?php echo $text_order; ?></a></li>
+          ]]></add>
+      </operation>
+
+    </file>
+
+    <file name="catalog/view/theme/so-topdeal/template/account/account.tpl">
+
+      <operation>
+        <search position="replace" offset="1"><![CDATA[
+            <li><a href="<?php echo $address; ?>"><?php echo $text_address; ?></a></li>
+          ]]></search>
+        <add><![CDATA[
+
+          ]]></add>
+      </operation>
+
+      <operation>
+        <search position="replace" offset="6"><![CDATA[
+            <li><a href="<?php echo $download; ?>"><?php echo $text_download; ?></a></li>
+          ]]></search>
+        <add><![CDATA[
+
+          ]]></add>
+      </operation>
+
+      <operation>
+        <search position="replace" offset="3"><![CDATA[
+            <h2><?php echo $text_my_newsletter; ?></h2>
+          ]]></search>
+        <add><![CDATA[
+
+          ]]></add>
+      </operation>
+    </file>
+
+</modification>
