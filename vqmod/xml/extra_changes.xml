@@ -142,4 +142,27 @@
 
     <!-- Show Drop-down on Header for SELLER ENDS-->
 
+    <!-- Set a Default Reply-To address in mail function itself -->
+    <file name="system/library/mail.php">
+
+      <operation>
+        <search position="after"><![CDATA[
+            protected $reply_to;
+          ]]></search>
+        <add><![CDATA[
+            public $default_reply_to = "support@sezplus.com";
+          ]]></add>
+      </operation>
+
+      <operation>
+        <search position="replace"><![CDATA[
+            $header .= 'Reply-To: =?UTF-8?B?' . base64_encode($this->sender) . '?= <' . $this->from . '>' . PHP_EOL;
+          ]]></search>
+        <add><![CDATA[
+            $header .= 'Reply-To: =?UTF-8?B?' . base64_encode($this->default_reply_to) . '?= <' . $this->from . '>' . PHP_EOL;
+          ]]></add>
+      </operation>
+
+    </file>
+
 </modification>
