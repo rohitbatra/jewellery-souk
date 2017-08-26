@@ -179,4 +179,150 @@
       </operation>
     </file>
 
+    <!-- Only List Admin/Mods in ADMIN User List -->
+    <file name="admin/controller/user/user.php">
+
+      <operation>
+        <search position="after"><![CDATA[
+            'start' => ($page - 1) * $this->config->get('config_limit_admin'),
+          ]]></search>
+        <add><![CDATA[
+            'user_type' => array('administrator', 'moderator'),
+          ]]></add>
+      </operation>
+
+      <operation>
+        <search position="after"><![CDATA[
+            'status'     => ($result['status'] ? $this->language->get('text_enabled') : $this->language->get('text_disabled')),
+          ]]></search>
+        <add><![CDATA[
+            'user_group' => $result['user_group'],
+          ]]></add>
+      </operation>
+
+      <operation>
+        <search position="after"><![CDATA[
+            $data['column_action'] = $this->language->get('column_action');
+          ]]></search>
+        <add><![CDATA[
+            $data['column_user_group'] = $this->language->get('column_user_group');
+          ]]></add>
+      </operation>
+
+      <operation>
+        <search position="replace"><![CDATA[
+            $user_total = $this->model_user_user->getTotalUsers();
+          ]]></search>
+        <add><![CDATA[
+            $user_total = $this->model_user_user->getTotalUsers($filter_data);
+          ]]></add>
+      </operation>
+
+    </file>
+
+    <file name="admin/language/en-gb/user/user.php">
+
+      <operation>
+        <search position="after"><![CDATA[
+            $_['column_action']         = 'Action';
+          ]]></search>
+        <add><![CDATA[
+            $_['column_user_group']         = 'User Group';
+          ]]></add>
+      </operation>
+
+    </file>
+
+    <file name="admin/view/template/user/user_list.tpl">
+
+      <operation>
+        <search position="after" offset="1"><![CDATA[
+            <a href="<?php echo $sort_status; ?>"><?php echo $column_status; ?></a>
+          ]]></search>
+        <add><![CDATA[
+            <td class="text-left"><?php echo $column_user_group; ?></td>
+          ]]></add>
+      </operation>
+
+
+      <operation>
+        <search position="after"><![CDATA[
+            <td class="text-left"><?php echo $user['status']; ?></td>
+          ]]></search>
+        <add><![CDATA[
+            <td class="text-left"><?php echo $user['user_group']; ?></td>
+          ]]></add>
+      </operation>
+
+    </file>
+
+    <file name="admin/model/user/user.php">
+
+      <operation>
+        <search position="before"><![CDATA[
+            if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
+          ]]></search>
+        <add><![CDATA[
+            if (isset($data['user_type']) && !empty($data['user_type'])) {
+              $sql .= " WHERE ";
+              foreach ($data['user_type'] as $ugn)
+              {
+                $sql .= "  LOWER(ug.name) LIKE '{$ugn}' OR ";
+              }
+              $sql = substr($sql, 0, -3);
+        		}
+        ]]></add>
+      </operation>
+
+      <operation>
+        <search position="replace"><![CDATA[
+          public function getTotalUsers() {
+        ]]></search>
+        <add><![CDATA[
+          public function getTotalUsersOLD() {
+        ]]></add>
+      </operation>
+
+      <operation>
+        <search position="before"><![CDATA[
+          public function getTotalUsersByGroupId($user_group_id) {
+        ]]></search>
+        <add><![CDATA[
+          public function getTotalUsers($data)
+          {
+            if (isset($data['user_type']) && !empty($data['user_type']))
+            {
+                $addSQL = "LEFT OUTER JOIN `" . DB_PREFIX . "user_group`  ug ON (ug.user_group_id = u.user_group_id) WHERE ";
+
+                foreach ($data['user_type'] as $ugn)
+                {
+                  $addSQL .= "  LOWER(ug.name) LIKE '{$ugn}' OR ";
+                }
+
+                $addSQL = substr($addSQL, 0, -3);
+
+            } else {
+                $addSQL = "";
+            }
+
+            $query = $this->db->query("SELECT COUNT(u.user_id) AS total FROM `" . DB_PREFIX . "user` AS u {$addSQL} ");
+            return $query->row['total'];
+          }
+        ]]></add>
+      </operation>
+
+      <operation>
+        <search position="replace"><![CDATA[
+          $sql = "SELECT * FROM `" . DB_PREFIX . "user`";
+        ]]></search>
+        <add><![CDATA[
+          $sql = "SELECT u.*, ug.name as user_group FROM `" . DB_PREFIX . "user` AS u LEFT JOIN `" . DB_PREFIX . "user_group`  ug ON (ug.user_group_id = u.user_group_id)";
+        ]]></add>
+      </operation>
+
+
+
+    </file>
+
+
 </modification>
