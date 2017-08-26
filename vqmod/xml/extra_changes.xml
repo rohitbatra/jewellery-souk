@@ -165,4 +165,16 @@
 
     </file>
 
+    <!-- Remove Floating Widget on Home Page -->
+    <file name="catalog/view/theme/so-topdeal/template/common/home.tpl">
+      <operation>
+        <search position="replace"><![CDATA[
+            <div class="custom-scoll hidden-sm hidden-md hidden-xs">
+          ]]></search>
+        <add><![CDATA[
+            <div class="custom-scoll hidden hidden-sm hidden-md hidden-xs">
+          ]]></add>
+      </operation>
+    </file>
+
 </modification>
