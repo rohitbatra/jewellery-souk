@@ -35,16 +35,18 @@
 									<?php if($checkout_status):?><li class="checkout"><a href="<?php echo $checkout; ?>" class="btn-link" title="<?php echo $text_checkout; ?>"><span ><?php echo $text_checkout; ?></span></a></li><?php endif; ?>
 								</ul>
 							</li>
-							<li class="account" id="seller_drop">
-		            <a href="javascript:void(1);" class="btn-xs dropdown-toggle" data-toggle="dropdown">
-		              <span><?php echo 'Seller(s)'; ?></span>
-		              <span class="fa fa-angle-down"></span>
-		            </a>
-		            <ul class="dropdown-menu ">
-		              <li><a href="<?php echo $seller_login; ?>"><?php echo $text_login; ?></a></li>
-		              <li><a href="<?php echo $seller_register; ?>"><?php echo $text_register; ?></a></li>
-		            </ul>
-		          </li>
+							<?php if (!$logged) { ?>
+								<li class="account" id="seller_drop">
+			            <a href="javascript:void(1);" class="btn-xs dropdown-toggle" data-toggle="dropdown">
+			              <span><?php echo 'Seller(s)'; ?></span>
+			              <span class="fa fa-angle-down"></span>
+			            </a>
+			            <ul class="dropdown-menu ">
+			              <li><a href="<?php echo $seller_login; ?>"><?php echo $text_login; ?></a></li>
+			              <li><a href="<?php echo $seller_register; ?>"><?php echo $text_register; ?></a></li>
+			            </ul>
+			          </li>
+							<?php } ?>
 							<li class="login" >
 								<?php if ($logged) { ?>
 								<a class="link-lg" href="<?php echo $logout; ?>"><?php echo $text_logout; ?></a>
