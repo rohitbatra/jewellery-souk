@@ -320,9 +320,39 @@
         ]]></add>
       </operation>
 
+    </file>
 
+    <!-- Add a new menu-item `Seller` ADMIN -->
+    <file name="admin/controller/common/column_left.php">
+
+      <operation>
+        <search position="before"><![CDATA[
+          // Localisation
+        ]]></search>
+        <add><![CDATA[
+          if ($this->user->hasPermission('access', 'seller/seller')) {
+      				$system[] = array(
+              'name'	   => $this->language->get('text_sellers'),
+              'href'     => $this->url->link('seller/seller', 'token=' . $this->session->data['token'], true),
+              'children' => array()
+      				);
+          }
+        ]]></add>
+      </operation>
 
     </file>
 
+    <file name="admin/language/en-gb/common/column_left.php">
+
+      <operation>
+        <search position="after"><![CDATA[
+          $_['text_users']                     = 'Users';
+        ]]></search>
+        <add><![CDATA[
+          $_['text_sellers']                     = 'Sellers';
+        ]]></add>
+      </operation>
+
+    </file>
 
 </modification>
