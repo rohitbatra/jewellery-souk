@@ -83,4 +83,10 @@ class ModelSellerSeller extends Model {
 		$this->db->query("UPDATE `" . DB_PREFIX . "user` SET `status` = '0' WHERE user_id = '". (int)$user_id ."' ");
 	}
 
+	public function getSeller($seller_id) {
+		$query = $this->db->query("SELECT u.*, ug.* FROM `" . DB_PREFIX . "user` AS u LEFT JOIN `" . DB_PREFIX . "user_group` ug ON (u.user_group_id = ug.user_group_id) WHERE u.user_id = '" . (int)$user_id . "'");
+
+		return $query->row;
+	}
+
 }

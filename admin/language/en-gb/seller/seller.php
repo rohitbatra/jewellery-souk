@@ -9,18 +9,19 @@ $_['text_add']              = 'Add Seller';
 $_['text_edit']             = 'Edit Seller';
 
 // Column
-$_['column_email']       = 'E-Mail';
+$_['column_email']          = 'E-Mail';
 $_['column_status']         = 'Status';
-$_['column_seller_type']         = 'Seller Type';
+$_['column_seller_type']    = 'Seller Type';
 $_['column_date_added']     = 'Date Added';
 $_['column_action']         = 'Action';
 
 // Buttons
-$_['button_lock']         = 'De-Activate Seller';
+$_['button_lock']           = 'De-Activate Seller';
 $_['button_unlock']         = 'Activate Seller';
 $_['button_filter']         = 'Filter';
 
 // Entry
+$_['entry_email']           = 'E-Mail';
 $_['entry_username']        = 'Username';
 $_['entry_user_group']      = 'User Group';
 $_['entry_password']        = 'Password';
@@ -30,11 +31,11 @@ $_['entry_lastname']        = 'Last Name';
 $_['entry_email']           = 'E-Mail';
 $_['entry_image']           = 'Image';
 $_['entry_status']          = 'Status';
-$_['entry_seller_type']          = 'Seller Type';
+$_['entry_seller_type']     = 'Seller Type';
 
 // Texts
 $_['text_enabled']          = 'Enabled';
-$_['text_disabled']          = 'Disabled';
+$_['text_disabled']         = 'Disabled';
 
 
 // Error
