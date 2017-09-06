@@ -33,7 +33,7 @@ class ModelSellerSeller extends Model {
         }
 
         $query_ug = $this->db->query("SELECT ug.user_group_id FROM " . DB_PREFIX . "user_group AS ug WHERE LOWER(ug.name) LIKE '{$data['user_group']}' ");
-        if($query_ug->countAffected() > 0)
+        if($this->db->countAffected() > 0)
         {
           $data['user_group_id'] = $query_ug->row['user_group_id'];
         }

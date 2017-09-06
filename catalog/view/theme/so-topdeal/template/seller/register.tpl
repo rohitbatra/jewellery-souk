@@ -110,7 +110,7 @@
             <div class="form-group required">
               <label class="col-sm-2 control-label" for="input-company_name"><?php echo $entry_company_name; ?></label>
               <div class="col-sm-10">
-                <input type="text" name="company_name" value="<?php echo $company_name; ?>" placeholder="<?php echo $entry_company_name; ?>" id="input-company_name" class="form-control" />
+                <input type="text" name="company_name" value="<?php echo $company_name; ?>" placeholder="<?php echo $entry_company_name; ?>" id="input-company_name" class="form-control company" />
                 <?php if ($error_company_name) { ?>
                 <div class="text-danger"><?php echo $error_company_name; ?></div>
                 <?php } ?>
@@ -119,19 +119,19 @@
             <div class="form-group">
               <label class="col-sm-2 control-label" for="input-company_pan"><?php echo $entry_company_pan; ?></label>
               <div class="col-sm-10">
-                <input type="text" name="company_pan" value="<?php echo $company_pan; ?>" placeholder="<?php echo $entry_company_pan; ?>" id="input-company_pan" class="form-control" />
+                <input type="text" name="company_pan" value="<?php echo $company_pan; ?>" placeholder="<?php echo $entry_company_pan; ?>" id="input-company_pan" class="form-control company" />
               </div>
             </div>
             <div class="form-group">
               <label class="col-sm-2 control-label" for="input-company_tin"><?php echo $entry_company_tin; ?></label>
               <div class="col-sm-10">
-                <input type="text" name="company_tin" value="<?php echo $company_tin; ?>" placeholder="<?php echo $entry_company_tin; ?>" id="input-company_tin" class="form-control" />
+                <input type="text" name="company_tin" value="<?php echo $company_tin; ?>" placeholder="<?php echo $entry_company_tin; ?>" id="input-company_tin" class="form-control company" />
               </div>
             </div>
             <div class="form-group required">
                 <label class="col-sm-2 control-label" for="input-company_p_firstname"><?php echo $entry_company_p_firstname; ?></label>
                 <div class="col-sm-4">
-                    <input type="text" name="company_p_firstname" value="<?php echo $firstname; ?>" placeholder="<?php echo $entry_company_p_firstname; ?>" id="input-company_p_firstname" class="form-control" />
+                    <input type="text" name="company_p_firstname" value="<?php echo $firstname; ?>" placeholder="<?php echo $entry_company_p_firstname; ?>" id="input-company_p_firstname" class="form-control company" />
                     <?php if ($error_company_p_firstname) { ?>
                     <div class="text-danger"><?php echo $error_company_p_firstname; ?></div>
                     <?php } ?>
@@ -139,7 +139,7 @@
 
                 <label class="col-sm-2 control-label" for="input-company_p_lastname"><?php echo $entry_company_p_lastname; ?></label>
                 <div class="col-sm-4">
-                    <input type="text" name="company_p_lastname" value="<?php echo $lastname; ?>" placeholder="<?php echo $entry_company_p_lastname; ?>" id="input-company_p_lastname" class="form-control" />
+                    <input type="text" name="company_p_lastname" value="<?php echo $lastname; ?>" placeholder="<?php echo $entry_company_p_lastname; ?>" id="input-company_p_lastname" class="form-control company" />
                     <?php if ($error_company_p_lastname) { ?>
                     <div class="text-danger"><?php echo $error_company_p_lastname; ?></div>
                     <?php } ?>
@@ -152,7 +152,7 @@
             <div class="form-group required">
                 <label class="col-sm-2 control-label" for="input-firstname"><?php echo $entry_firstname; ?></label>
                 <div class="col-sm-10">
-                    <input type="text" name="firstname" value="<?php echo $firstname; ?>" placeholder="<?php echo $entry_firstname; ?>" id="input-firstname" class="form-control" />
+                    <input type="text" name="firstname" value="<?php echo $firstname; ?>" placeholder="<?php echo $entry_firstname; ?>" id="input-firstname" class="form-control individual" />
                     <?php if ($error_firstname) { ?>
                     <div class="text-danger"><?php echo $error_firstname; ?></div>
                     <?php } ?>
@@ -161,7 +161,7 @@
             <div class="form-group required">
                 <label class="col-sm-2 control-label" for="input-lastname"><?php echo $entry_lastname; ?></label>
                 <div class="col-sm-10">
-                    <input type="text" name="lastname" value="<?php echo $lastname; ?>" placeholder="<?php echo $entry_lastname; ?>" id="input-lastname" class="form-control" />
+                    <input type="text" name="lastname" value="<?php echo $lastname; ?>" placeholder="<?php echo $entry_lastname; ?>" id="input-lastname" class="form-control individual" />
                     <?php if ($error_lastname) { ?>
                     <div class="text-danger"><?php echo $error_lastname; ?></div>
                     <?php } ?>
@@ -170,7 +170,7 @@
             <div class="form-group">
               <label class="col-sm-2 control-label" for="input-your_pan"><?php echo $entry_your_pan; ?></label>
               <div class="col-sm-10">
-                <input type="text" name="pan_number" value="<?php echo $pan_number; ?>" placeholder="<?php echo $entry_your_pan; ?>" id="input-your_pan" class="form-control" />
+                <input type="text" name="pan_number" value="<?php echo $pan_number; ?>" placeholder="<?php echo $entry_your_pan; ?>" id="input-your_pan" class="form-control individual" />
               </div>
             </div>
         </fieldset>
@@ -315,6 +315,8 @@
             $('#your_address_legend').hide();
             $('#company_address_legend').hide();
             $('.buttons').hide();
+            $('.individual').removeAttr('disabled');
+            $('.company').removeAttr('disabled');
 
             var checkedSellerType = $(this).val();
 
@@ -326,6 +328,10 @@
                 $('#your_address_legend').show();
                 $('.buttons').slideDown('slow');
 
+                // Disable the fields to prevent them being sent in form post
+                $('.company').attr('disabled','disabled');
+                $('.individual').removeAttr('disabled');
+
             }else if(checkedSellerType == 'company')
             {
                 $('#company_details').slideDown('slow');
@@ -333,6 +339,11 @@
                 $('#address_details').slideDown('slow');
                 $('#company_address_legend').show();
                 $('.buttons').slideDown('slow');
+
+                // Disable the fields to prevent them being sent in form post
+                $('.individual').attr('disabled','disabled');
+                $('.company').removeAttr('disabled');
+
 
             }
         });
