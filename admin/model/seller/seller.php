@@ -75,18 +75,66 @@ class ModelSellerSeller extends Model {
 		return $query->rows;
 	}
 
-	public function enableSeller($user_id) {
-		$this->db->query("UPDATE `" . DB_PREFIX . "user` SET `status` = '1' WHERE user_id = '". (int)$user_id ."' ");
+	public function enableSeller($seller_id) {
+		$this->db->query("UPDATE `" . DB_PREFIX . "user` SET `status` = '1' WHERE user_id = '". (int)$seller_id ."' ");
 	}
 
-	public function disableSeller($user_id) {
-		$this->db->query("UPDATE `" . DB_PREFIX . "user` SET `status` = '0' WHERE user_id = '". (int)$user_id ."' ");
+	public function disableSeller($seller_id) {
+		$this->db->query("UPDATE `" . DB_PREFIX . "user` SET `status` = '0' WHERE user_id = '". (int)$seller_id ."' ");
 	}
 
 	public function getSeller($seller_id) {
-		$query = $this->db->query("SELECT u.*, ug.* FROM `" . DB_PREFIX . "user` AS u LEFT JOIN `" . DB_PREFIX . "user_group` ug ON (u.user_group_id = ug.user_group_id) WHERE u.user_id = '" . (int)$user_id . "'");
+		$query = $this->db->query("SELECT u.*, ug.* FROM `" . DB_PREFIX . "user` AS u LEFT JOIN `" . DB_PREFIX . "user_group` ug ON (u.user_group_id = ug.user_group_id) WHERE u.user_id = '" . (int)$seller_id . "'");
 
 		return $query->row;
+	}
+
+	public function getSellerDetails($seller_id) {
+		$retArr = array();
+		$query = $this->db->query("SELECT si.* FROM `" . DB_PREFIX . "seller_info` AS si WHERE si.user_id = '" . (int)$seller_id . "'");
+
+		foreach($query->rows as $row)
+		{
+			$retArr[$row['key']] = $row['value'];
+		}
+		return $retArr;
+	}
+
+	public function getSellerPaymentTransactions($seller_id) {
+		$query = $this->db->query("SELECT sp.amount, sp.payment_date, sp.payment_status, sp.payment_id, sp.extra_data, DATE(sp.dataTime) as date_modified FROM `" . DB_PREFIX . "seller_payments` AS sp WHERE sp.user_id = '" . (int)$seller_id . "'");
+
+		return $query->rows;
+	}
+
+	public function editSeller($seller_id,$data) {
+
+		// Update the USER table
+		if(array_key_exists('company_p_firstname', $data))
+		{
+			$firstname = $data['company_p_firstname'];
+		}else{
+			$firstname = $data['firstname'];
+		}
+
+		if(array_key_exists('company_p_lastname', $data))
+		{
+			$lastname = $data['company_p_lastname'];
+		}else{
+			$lastname = $data['lastname'];
+		}
+
+		$this->db->query("UPDATE `" . DB_PREFIX . "user` SET `user_group_id` = '". (int)$data['seller_type_id'] ."', username = '".$this->db->escape($data['username'])."', status = '".(int) $data['status']."', email = '".$this->db->escape($data['email'])."', firstname = '".$this->db->escape($firstname)."', lastname = '".$this->db->escape($lastname)."', salt = '" . $this->db->escape($salt = token(9)) . "', password = '" . $this->db->escape(sha1($salt . sha1($salt . sha1($data['password'])))) . "' WHERE user_id = '". (int)$seller_id ."'  ");
+
+		// Update the Seller Info
+		foreach ($data as $key => $value) {
+			$select_query = $this->db->query("Select id FROM `" . DB_PREFIX . "seller_info` WHERE user_id = '". (int)$seller_id ."' AND `key` LIKE '".$this->db->escape($key)."' ");
+
+			if($select_query->rows)
+			{
+				$this->db->query("UPDATE `" . DB_PREFIX . "seller_info` SET `value` = '". $this->db->escape($value) ."' WHERE id = '".(int) $select_query->row['id']."' AND user_id = '". (int)$seller_id ."'");
+			}
+		}
+
 	}
 
 }

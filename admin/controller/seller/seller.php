@@ -341,57 +341,42 @@ class ControllerSellerSeller extends Controller {
 		$data['text_form'] = !isset($this->request->get['user_id']) ? $this->language->get('text_add') : $this->language->get('text_edit');
 		$data['text_enabled'] = $this->language->get('text_enabled');
 		$data['text_disabled'] = $this->language->get('text_disabled');
-		$data['text_yes'] = $this->language->get('text_yes');
-		$data['text_no'] = $this->language->get('text_no');
 		$data['text_select'] = $this->language->get('text_select');
 		$data['text_none'] = $this->language->get('text_none');
-		$data['text_loading'] = $this->language->get('text_loading');
-		$data['text_add_ban_ip'] = $this->language->get('text_add_ban_ip');
-		$data['text_remove_ban_ip'] = $this->language->get('text_remove_ban_ip');
+		$data['text_address'] = $this->language->get('text_address');
+		$data['text_company_details'] = $this->language->get('text_company_details');
+		$data['text_personal_details'] = $this->language->get('text_personal_details');
 
-		$data['entry_customer_group'] = $this->language->get('entry_customer_group');
+		$data['entry_user_group'] = $this->language->get('entry_seller_type');
+		$data['entry_username'] = $this->language->get('entry_username');
 		$data['entry_firstname'] = $this->language->get('entry_firstname');
 		$data['entry_lastname'] = $this->language->get('entry_lastname');
 		$data['entry_email'] = $this->language->get('entry_email');
 		$data['entry_telephone'] = $this->language->get('entry_telephone');
-		$data['entry_fax'] = $this->language->get('entry_fax');
 		$data['entry_password'] = $this->language->get('entry_password');
 		$data['entry_confirm'] = $this->language->get('entry_confirm');
-		$data['entry_newsletter'] = $this->language->get('entry_newsletter');
 		$data['entry_status'] = $this->language->get('entry_status');
 		$data['entry_approved'] = $this->language->get('entry_approved');
-		$data['entry_safe'] = $this->language->get('entry_safe');
-		$data['entry_company'] = $this->language->get('entry_company');
+
 		$data['entry_address_1'] = $this->language->get('entry_address_1');
 		$data['entry_address_2'] = $this->language->get('entry_address_2');
-		$data['entry_city'] = $this->language->get('entry_city');
 		$data['entry_postcode'] = $this->language->get('entry_postcode');
-		$data['entry_zone'] = $this->language->get('entry_zone');
+		$data['entry_city'] = $this->language->get('entry_city');
 		$data['entry_country'] = $this->language->get('entry_country');
-		$data['entry_default'] = $this->language->get('entry_default');
-		$data['entry_comment'] = $this->language->get('entry_comment');
-		$data['entry_description'] = $this->language->get('entry_description');
-		$data['entry_amount'] = $this->language->get('entry_amount');
-		$data['entry_points'] = $this->language->get('entry_points');
 
-		$data['help_safe'] = $this->language->get('help_safe');
-		$data['help_points'] = $this->language->get('help_points');
+		$data['entry_company_name'] = $this->language->get('entry_company_name');
+		$data['entry_company_pan'] = $this->language->get('entry_company_pan');
+		$data['entry_company_tin'] = $this->language->get('entry_company_tin');
+		$data['entry_company_p_firstname'] = $this->language->get('entry_company_p_firstname');
+		$data['entry_company_p_lastname'] = $this->language->get('entry_company_p_lastname');
+		$data['entry_your_pan'] = $this->language->get('entry_your_pan');
+
 
 		$data['button_save'] = $this->language->get('button_save');
 		$data['button_cancel'] = $this->language->get('button_cancel');
-		$data['button_address_add'] = $this->language->get('button_address_add');
-		$data['button_history_add'] = $this->language->get('button_history_add');
-		$data['button_transaction_add'] = $this->language->get('button_transaction_add');
-		$data['button_reward_add'] = $this->language->get('button_reward_add');
-		$data['button_remove'] = $this->language->get('button_remove');
-		$data['button_upload'] = $this->language->get('button_upload');
 
 		$data['tab_general'] = $this->language->get('tab_general');
-		$data['tab_address'] = $this->language->get('tab_address');
-		$data['tab_history'] = $this->language->get('tab_history');
 		$data['tab_transaction'] = $this->language->get('tab_transaction');
-		$data['tab_reward'] = $this->language->get('tab_reward');
-		$data['tab_ip'] = $this->language->get('tab_ip');
 
 		$data['token'] = $this->session->data['token'];
 
@@ -407,28 +392,16 @@ class ControllerSellerSeller extends Controller {
 			$data['error_warning'] = '';
 		}
 
-		if (isset($this->error['firstname'])) {
-			$data['error_firstname'] = $this->error['firstname'];
-		} else {
-			$data['error_firstname'] = '';
-		}
-
-		if (isset($this->error['lastname'])) {
-			$data['error_lastname'] = $this->error['lastname'];
-		} else {
-			$data['error_lastname'] = '';
-		}
-
 		if (isset($this->error['email'])) {
 			$data['error_email'] = $this->error['email'];
 		} else {
 			$data['error_email'] = '';
 		}
 
-		if (isset($this->error['telephone'])) {
-			$data['error_telephone'] = $this->error['telephone'];
+		if (isset($this->error['username'])) {
+			$data['error_username'] = $this->error['username'];
 		} else {
-			$data['error_telephone'] = '';
+			$data['error_username'] = '';
 		}
 
 		if (isset($this->error['password'])) {
@@ -441,18 +414,6 @@ class ControllerSellerSeller extends Controller {
 			$data['error_confirm'] = $this->error['confirm'];
 		} else {
 			$data['error_confirm'] = '';
-		}
-
-		if (isset($this->error['custom_field'])) {
-			$data['error_custom_field'] = $this->error['custom_field'];
-		} else {
-			$data['error_custom_field'] = array();
-		}
-
-		if (isset($this->error['address'])) {
-			$data['error_address'] = $this->error['address'];
-		} else {
-			$data['error_address'] = array();
 		}
 
 		$url = '';
@@ -497,24 +458,16 @@ class ControllerSellerSeller extends Controller {
 
 		$data['cancel'] = $this->url->link('seller/seller', 'token=' . $this->session->data['token'] . $url, true);
 
-		if (isset($this->request->get['user_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
+		if (isset($this->request->get['user_id'])) {
 			$seller_info = $this->model_seller_seller->getSeller($this->request->get['user_id']);
 		}
 
-		if (isset($this->request->post['firstname'])) {
-			$data['firstname'] = $this->request->post['firstname'];
+		if (isset($this->request->post['username'])) {
+			$data['username'] = $this->request->post['username'];
 		} elseif (!empty($seller_info)) {
-			$data['firstname'] = $seller_info['firstname'];
+			$data['username'] = $seller_info['username'];
 		} else {
-			$data['firstname'] = '';
-		}
-
-		if (isset($this->request->post['lastname'])) {
-			$data['lastname'] = $this->request->post['lastname'];
-		} elseif (!empty($seller_info)) {
-			$data['lastname'] = $seller_info['lastname'];
-		} else {
-			$data['lastname'] = '';
+			$data['username'] = '';
 		}
 
 		if (isset($this->request->post['email'])) {
@@ -523,14 +476,6 @@ class ControllerSellerSeller extends Controller {
 			$data['email'] = $seller_info['email'];
 		} else {
 			$data['email'] = '';
-		}
-
-		if (isset($this->request->post['telephone'])) {
-			$data['telephone'] = $this->request->post['telephone'];
-		} elseif (!empty($seller_info)) {
-			$data['telephone'] = $seller_info['telephone'];
-		} else {
-			$data['telephone'] = '';
 		}
 
 		if (isset($this->request->post['status'])) {
@@ -553,6 +498,142 @@ class ControllerSellerSeller extends Controller {
 			$data['confirm'] = '';
 		}
 
+		// Selected Seller Type
+		$data['seller_type_id'] = $seller_info['user_group_id'];
+		// Seller Types
+		$data['seller_types'] = $this->model_seller_seller->getSellerTypes();
+
+		// Seller Details
+		$data['seller_details'] = $seller_details =  $this->model_seller_seller->getSellerDetails($data['user_id']);
+
+		// Arrange the UI Variables as per seller_details type
+		if($seller_details['seller_type'] == "company")
+		{
+			if (isset($this->request->post['company_name'])) {
+				$data['company_name'] = $this->request->post['company_name'];
+			} elseif (!empty($seller_details)) {
+				$data['company_name'] = $seller_details['company_name'];
+			} else {
+				$data['company_name'] = '';
+			}
+
+			if (isset($this->request->post['company_pan'])) {
+				$data['company_pan'] = $this->request->post['company_pan'];
+			} elseif (!empty($seller_details)) {
+				$data['company_pan'] = $seller_details['company_pan'];
+			} else {
+				$data['company_pan'] = '';
+			}
+
+			if (isset($this->request->post['company_tin'])) {
+				$data['company_tin'] = $this->request->post['company_tin'];
+			} elseif (!empty($seller_details)) {
+				$data['company_tin'] = $seller_details['company_tin'];
+			} else {
+				$data['company_tin'] = '';
+			}
+
+			if (isset($this->request->post['company_p_firstname'])) {
+				$data['firstname'] = $this->request->post['company_p_firstname'];
+			} elseif (!empty($seller_details)) {
+				$data['firstname'] = $seller_details['company_p_firstname'];
+			} else {
+				$data['firstname'] = '';
+			}
+
+			if (isset($this->request->post['company_p_lastname'])) {
+				$data['lastname'] = $this->request->post['company_p_lastname'];
+			} elseif (!empty($seller_details)) {
+				$data['lastname'] = $seller_details['company_p_lastname'];
+			} else {
+				$data['lastname'] = '';
+			}
+
+		} else if($seller_details['seller_type'] == "individual") {
+
+			if (isset($this->request->post['pan_number'])) {
+				$data['pan_number'] = $this->request->post['pan_number'];
+			} elseif (!empty($seller_details)) {
+				$data['pan_number'] = $seller_details['pan_number'];
+			} else {
+				$data['pan_number'] = '';
+			}
+
+			if (isset($this->request->post['firstname'])) {
+				$data['firstname'] = $this->request->post['firstname'];
+			} else if(!empty($seller_info) && array_key_exists('firstname', $seller_info)) {
+				$data['firstname'] = $seller_info['firstname'];
+			}else {
+				$data['firstname'] = '';
+			}
+
+			if (isset($this->request->post['lastname'])) {
+				$data['lastname'] = $this->request->post['lastname'];
+			} else if(!empty($seller_info) && array_key_exists('lastname', $seller_info)) {
+				$data['lastname'] = $seller_info['lastname'];
+			}else {
+				$data['lastname'] = '';
+			}
+
+		}
+
+		// Address UI Variables
+		if (isset($this->request->post['address_1'])) {
+			$data['address_1'] = $this->request->post['address_1'];
+		} elseif (!empty($seller_details)) {
+			$data['address_1'] = $seller_details['address_1'];
+		} else {
+			$data['address_1'] = '';
+		}
+
+		if (isset($this->request->post['address_2'])) {
+			$data['address_2'] = $this->request->post['address_2'];
+		} elseif (!empty($seller_details)) {
+			$data['address_2'] = $seller_details['address_2'];
+		} else {
+			$data['address_2'] = '';
+		}
+
+		if (isset($this->request->post['postcode'])) {
+			$data['postcode'] = $this->request->post['postcode'];
+		} elseif (!empty($seller_details)) {
+			$data['postcode'] = $seller_details['postcode'];
+		} else {
+			$data['postcode'] = '';
+		}
+
+		if (isset($this->request->post['city'])) {
+			$data['city'] = $this->request->post['city'];
+		} elseif (!empty($seller_details)) {
+			$data['city'] = $seller_details['city'];
+		} else {
+			$data['city'] = '';
+		}
+
+		if (isset($this->request->post['country_id'])) {
+			$data['country_id'] = $this->request->post['country_id'];
+		} elseif (!empty($seller_details)) {
+			$data['country_id'] = $seller_details['country_id'];
+		} else {
+			$data['country_id'] = '';
+		}
+
+		if (isset($this->request->post['telephone'])) {
+			$data['telephone'] = $this->request->post['telephone'];
+		} elseif (!empty($seller_details)) {
+			$data['telephone'] = $seller_details['telephone'];
+		} else {
+			$data['telephone'] = '';
+		}
+
+		// Get All Countries
+		$this->load->model('localisation/country');
+
+		$data['countries'] = $this->model_localisation_country->getCountries();
+
+		// Payment Transactions from CCAvenue
+		$data['transactions'] = $this->model_seller_seller->getSellerPaymentTransactions($data['user_id']);
+
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
@@ -569,9 +650,10 @@ class ControllerSellerSeller extends Controller {
 			$this->error['email'] = $this->language->get('error_email');
 		}
 
-		if ((utf8_strlen($this->request->post['telephone']) < 3) || (utf8_strlen($this->request->post['telephone']) > 32)) {
-			$this->error['telephone'] = $this->language->get('error_telephone');
+		if ((utf8_strlen($this->request->post['username']) < 4) || (utf8_strlen($this->request->post['username']) > 20)) {
+			$this->error['username'] = $this->language->get('error_username');
 		}
+
 
 		if ($this->request->post['password'] || (!isset($this->request->get['user_id']))) {
 			if ((utf8_strlen($this->request->post['password']) < 4) || (utf8_strlen($this->request->post['password']) > 20)) {
