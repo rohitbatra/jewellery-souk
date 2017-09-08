@@ -52,15 +52,52 @@ class ModelSellerSeller extends Model {
             }
         }
 
+        // Trigger Registration/Welcome email to Seller
+        $this->sendWelcomeEmailToSeller($seller_id);
+
         return $seller_id;
     }
 
-
-    public function addPaymentInfo($data)
+    protected function sendWelcomeEmailToSeller($seller_id)
     {
-        $this->db->query("INSERT into " . DB_PREFIX . "seller_payments (user_id,amount,status,payment_id,extra_data)
+
+      $seller_data = $this->getSellerById($seller_id);
+
+      $data['web_url'] = HTTPS_SERVER . "/";
+      $data['logo_url'] = HTTPS_SERVER . "image/" .$this->config->get('config_logo');
+      $data['subject'] = "Welcome to ".$this->config->get('config_name').", ".$seller_data['firstname']."!" ;
+      $data['firstname'] = $seller_data['firstname'];
+      $data['username'] = $seller_data['username'];
+      $data['to_email'] = $seller_data['email'];
+      $data['web_name'] = $this->config->get('config_name');
+      $data['action_url'] = $this->url->link('seller/payment_process', 'uID=' . base64_encode($seller_id), true);
+      $data['login_url'] = $this->url->link('seller/login','',true);
+      $data['ip_address'] = $this->request->server['REMOTE_ADDR'];
+      $data['support_email'] = 'seller.support@sezplus.com';
+
+      // Send an HTML email
+      $mail = new Mail();
+      $mail->protocol = $this->config->get('config_mail_protocol');
+      $mail->parameter = $this->config->get('config_mail_parameter');
+      $mail->smtp_hostname = $this->config->get('config_mail_smtp_hostname');
+      $mail->smtp_username = $this->config->get('config_mail_smtp_username');
+      $mail->smtp_password = html_entity_decode($this->config->get('config_mail_smtp_password'), ENT_QUOTES, 'UTF-8');
+      $mail->smtp_port = $this->config->get('config_mail_smtp_port');
+      $mail->smtp_timeout = $this->config->get('config_mail_smtp_timeout');
+
+      $mail->setTo($data['to_email']);
+      $mail->setFrom($this->config->get('config_email'));
+      $mail->setSender(html_entity_decode($data['web_name'], ENT_QUOTES, 'UTF-8'));
+      $mail->setSubject(html_entity_decode($data['subject'], ENT_QUOTES, 'UTF-8'));
+      $mail->setHtml($this->load->view('mail/seller/register', $data));
+      $mail->send();
+
+    }
+
+    public function addPaymentInfo($data) {
+        $this->db->query("INSERT into " . DB_PREFIX . "seller_payments (user_id,amount,payment_date,payment_status,payment_id,extra_data)
                             VALUES
-                            ('{$data['user_id']}','{$data['amount']}','{$data['order_status']}','{$data['tracking_id']}','".json_encode($data)."') ");
+                            ('{$data['seller_id']}','{$data['amount']}','".date('Y-m-d')."','{$data['order_status']}','{$data['tracking_id']}','".json_encode($data)."') ");
 
     }
 
@@ -94,37 +131,19 @@ class ModelSellerSeller extends Model {
         return $q->row['email'];
     }
 
-    public function sendEmail($data)
+    public function emailPaymentReceipt($data)
     {
+        $seller_data = $this->getSellerById($data['seller_id']);
 
-        $this->load->language('mail/seller');
-
-        if($data['order_status'] == "Success")
-        {
-            $subject = sprintf($this->language->get('text_subject'), html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8'));
-
-            $message = sprintf($this->language->get('text_welcome'), html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8')) . "\n\n";
-
-            $message .= $this->language->get('text_login') . "\n";
-            $message .= $this->url->link('account/seller/login', '', true) . "\n\n";
-            $message .= $this->language->get('text_services') . "\n\n";
-            $message .= $this->language->get('text_thanks') . "\n";
-            $message .= html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');
-
-        }else{
-            $subject = sprintf($this->language->get('text_subject'), html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8'));
-
-            $message = sprintf($this->language->get('text_welcome_error'), html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8')) . "\n\n";
-
-            $message .= $this->language->get('text_login_error') . "\n";
-            $message .= $this->url->link('account/seller/login', '', true) . "\n\n";
-            $message .= $this->language->get('text_services') . "\n\n";
-            $message .= $this->language->get('text_thanks') . "\n";
-            $message .= html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');
-
-        }
-
-        $sellerEmail = $this->getSellerEmail($data['user_id']);
+        $data['payment_status'] = strtolower($data['order_status']);
+        $data['web_url'] = HTTPS_SERVER . "/";
+        $data['logo_url'] = HTTPS_SERVER . "image/" .$this->config->get('config_logo');
+        $data['firstname'] = $seller_data['firstname'];
+        $data['username'] = $seller_data['username'];
+        $data['to_email'] = $seller_data['email'];
+        $data['web_name'] = $this->config->get('config_name');
+        $data['payment_resume_url'] = $this->url->link('seller/payment_process', 'uID=' . base64_encode($data['user_id']), true);
+        $data['support_email'] = 'seller.support@sezplus.com';
 
         $mail = new Mail();
         $mail->protocol = $this->config->get('config_mail_protocol');
@@ -134,51 +153,30 @@ class ModelSellerSeller extends Model {
         $mail->smtp_password = html_entity_decode($this->config->get('config_mail_smtp_password'), ENT_QUOTES, 'UTF-8');
         $mail->smtp_port = $this->config->get('config_mail_smtp_port');
         $mail->smtp_timeout = $this->config->get('config_mail_smtp_timeout');
-
-        $mail->setTo($sellerEmail);
+        $mail->setTo($data['to_email']);
         $mail->setFrom($this->config->get('config_email'));
-        $mail->setSender(html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8'));
-        $mail->setSubject($subject);
-        $mail->setText($message);
-        $mail->send();
+        $mail->setSender(html_entity_decode($data['web_name'], ENT_QUOTES, 'UTF-8'));
 
-        // Send to main admin email if new account email is enabled
-        if (in_array('account', (array)$this->config->get('config_mail_alert'))) {
-            $message  = $this->language->get('text_signup') . "\n\n";
-            $message .= $this->language->get('text_website') . ' ' . html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8') . "\n";
-            $message .= $this->language->get('text_firstname') . ' ' . $data['billing_name'] . "\n";
-            $message .= $this->language->get('text_userid') . ' ' . $data['user_id'] . "\n";
-            //$message .= $this->language->get('text_lastname') . ' ' . $data['user_id'] . "\n";
-            $message .= "Seller User \n";
-            //$message .= $this->language->get('text_email') . ' '  .  $data['email'] . "\n";
-            //$message .= $this->language->get('text_telephone') . ' ' . $data['telephone'] . "\n";
+        if(strtolower($data['order_status']) == "success")
+        {
+            // Payment Recieved
+            $data['subject'] = "Seller Payment Success | ".$web_name;
+            $data['receipt_id'] = $data['payment_id'];
+            $data['date'] = date('d-m-Y');
+            $data['description'] = "Seller Subscription Fees";
+            $data['amount'] = $this->config->get('subscription_fees');
+            $data['total'] = $data['amount'];
+            $mail->setSubject(html_entity_decode($data['subject'], ENT_QUOTES, 'UTF-8'));
+            $mail->setHtml($this->load->view('mail/seller/payment_receipt', $data));
 
-            $mail = new Mail();
-            $mail->protocol = $this->config->get('config_mail_protocol');
-            $mail->parameter = $this->config->get('config_mail_parameter');
-            $mail->smtp_hostname = $this->config->get('config_mail_smtp_hostname');
-            $mail->smtp_username = $this->config->get('config_mail_smtp_username');
-            $mail->smtp_password = html_entity_decode($this->config->get('config_mail_smtp_password'), ENT_QUOTES, 'UTF-8');
-            $mail->smtp_port = $this->config->get('config_mail_smtp_port');
-            $mail->smtp_timeout = $this->config->get('config_mail_smtp_timeout');
-
-            $mail->setTo($this->config->get('config_email'));
-            $mail->setFrom($this->config->get('config_email'));
-            $mail->setSender(html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8'));
-            $mail->setSubject(html_entity_decode($this->language->get('text_new_customer'), ENT_QUOTES, 'UTF-8'));
-            $mail->setText($message);
-            $mail->send();
-
-            // Send to additional alert emails if new account email is enabled
-            $emails = explode(',', $this->config->get('config_alert_email'));
-
-            foreach ($emails as $email) {
-                if (utf8_strlen($email) > 0 && filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                    $mail->setTo($email);
-                    $mail->send();
-                }
-            }
+        } else {
+            // Payment Issue ** NOT Recieved **
+            $data['subject'] = "Seller Payment Failed | ".$web_name;
+            $mail->setSubject(html_entity_decode($data['subject'], ENT_QUOTES, 'UTF-8'));
+            $mail->setHtml($this->load->view('mail/seller/payment_receipt', $data));
         }
+
+        $mail->send();
     }
 
     public function getUserByUsername($username)

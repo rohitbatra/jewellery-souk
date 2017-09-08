@@ -55,6 +55,33 @@
                 }
             ]]></add>
         </operation>
+
+        <operation>
+            <search position="before"><![CDATA[
+                public function getTotalUsers() {
+            ]]></search>
+            <add><![CDATA[
+                public function isSeller($data = array()) {
+                  $ret = false;
+
+                  if(!empty($data))
+                  {
+                    // Check with key in user table
+                    $srch_query = $this->db->query("SELECT LOWER(ug.name) as `name` FROM user as u INNER JOIN user_group ug ON (u.user_group_id = ug.user_group_id) WHERE `".key($data)."` = '".$data[key($data)]."' ");
+                    if($srch_query->rows)
+                    {
+                      if($srch_query->row['name'] !== 'administrator' && $srch_query->row['name'] !== 'moderator')
+                      {
+                        $ret = true;
+                      }
+                    }
+                  }
+
+                  return $ret;
+                }
+            ]]></add>
+        </operation>
+
     </file>
     <!-- Add a new Filter on Product List page for ADMIN ENDS-->
 

@@ -43,7 +43,7 @@
               <input type="text" name="amount" value="<?php echo $subscription_fees; ?>"/>
               <input type="text" name="currency" value="INR"/>
               <input type="text" name="redirect_url" value="<?php echo HTTP_SERVER; ?>ccavenue/ccavResponseHandler.php"/>
-              <input type="text" name="cancel_url" value="<?php echo HTTP_SERVER; ?>index.php?route=seller/payment_process&error=payCancel"/>
+              <input type="text" name="cancel_url" value="<?php echo HTTP_SERVER; ?>index.php?route=seller/payment_process&amp;error=payCancel"/>
               <input type="text" name="language" value="EN"/>
           </form>
       </div>

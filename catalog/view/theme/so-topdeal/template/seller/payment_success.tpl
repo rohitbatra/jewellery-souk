@@ -30,26 +30,20 @@
     <?php } else { ?>
     <?php $class = 'col-sm-12'; ?>
     <?php } ?>
-    <div id="content" class="bg-page-404 <?php echo $class; ?>">
+    <div id="content" class="<?php echo $class; ?>">
 		<?php echo $content_top; ?>
         <div class="row">
-            <div class="content_404">
-                <div class="item-left col-lg-5 col-md-5">
-                    <div class="erro-image">
-                        <span class="erro-key">
-                            <img src="image/catalog/demo/bonuspage/404/img-404.png" alt="">
-                        </span>
-                    </div>
-                </div>
-                <div class="item-right col-lg-7 col-md-7">
+            <div>
+                <div class="">
                     <div class="block-top font-ct">
-                        <h2><span>Oops, <?php echo $heading_title; ?></span></h2>
-                        <div class="warning-code"><p><?php echo $text_error; ?></p></div>
+                        <h2><span>Thank You!</span></h2>
+                        <p><?php echo $name; ?>, your Seller Account is now <strong>Activated</strong>.</p>
+                        <p>We will also send you an email with the Payment Reciept of this Transaction for your reference. </p><p>If you have any questions, please email our <strong><a href="mailto:seller.support@sezplus.com">Support Team</a></strong>.</p>
+                        <p> You can login using the below Button:</p>
                     </div>
 
                     <div class="block-bottom">
                         <a href="<?php echo $continue; ?>" class="btn btn-revo" title="<?php echo $button_continue; ?>"><?php echo $button_continue; ?></a>
-                        <a href="mailto:support@sezplus.com" class="btn btn-revo" title="Go Support">Go Support</a>
                     </div>
                 </div>
             </div>

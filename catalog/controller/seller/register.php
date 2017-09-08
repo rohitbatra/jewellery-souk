@@ -21,7 +21,7 @@ class ControllerSellerRegister extends Controller {
             if(is_numeric($seller_id))
             {
                 // Redirect to Payment Processing Page -- DUMMY PAGE
-                $this->response->redirect($this->url->link('seller/payment_process', '&uID='. $seller_id, true));
+                $this->response->redirect($this->url->link('seller/payment_process', '&uID='. base64_encode($seller_id), true));
             }else {
                 $this->session->data['error'] = "There's a problem with your Registration, please email us at <a href='mailto:seller.support@sezplus.com'>seller.support@sezplus.com</a>'";
             }

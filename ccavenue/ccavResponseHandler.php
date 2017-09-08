@@ -56,7 +56,7 @@
 
 	echo "</center>";
 ?>
-<form method="post" name="redirect" action="<?php echo HTTP_SERVER; ?>index.php?route=seller/payment_process&payment=successful">
+<form method="post" name="redirect" action="<?php echo HTTP_SERVER; ?>index.php?route=seller/payment_process&payment=complete">
 <?php
 	foreach ($postArr as $var => $val)
 	{

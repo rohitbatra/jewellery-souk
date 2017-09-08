@@ -17,12 +17,12 @@ class ControllerSellerPaymentProcess extends Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_account'),
-			'href' => $this->url->link('seller/seller', '', true)
+			'href' => $this->url->link('seller/seller','', true)
 		);
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_payment_process'),
-			'href' => $this->url->link('seller/payment_process', '', true)
+			'href' => $this->url->link('seller/payment_process',  'uID=' . ($this->request->get['uID']), true)
 		);
 
 		$data['heading_title'] = $this->language->get('heading_title');
@@ -31,11 +31,14 @@ class ControllerSellerPaymentProcess extends Controller {
 
     if(isset($this->request->get['uID']) && !empty($this->request->get['uID']))
     {
-      $data['uID'] = $this->request->get['uID'];
+
+			$uID = base64_decode($this->request->get['uID']);
+
+      $data['uID'] = $uID;
       $data['error_warning'] = "";
       // get Seller Info from Database
       $this->load->model('seller/seller');
-      $seller_info = $this->model_seller_seller->getSellerById($this->request->get['uID']);
+      $seller_info = $this->model_seller_seller->getSellerById($data['uID']);
 
       if($seller_info['seller_type'] == "company")
       {
@@ -51,18 +54,43 @@ class ControllerSellerPaymentProcess extends Controller {
       $data['action'] = "";
 
 
-
     }else if(isset($this->request->get['error']) && !empty($this->request->get['error']))
     {
-        // Also check for Error's in the POST method from CCAVENUE
-    }else if(isset($this->request->get['payment']) && !empty($this->request->get['payment'])){
+        // Payment Cancelled by USER from CCAVENUE
+				// Redirect to Payment Not Completed Error Page
+				$this->response->redirect($this->url->link('seller/payment_error', 'uID=' . base64_encode($data['uID']) , 'SSL'));
+
+    }else if(isset($this->request->get['payment']) && !empty($this->request->get['payment']))
+		{
 
         // Also check for Success in the POST method from CCAVENUE
-    }else{
-      // Show message
+				if(isset($this->request->post['order_status']) && !empty($this->request->post['order_status']))
+				{
+						// Check for Order Status
+						if(strtolower($this->request->post['order_status']) == 'success')
+						{
+								$postData = $this->request->post;
+								$postData['seller_id'] = $data['uID'];
+								$this->model_seller_seller->addPaymentInfo($postData);
+								$this->model_seller_seller->emailPaymentReceipt($postData);
+								$this->response->redirect($this->url->link('seller/payment_success', 'uID=' . base64_encode($data['uID']) , 'SSL'));
+
+						} else {
+							$postData = $this->request->post;
+							$postData['seller_id'] = $data['uID'];
+							$this->model_seller_seller->addPaymentInfo($postData);
+							$this->model_seller_seller->emailPaymentReceipt($postData);
+							$this->response->redirect($this->url->link('seller/payment_error', 'uID=' . base64_encode($data['uID']) , 'SSL'));
+						}
+
+				}
+    } else {
+				// unknown error landing to this page
+      // Show error message
       $data['error_warning'] = $this->language->get('error_wrong_page');
       $data['text_message'] = $this->language->get('error_something_wrong');
-      $data['contact_url'] = $this->url->link('seller/contact','',true);
+      $data['contact_url'] = $this->url->link('seller/register','',true);
+			$data['button_continue'] = 'Go to Home';
       $data['action'] = "";
     }
 
