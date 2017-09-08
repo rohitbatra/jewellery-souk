@@ -22,7 +22,7 @@ class ControllerSellerPaymentProcess extends Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_payment_process'),
-			'href' => $this->url->link('seller/payment_process',  'uID=' . ($this->request->get['uID']), true)
+			'href' => $this->url->link('seller/payment_process',  'uID=' . (isset($this->request->get['uID']) ? $this->request->get['uID'] : ''), true)
 		);
 
 		$data['heading_title'] = $this->language->get('heading_title');
@@ -66,12 +66,11 @@ class ControllerSellerPaymentProcess extends Controller {
         // Also check for Success in the POST method from CCAVENUE
 				if(isset($this->request->post['order_status']) && !empty($this->request->post['order_status']))
 				{
-					if(isset($data['order_id']))
+					if(isset($this->request->post['order_id']))
 					{
 						$tmp = explode('-',$data['order_id']);
 						$data['uID'] = end($tmp);
 					}
-
 
 						// Check for Order Status
 						if(strtolower($this->request->post['order_status']) == 'success')
