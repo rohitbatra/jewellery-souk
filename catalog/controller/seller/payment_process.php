@@ -68,7 +68,7 @@ class ControllerSellerPaymentProcess extends Controller {
 				{
 					if(isset($this->request->post['order_id']))
 					{
-						$tmp = explode('-',$data['order_id']);
+						$tmp = explode('-',$this->request->post['order_id']);
 						$data['uID'] = end($tmp);
 					}
 
