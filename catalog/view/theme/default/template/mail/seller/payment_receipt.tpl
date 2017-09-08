@@ -488,7 +488,8 @@
                           </tr>
                         </table>
 
-                        <p>Your Seller Account is now <strong>Activated</strong>. Please use the below details to login.</p>
+                        <p>Your Seller Account is now <strong>Activated</strong>. </p>
+                        <p>Please use the below details to login.</p>
                         <p>For reference, here's your login information:</p>
                         <table class="attributes" width="100%" cellpadding="0" cellspacing="0">
                           <tr>
@@ -517,7 +518,7 @@
 
                       <?php } ?>
 
-                      <p>If you have any questions about this email, simply email to our <a href="mailto:<?php echo $support_email; ?>">support team</a> for help.</p>
+                      <p>If you have any questions, simply email to our <a href="mailto:<?php echo $support_email; ?>">support team</a> .</p>
                       <p>Cheers,
                         <br><?php echo $web_name; ?> Team</p>
 
