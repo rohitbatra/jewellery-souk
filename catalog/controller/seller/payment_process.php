@@ -66,6 +66,13 @@ class ControllerSellerPaymentProcess extends Controller {
         // Also check for Success in the POST method from CCAVENUE
 				if(isset($this->request->post['order_status']) && !empty($this->request->post['order_status']))
 				{
+					if(isset($data['order_id']))
+					{
+						$tmp = explode('-',$data['order_id']);
+						$data['uID'] = end($tmp);
+					}
+
+
 						// Check for Order Status
 						if(strtolower($this->request->post['order_status']) == 'success')
 						{
@@ -76,11 +83,11 @@ class ControllerSellerPaymentProcess extends Controller {
 								$this->response->redirect($this->url->link('seller/payment_success', 'uID=' . base64_encode($data['uID']) , 'SSL'));
 
 						} else {
-							$postData = $this->request->post;
-							$postData['seller_id'] = $data['uID'];
-							$this->model_seller_seller->addPaymentInfo($postData);
-							$this->model_seller_seller->emailPaymentReceipt($postData);
-							$this->response->redirect($this->url->link('seller/payment_error', 'uID=' . base64_encode($data['uID']) , 'SSL'));
+								$postData = $this->request->post;
+								$postData['seller_id'] = $data['uID'];
+								$this->model_seller_seller->addPaymentInfo($postData);
+								$this->model_seller_seller->emailPaymentReceipt($postData);
+								$this->response->redirect($this->url->link('seller/payment_error', 'uID=' . base64_encode($data['uID']) , 'SSL'));
 						}
 
 				}
