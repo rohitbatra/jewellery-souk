@@ -20,6 +20,12 @@ class ModelSellerSeller extends Model {
 			$sql .= " AND u.user_group_id = '". (int)$data['filter_seller_type'] ."'";
 		}
 
+		if (isset($data['filter_date_added']) && !empty($data['filter_date_added']))
+		{
+			$sql .= " AND DATE(u.date_added) = DATE('" . $this->db->escape($data['filter_date_added']) . "') ";
+		}
+
+
 		$sql .= " ORDER BY username";
 
 		if (isset($data['order']) && ($data['order'] == 'DESC')) {
@@ -63,6 +69,11 @@ class ModelSellerSeller extends Model {
 		if (isset($data['filter_seller_type']))
 		{
 			$sql .= " AND u.user_group_id = '". (int)$data['filter_seller_type'] ."'";
+		}
+
+		if (isset($data['filter_date_added']) && !empty($data['filter_date_added']))
+		{
+			$sql .= " AND DATE(u.date_added) = DATE('" . $this->db->escape($data['filter_date_added']) . "') ";
 		}
 
 		$query = $this->db->query($sql);
