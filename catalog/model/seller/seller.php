@@ -201,4 +201,11 @@ class ModelSellerSeller extends Model {
         return $query->rows;
     }
 
+    public function getSubscriptionFeesByUserGroup($userGroupId)
+    {
+      $query = $this->db->query("SELECT subscription_fees FROM " . DB_PREFIX . "user_group WHERE user_group_id = '" . (int)$userGroupId . "'");
+
+      return $query->row['subscription_fees'];
+    }
+
 }

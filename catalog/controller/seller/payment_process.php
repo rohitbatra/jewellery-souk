@@ -41,6 +41,12 @@ class ControllerSellerPaymentProcess extends Controller {
       // get Seller Info from Database
 
       $seller_info = $this->model_seller_seller->getSellerById($data['uID']);
+			
+			if(empty($seller_info))
+			{
+					// Redirect to Error page -- there was some error that got him to this page.
+					goto toError;
+			}
 
       if($seller_info['seller_type'] == "company")
       {
@@ -49,8 +55,9 @@ class ControllerSellerPaymentProcess extends Controller {
         $data['seller_name'] = $seller_info['firstname'] ." " .$seller_info['lastname'];
       }
       $data['text_welcome'] = sprintf($this->language->get('text_welcome'), $data['seller_name']);
-      $data['text_message'] = sprintf($this->language->get('text_message'), $this->config->get('subscription_fees'));
-      $data['subscription_fees'] = $this->config->get('subscription_fees');
+      $data['subscription_fees'] = $this->model_seller_seller->getSubscriptionFeesByUserGroup($seller_info['user_group_id']);
+			$data['text_message'] = sprintf($this->language->get('text_message'), $data['subscription_fees']);
+
       $data['continue'] = $this->url->link('','',true);
 
       $data['action'] = "";
@@ -91,6 +98,7 @@ class ControllerSellerPaymentProcess extends Controller {
 
 				}
     } else {
+			toError:
 				// unknown error landing to this page
       // Show error message
       $data['error_warning'] = $this->language->get('error_wrong_page');
