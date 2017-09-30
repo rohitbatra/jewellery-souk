@@ -1,4 +1,4 @@
-<?php 
+<?php
 /******************************************************
  * @package	SO Theme Framework for Opencart 2.0.x
  * @author	http://www.magentech.com
@@ -16,7 +16,7 @@
 		$product_description_short = "<h3>". $overview."</h3>";
 		$product_description_short .= (strlen($full_description) > $limit ? utf8_substr($full_description, 0, $limit) . '...' : $full_description);
 	}
-	
+
 	if($column_left && $column_right) $getColumn='3column';
 	else if ($column_left)  $getColumn='left';
 	else if($column_right)  $getColumn='right';
@@ -37,8 +37,8 @@
 	             <?php echo '<b>'.$breadcrumb['text'].'</b>'; ?>
 	          <?php }else{ ?>
 	            <a href="<?php echo $breadcrumb['href']; ?>"></a>
-	          <?php } ?>      
-	        <?php $i++; ?> 
+	          <?php } ?>
+	        <?php $i++; ?>
 	      <?php } ?>
 	    </div>
 	    <ul class="breadcrumb-cate">
@@ -47,7 +47,7 @@
 		    <?php } ?>
 		</ul>
 	</div>
- 
+
 </div>
 <?php // Content Detail Blocks ========================================= ?>
 <div class="container product-detail <?php echo'product-'. $getColumn;?>">
@@ -60,7 +60,7 @@
     <?php } else { ?>
     <?php $class = 'col-sm-12'; ?>
     <?php } ?>
-	
+
     <div id="content" class="<?php echo $class; ?>">
     	<?php if($column_left || $column_right) :?>
 	  <a href="javascript:void(0)" class="open-sidebar hidden-lg hidden-md"><i class="fa fa-bars"></i> <?php echo $text_sidebar; ?></a>
@@ -91,7 +91,7 @@
 								<span class="btn-more prev-thumb nt"><i class="fa fa-chevron-up"></i></span>
 								<span class="btn-more next-thumb nt"><i class="fa fa-chevron-down"></i></span>
 								<ul class="thumb-vertical">
-									<?php 
+									<?php
 									if (sizeof($images) > 0) {
 										$firstimg = array('popup' => $popup,'thumb' => $thumb);
 										array_unshift($images, $firstimg);
@@ -108,7 +108,7 @@
 								</ul>
 	                        </div>
 	                    <?php endif; ?>
-	                  
+
 
 						<div class="large-image  <?php echo  (isset($thumbnails_position) && $thumbnails_position == 'left') ? ' vertical ' : '' ?> ">
 							<img itemprop="image" class="product-image-zoom" src="<?php echo $popup; ?>" data-zoom-image="<?php echo $popup; ?>" title="<?php echo $heading_title; ?>" alt="<?php echo $heading_title; ?>" />
@@ -127,13 +127,13 @@
 								<?php endif; ?>
 								<?php endif; ?>
 								<?php endif; ?>
-								
+
 								<!--Sale Label-->
 								<?php if (isset($sale_status ) && ($sale_status )) :?>
 								<?php if ($product_info['special']) : ?>
 									<span class="label-product label-sale">
-										
-										<?php  if($discount_status) echo $discount; ?>    
+
+										<?php  if($discount_status) echo $discount; ?>
 									</span>
 								<?php endif; ?>
 								<?php endif; ?>
@@ -142,9 +142,9 @@
 								<a class="thumb-video pull-left" href="<?php echo $video1; ?>"><i class="fa fa-youtube-play"></i></a>
 							<?php endif; ?>
 						</div>
-							
-					
-						
+
+
+
 						<?php //Bottom Thumbnails previews -------?>
 	                    <?php if ($images  && isset($thumbnails_position) && $thumbnails_position == 'bottom') : ?>
 	                        <div id="thumb-slider" class="<?php echo ((count($images) < 3 ) ? 'not_full_slider' : 'full_slider'); ?> <?php echo ($thumbnails_position == 'left' ? 'flexslider-large visible-xs' : 'owl-carousel'); ?>">
@@ -152,7 +152,7 @@
 								if (sizeof($images) > 0) {
 									$firstimg = array('popup' => $popup,'thumb' => $thumb);
 									array_unshift($images, $firstimg);
-									
+
 								}
 								if ($images) : ?>
 									<?php $i=-1; foreach ($images as $image) : $i++ ?>
@@ -161,12 +161,12 @@
 										</a>
 									<?php endforeach; ?>
 								<?php endif; ?>
-								
+
 	                        </div>
 							<script type="text/javascript">
 								$(function ($) {
 									var $nav = $("#thumb-slider");
-									
+
 									$nav.each(function () {
 										$(this).owlCarousel2({
 											nav:true,
@@ -188,7 +188,7 @@
 											}
 										});
 									})
-									
+
 								});
 							</script>
 	                    <?php endif; ?>
@@ -199,11 +199,11 @@
 				<?php //Product info Block -------?>
 				<div class="content-product-right <?php if(isset($thumbnails_position) && $thumbnails_position == 'bottom') echo "info-right"; ?> <?php  echo $right_gallery; ?>">
 					<!--Countdown box-->
-					<?php   
+					<?php
 						$product['special'] = $special;
 						$product['special_end_date'] = $special_end_date;
 						$product['product_id'] = $product_id;
-						if (file_exists(DIR_TEMPLATE . $theme . '/template/soconfig/countdown.php')) include(DIR_TEMPLATE.$theme.'/template/soconfig/countdown.php'); 
+						if (file_exists(DIR_TEMPLATE . $theme . '/template/soconfig/countdown.php')) include(DIR_TEMPLATE.$theme.'/template/soconfig/countdown.php');
 						else echo 'Not found';
 					?>
 					<!--End countdown box-->
@@ -224,17 +224,17 @@
 							  <?php } ?>
 							  </div>
 						  </div>
-				 
+
 						   <a class="reviews_button" href="" onclick="$('a[href=\'#tab-review\']').trigger('click'); return false;" itemprop="reviewCount" content="<?php echo $count_reviews; ?>"><?php echo $reviews; ?></a> | <a class="write_review_button" href="" onclick="$('a[href=\'#tab-review\']').trigger('click'); return false;"><?php echo $text_write; ?></a>
 						</div>
 					<?php } ?>
-					
-				
+
+
 					<?php //Product Description -------?>
 					<div class="product-label">
 						<?php //Product Price -------?>
 						<?php if ($price) : ?>
-						<div class="product_page_price price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">											 
+						<div class="product_page_price price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
 
 					        <?php if (!$special) { ?>
 	                        <span class="price-new"><span itemprop="price" id="price-old" content="<?php echo $price_value; ?>"><?php echo $price; ?></span><meta itemprop="priceCurrency" content="<?php echo $currency;?>" /></span>
@@ -245,7 +245,7 @@
 							<?php if ($tax) { ?>
 							<div class="price-tax"><span><?php echo $text_tax; ?></span> <?php echo $tax; ?></div>
 							<?php } ?>
-							
+
 							<?php if ($discounts) { ?>
 							<ul class="list-unstyled">
 								<?php foreach ($discounts as $discount) { ?>
@@ -255,14 +255,14 @@
 							<?php } ?>
 						</div>
 						<?php endif; ?>
-						<?php //End Product Price -------?>	
+						<?php //End Product Price -------?>
 					</div>
 					<div class="product-box-desc">
 						<div class="inner-box-desc">
 							<?php if ($manufacturer): ?>
 								<div class="brand"><span><?php echo $text_manufacturer; ?></span><a href="<?php echo $manufacturers; ?>"><?php echo $manufacturer; ?></a></div>
 							<?php endif; ?>
-							<?php 
+							<?php
 							if ($model): ?>
 							<div class="model"><span><?php echo $text_model; ?></span> <?php echo $model; ?></div>
 							<?php endif; ?>
@@ -272,15 +272,15 @@
 							<?php if ($points) { ?>
 							<div class="reward"><span><?php echo $text_points; ?></span> <?php echo $points; ?></div>
 							<?php } ?>
-							<div class="stock"><span><?php echo $text_stock; ?></span> <i class="fa fa-check-square-o"></i> <?php echo $stock; ?></div>	
-						</div>		
+							<div class="stock"><span><?php echo $text_stock; ?></span> <i class="fa fa-check-square-o"></i> <?php echo $stock; ?></div>
+						</div>
 					</div>
-					
+
 					<div class="short_description form-group" itemprop="description">
 	                    <?php echo $product_description_short;?>
 	                </div>
 					<?php // End Product Description -------?>
-					
+
 					<div id="product">
 						<?php if ($options) { ?>
 						<div class="options clearfix">
@@ -303,14 +303,14 @@
 								</div>
 							</div>
 							<?php } ?>
-						
+
 							<?php if ($option['type'] == 'radio') { ?>
 							<div class="form-group<?php echo ($option['required'] ? ' required' : ''); ?>">
 								<label class="control-label"><?php echo $option['name']; ?></label>
 								<div id="input-option<?php echo $option['product_option_id']; ?>">
-									<?php 
+									<?php
 									$radio_type 	= isset($radio_style) && $radio_style ? ' radio-type-button':'';
-									foreach ($option['product_option_value'] as $option_value) { 
+									foreach ($option['product_option_value'] as $option_value) {
 									$radio_image 	= isset($option_value['image']) ? 'option_image' : '';
 									$radio_price  	= isset($radio_style) && $radio_style ? $option_value['price_prefix']. $option_value['price'] : '';
 									?>
@@ -319,7 +319,7 @@
 												<input type="radio" name="option[<?php echo $option['product_option_id']; ?>]" value="<?php echo $option_value['product_option_value_id']; ?>" />
 												<span class="option-content-box" data-title="<?php echo $radio_price;?>" data-toggle='tooltip'>
 													<?php if ($option_value['image']) { ?>
-													<img src="<?php echo $option_value['image']; ?>" alt="<?php echo $option_value['name'] . ($option_value['price'] ? ' ' . $option_value['price_prefix'] . $option_value['price'] : ''); ?>" class="img-thumbnail" /> 
+													<img src="<?php echo $option_value['image']; ?>" alt="<?php echo $option_value['name'] . ($option_value['price'] ? ' ' . $option_value['price_prefix'] . $option_value['price'] : ''); ?>" class="img-thumbnail" />
 													<?php } ?>
 													<span class="option-name"><?php echo $option_value['name']; ?></span>
 													<?php if ($option_value['price'] && $radio_style !='1') { ?>
@@ -328,7 +328,7 @@
 												  </label>
 												</span>
 										</div>
-										
+
 									<?php } ?>
 									<?php if($radio_style) { ?>
 									<script type="text/javascript">
@@ -343,12 +343,12 @@
 								</div>
 							</div>
 							<?php } ?>
-						
+
 							<?php if ($option['type'] == 'checkbox') { ?>
 							<div class="box-checkbox form-group<?php echo ($option['required'] ? ' required' : ''); ?>">
 								<label class="control-label"><?php echo $option['name']; ?></label>
 								<div id="input-option<?php echo $option['product_option_id']; ?>">
-									<?php 
+									<?php
 									$check_type 	= isset($check_style) && $check_style ? ' radio-type-button':'';
 									foreach ($option['product_option_value'] as $option_value) {
 									$check_image 	= isset($option_value['image']) ? ' option_image' : '';
@@ -359,7 +359,7 @@
 												<input type="checkbox" name="option[<?php echo $option['product_option_id']; ?>][]" value="<?php echo $option_value['product_option_value_id']; ?>" />
 												<span class="option-content-box" data-title="<?php echo $check_price;?>" data-toggle='tooltip'>
 													<?php if ($option_value['image']) { ?>
-													<img src="<?php echo $option_value['image']; ?>" alt="<?php echo $option_value['name'] . ($option_value['price'] ? ' ' . $option_value['price_prefix'] . $option_value['price'] : ''); ?>" class="img-thumbnail" /> 
+													<img src="<?php echo $option_value['image']; ?>" alt="<?php echo $option_value['name'] . ($option_value['price'] ? ' ' . $option_value['price_prefix'] . $option_value['price'] : ''); ?>" class="img-thumbnail" />
 													<?php } ?>
 													<span class="option-name"><?php echo $option_value['name']; ?></span>
 													<?php if ($option_value['price'] && $check_style !='1') { ?>
@@ -369,7 +369,7 @@
 											</label>
 										</div>
 										<?php } ?>
-										
+
 										<?php if($check_style) { ?>
 										<script type="text/javascript">
 											 $(document).ready(function(){
@@ -382,24 +382,24 @@
 									<?php } ?>
 								</div>
 							</div>
-							
+
 							<?php } ?>
-						
-						
+
+
 							<?php if ($option['type'] == 'text') { ?>
 							<div class="form-group<?php echo ($option['required'] ? ' required' : ''); ?>">
 								<label class="control-label" for="input-option<?php echo $option['product_option_id']; ?>"><?php echo $option['name']; ?></label>
 								<input type="text" name="option[<?php echo $option['product_option_id']; ?>]" value="<?php echo $option['value']; ?>" placeholder="<?php echo $option['name']; ?>" id="input-option<?php echo $option['product_option_id']; ?>" class="form-control" />
 							</div>
 							<?php } ?>
-							
+
 							<?php if ($option['type'] == 'textarea') { ?>
 							<div class="form-group<?php echo ($option['required'] ? ' required' : ''); ?>">
 								<label class="control-label" for="input-option<?php echo $option['product_option_id']; ?>"><?php echo $option['name']; ?></label>
 								<textarea name="option[<?php echo $option['product_option_id']; ?>]" rows="5" placeholder="<?php echo $option['name']; ?>" id="input-option<?php echo $option['product_option_id']; ?>" class="form-control"><?php echo $option['value']; ?></textarea>
 							</div>
 							<?php } ?>
-							
+
 							<?php if ($option['type'] == 'file') { ?>
 							<div class="form-group<?php echo ($option['required'] ? ' required' : ''); ?>">
 								<label class="control-label"><?php echo $option['name']; ?></label>
@@ -407,7 +407,7 @@
 								<input type="hidden" name="option[<?php echo $option['product_option_id']; ?>]" value="" id="input-option<?php echo $option['product_option_id']; ?>" />
 							</div>
 							<?php } ?>
-						
+
 							<?php if ($option['type'] == 'date') { ?>
 							<div class="box-date form-group<?php echo ($option['required'] ? ' required' : ''); ?> col-sm-12 col-xs-12">
 								<label class="control-label" for="input-option<?php echo $option['product_option_id']; ?>"><?php echo $option['name']; ?></label>
@@ -419,7 +419,7 @@
 								</div>
 							</div>
 							<?php } ?>
-						
+
 							<?php if ($option['type'] == 'datetime') { ?>
 							<div class="box-date form-group<?php echo ($option['required'] ? ' required' : ''); ?> col-sm-12 col-xs-12">
 								<label class="control-label" for="input-option<?php echo $option['product_option_id']; ?>"><?php echo $option['name']; ?></label>
@@ -431,7 +431,7 @@
 								</div>
 							</div>
 							<?php } ?>
-						
+
 							<?php if ($option['type'] == 'time') { ?>
 							<div class="form-group<?php echo ($option['required'] ? ' required' : ''); ?>">
 								<label class="control-label" for="input-option<?php echo $option['product_option_id']; ?>"><?php echo $option['name']; ?></label>
@@ -443,11 +443,11 @@
 								</div>
 							</div>
 							<?php } ?>
-						
+
 						<?php } ?>
 						</div>
 						<?php } ?>
-						
+
 						<div class="box-cart cart clearfix">
 							<?php if ($recurrings) { ?>
 							<hr>
@@ -462,7 +462,7 @@
 								<div class="help-block" id="recurring-description"></div>
 							</div>
 							<?php } ?>
-							
+
 							<!-- QUALYTY -->
 							<div class="form-group box-info-product">
 							    <div class="option quantity">
@@ -491,11 +491,11 @@
 								<?php if ($minimum > 1) : ?><p class="minimum" style="clear:both; display:none;"><?php echo $text_minimum; ?></p><?php endif; ?>
 
 							</div>
-							
-							
+
+
 						</div>
-				
-				
+
+
 					<?php if ($product_page_button): ?>
 						<div class="form-group share clearfix">
 							<?php
@@ -505,13 +505,13 @@
 							?>
 						</div>
 					<?php endif; ?>
-				
+
 				</div>
 			</div><!-- end box info product -->
 
             </div>
 			<?php //End Product info Block -------?>
-			
+
 		</div>
 
 		<?php echo $content_top; ?>
@@ -539,21 +539,21 @@
 		</div>
 		<?php endif; ?>
 		<div class="row product-bottom">
-			<?php 
+			<?php
 			$related_column = ($related_position =='vertical' && $products && $related_status) ? 'col-md-8 col-sm-12' : 'col-xs-12';
 			if($related_position =='vertical' && $products) :?>
 			<div class="col-md-4 col-sm-12">
 				<!-- TAB RELATED PRODUCT VERTICAL -->
-				<?php 
+				<?php
 				if (isset($related_status) && $related_status ) :
 					if (file_exists(DIR_TEMPLATE . $theme . '/template/soconfig/related.php')) include(DIR_TEMPLATE.$theme.'/template/soconfig/related.php');
 					else echo 'Not found';
 				endif;
 				?>
-				
+
 			</div>
 			<?php endif;?>
-			
+
 			<div class="<?php echo $related_column;?>">
 				<?php // Tabs Blocks =========================================?>
 				<?php if (isset($tabs_position) && $tabs_position != 3) : ?>
@@ -564,38 +564,38 @@
 							<?php if ($description) : ?>
 							<li class="active"><a data-toggle="tab" href="#tab-1"><?php echo $tab_description; ?></a></li>
 							<?php endif; ?>
-							
-							
-							
+
+
+
 							<?php if (!empty($html_product_tab)) : ?>
 							<li class="<?php echo (!$description && !$attribute_groups && !$review_status && !$tags ? 'active' : 'item_nonactive'); ?>"><a data-toggle="tab" href="#tab-5"><?php echo (!empty($tab_title) ? $tab_title : 'Custom block'); ?></a></li>
 							<?php endif; ?>
-							
+
 							<?php if ($tags) : ?>
 							<li class="<?php echo (!$description && !$attribute_groups && !$review_status ? 'active' : 'item_nonactive'); ?>"><a data-toggle="tab" href="#tab-4"><?php echo (!empty($soconfig_lang[$lang]["tags_tab_title"]) ? $soconfig_lang[$lang]["tags_tab_title"] : 'TAGS'); ?></a></li>
 							<?php endif; ?>
-							
+
 							<?php if ($review_status) : ?>
 							<li class="<?php echo (!$description && !$attribute_groups ? 'active' : 'item_nonactive'); ?>"><a data-toggle="tab" href="#tab-review"><?php echo $tab_review; ?></a></li>
 							<?php endif; ?>
-							
+
 						</ul>
 						<?php endif; ?>
-					
+
 					<?php //Tabs Left Position -------?>
 						<?php if ($tabs_position == 1) : ?>
-						
+
 							<ul class="nav nav-tabs col-lg-3 col-sm-4">
 								<?php if ($description) : ?>
 								<li class="active"><a data-toggle="tab" href="#tab-1"><?php echo $tab_description; ?></a></li>
 								<?php endif; ?>
 
-							
+
 
 								<?php if ($review_status) : ?>
 								<li class="<?php echo (!$description && !$attribute_groups ? 'active' : 'item_nonactive'); ?>"><a data-toggle="tab" href="#tab-review"><?php echo $tab_review; ?></a></li>
 								<?php endif; ?>
-								
+
 								<?php if ($tags) : ?>
 								<li class="<?php echo (!$description && !$attribute_groups && !$review_status ? 'active' : 'item_nonactive'); ?>"><a data-toggle="tab" href="#tab-4"><?php echo (!empty($soconfig_lang[$lang]["tags_tab_title"]) ? $soconfig_lang[$lang]["tags_tab_title"] : 'TAGS'); ?></a></li>
 								<?php endif; ?>
@@ -604,7 +604,7 @@
 								<li class="<?php echo (!$description && !$attribute_groups && !$review_status && !$tags ? 'active' : 'item_nonactive'); ?>"><a data-toggle="tab" href="#tab-5"><?php echo (!empty($tab_title) ? $tab_title : 'Custom block'); ?></a></li>
 								<?php endif; ?>
 							</ul>
-							
+
 						<?php endif; ?>
 							<div class="tab-content <?php if ($tabs_position == 1){ echo "col-lg-9 col-sm-8"; }?> col-xs-12">
 								<?php if ($description) : ?>
@@ -613,7 +613,7 @@
 								</div>
 								<?php endif; ?>
 
-								
+
 
 								<?php if ($review_status) : ?>
 								<div id="tab-review" class="<?php echo (!$description && !$attribute_groups ? 'tab-pane active in' : 'tab-pane'); ?>">
@@ -680,11 +680,11 @@
 				  </div>
 				</div>
 				<?php endif; ?>
-				
+
 				<?php //Tabs Type = 3 -------?>
 				<?php if (isset($tabs_position) && $tabs_position == 3) : ?>
 				<div class="producttab panel-group accordion-simple" id="product-accordion">
-				
+
 					<?php if ($description) : ?>
 						<div class="panel">
 							<div class="panel-heading">
@@ -700,7 +700,7 @@
 							</div>
 						</div>
 					<?php endif; ?>
-				
+
 					<?php if ($attribute_groups) : ?>
 					<div class="panel">
 						<div class="panel-heading">
@@ -732,7 +732,7 @@
 						</div>
 					</div>
 					<?php endif; ?>
-				
+
 					<?php if ($review_status) : ?>
 					<div class="panel">
 						<div class="panel-heading">
@@ -746,7 +746,7 @@
 								<form>
 									<div id="review"></div>
 									<h2 id="review-title"><?php echo $text_write; ?></h2>
-									
+
 									<?php if ($review_guest) { ?>
 									<div class="contacts-form">
 										<div class="form-group">
@@ -771,11 +771,11 @@
 										&nbsp;
 										<input type="radio" name="rating" value="5" />
 										&nbsp;<span><?php echo $entry_good; ?></span><br />
-										
+
 										<?php echo $captcha; ?>
-				
+
 										<div class="buttons" style="visibility: visible;"><a id="button-review" class="btn btn-mega"><?php echo $button_continue; ?></a></div>
-				
+
 									</div>
 									<?php } else { ?>
 									<?php echo $text_login; ?>
@@ -785,7 +785,7 @@
 						</div>
 					</div>
 					<?php endif; ?>
-					
+
 					<?php  if ($tags) : ?>
 						<div class="panel">
 							<div class="panel-heading">
@@ -807,7 +807,7 @@
 							</div>
 						</div>
 					<?php endif; ?>
-				
+
 					<?php if (!empty($html_product_tab) && !empty($tab_title)) : ?>
 					<div class="panel">
 						<div class="panel-heading">
@@ -823,7 +823,7 @@
 						</div>
 					</div>
 					<?php endif; ?>
-				
+
 				</div>
 				<?php endif; ?>
 				<?php //End Tabs Type = 3 -------?>
@@ -832,13 +832,13 @@
 				<ul class="nav nav-tabs">
 				<?php if (!empty($products)) : ?>
 				  <li class="active"><a data-toggle="tab" href="#product-related"><?php echo $text_related; ?></a></li>
-				<?php endif; ?>  
+				<?php endif; ?>
 				  <li><a data-toggle="tab" href="#product-upsell"><?php echo $objlang->get('text_upsell'); ?></a></li>
 				</ul>
 				<div class="tab-content">
 				  	<div id="product-related" class="tab-pane fade in active">
-				   		<?php 
-						// TAB RELATED PRODUCT HORI 
+				   		<?php
+						// TAB RELATED PRODUCT HORI
 						if (isset($related_status) && $related_status && $related_position =='horizontal') :
 							if (file_exists(DIR_TEMPLATE . $theme . '/template/soconfig/related.php')) include(DIR_TEMPLATE.$theme.'/template/soconfig/related.php');
 							else echo 'Not found';
@@ -861,6 +861,14 @@
                   <?php } ?>
                   lensSize    :"<?php echo isset($product_zoomlenssize) ? $product_zoomlenssize : '300';?>",
                   easing:true,
+                  tint:true,
+                  tintColour:'#dd3c7f',
+                  tintOpacity:0.3,
+                  zoomWindowFadeIn: 500,
+              		zoomWindowFadeOut: 500,
+              		lensFadeIn: 500,
+              		lensFadeOut: 500,
+                  scrollZoom : true,
                   gallery:'thumb-slider',
                   cursor: 'pointer',
                   galleryActiveClass: "active"
@@ -888,13 +896,13 @@
 						}
 					}
 				});
-				
+
 			});
-					
+
 			</script>
 			<?php }else{?>
 			<script type="text/javascript"><!--
-			  $(document).ready(function() { 
+			  $(document).ready(function() {
 				$('.thumb-slider .owl2-item').magnificPopup({
 					items: [
 					<?php if ($images) { ?>
@@ -925,13 +933,13 @@
 			//--></script>
 			<?php } ?>
 		</div>
-		
+
     </div>
-	
+
 	<?php //Column Right Block -------?>
 	<?php echo $column_right; ?>
 	<?php //End Column Right Block -------?>
-		
+
 	</div>
 </div>
 
@@ -949,14 +957,14 @@ $('select[name=\'recurring_id\'], input[name="quantity"]').change(function(){
 		},
 		success: function(json) {
 			$('.alert, .text-danger').remove();
-			
+
 			if (json['success']) {
 				$('#recurring-description').html(json['success']);
 			}
 		}
 	});
 });
-//--></script> 
+//--></script>
 
 <script type="text/javascript"><!--
 $('#button-cart').on('click', function() {
@@ -974,7 +982,7 @@ $('#button-cart').on('click', function() {
 		success: function(json) {
 			$('.alert, .text-danger').remove();
 			$('.form-group').removeClass('has-error');
-			
+
 			if (json['error']) {
 				if (json['error']['option']) {
 					for (i in json['error']['option']) {
@@ -995,7 +1003,7 @@ $('#button-cart').on('click', function() {
 				// Highlight any found errors
 				$('.text-danger').parent().addClass('has-error');
 			}
-			
+
 			if (json['success']) {
 				$('#content').parent().before('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="fa fa-close close" data-dismiss="alert"></button></div>');
 				$('#cart  .total-shopping-cart ').html(json['total'] );
@@ -1012,7 +1020,7 @@ $('#button-cart').on('click', function() {
 	});
 });
 
-//--></script> 
+//--></script>
 <script type="text/javascript"><!--
 $('.date').datetimepicker({
 	pickTime: false
@@ -1029,11 +1037,11 @@ $('.time').datetimepicker({
 
 $('button[id^=\'button-upload\']').on('click', function() {
 	var node = this;
-	
+
 	$('#form-upload').remove();
-	
+
 	$('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" name="file" /></form>');
-	
+
 	$('#form-upload input[name=\'file\']').trigger('click');
     if (typeof timer != 'undefined') {
         clearInterval(timer);
@@ -1041,7 +1049,7 @@ $('button[id^=\'button-upload\']').on('click', function() {
 	timer = setInterval(function() {
 		if ($('#form-upload input[name=\'file\']').val() != '') {
 			clearInterval(timer);
-			
+
 			$.ajax({
 				url: 'index.php?route=tool/upload',
 				type: 'post',
@@ -1058,14 +1066,14 @@ $('button[id^=\'button-upload\']').on('click', function() {
 				},
 				success: function(json) {
 					$('.text-danger').remove();
-					
+
 					if (json['error']) {
 						$(node).parent().find('input').after('<div class="text-danger">' + json['error'] + '</div>');
 					}
-					
+
 					if (json['success']) {
 						alert(json['success']);
-						
+
 						$(node).parent().find('input').attr('value', json['code']);
 					}
 				},
@@ -1076,7 +1084,7 @@ $('button[id^=\'button-upload\']').on('click', function() {
 		}
 	}, 500);
 });
-//--></script> 
+//--></script>
 <script type="text/javascript"><!--
 $('#review').delegate('.pagination a', 'click', function(e) {
   e.preventDefault();
@@ -1102,14 +1110,14 @@ $('#button-review').on('click', function() {
 		},
 		success: function(json) {
 			$('.alert-success, .alert-danger').remove();
-			
+
 			if (json['error']) {
 				$('#review').after('<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + '</div>');
 			}
-			
+
 			if (json['success']) {
 				$('#review').after('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + '</div>');
-				
+
 				$('input[name=\'name\']').val('');
 				$('textarea[name=\'text\']').val('');
 				$('input[name=\'rating\']:checked').prop('checked', false);
@@ -1118,27 +1126,27 @@ $('#button-review').on('click', function() {
 	});
 });
 
-//--></script> 
+//--></script>
 
 
 <script type="text/javascript"><!--
 	$(document).ready(function() {
-		
+
 		$('.product-options li.radio').click(function(){
 			$(this).addClass(function() {
 				if($(this).hasClass("active")) return "";
 				return "active";
 			});
-			
+
 			$(this).siblings("li").removeClass("active");
 			$(this).parent().find('.selected-option').html('<span class="label label-success">'+ $(this).find('img').data('original-title') +'</span>');
 		})
-		
+
 		// CUSTOM BUTTON
 		$(".thumb-vertical-outer .next-thumb").click(function () {
 			$( ".thumb-vertical-outer .lSNext" ).trigger( "click" );
 		});
-		
+
 		$(".thumb-vertical-outer .prev-thumb").click(function () {
 			$( ".thumb-vertical-outer .lSPrev" ).trigger( "click" );
 		});
@@ -1180,16 +1188,16 @@ $('#button-review').on('click', function() {
 						item: 1,
 					}
 				}
-				
+
 			]
-							
+
         });
-		
-		
+
+
 		$("#thumb-slider .owl2-item").each(function() {
 			$(this).find("[data-index='0']").addClass('active');
 		});
-		
+
 		$('.thumb-video').magnificPopup({
 		  type: 'iframe',
 		  iframe: {
@@ -1197,14 +1205,14 @@ $('#button-review').on('click', function() {
 			   youtube: {
 				  index: 'youtube.com/', // String that detects type of video (in this case YouTube). Simply via url.indexOf(index).
 				  id: 'v=', // String that splits URL in a two parts, second part should be %id%
-				  src: '//www.youtube.com/embed/%id%?autoplay=1' // URL that will be set as a source for iframe. 
+				  src: '//www.youtube.com/embed/%id%?autoplay=1' // URL that will be set as a source for iframe.
 					},
 				}
 			}
 		});
 	});
-	
-	
+
+
 //--></script>
 
 
