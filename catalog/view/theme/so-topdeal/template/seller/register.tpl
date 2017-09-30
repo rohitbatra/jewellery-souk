@@ -97,6 +97,7 @@
                         <option value="<?php echo $category_c['value']; ?>"><?php echo $category_c['name']; ?></option>
                     <?php } ?>
                   </select>
+                  <a tabindex="0" class="btn btn-secondary" role="button" data-toggle="popover" data-html="true" data-trigger="focus" title="Other(s) Category:" data-content="<ul><li>Raw Gold Merchant</li><li>Model(s)</li><li>Mould(s)</li><li>Packaging & Displays</li><li>Tools & Machinery </li><li>Book(s), Catalogue & Magazine(s) </li><li>Diamond & Gem Stone(s)</li></ul>"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></a>
                     <?php if ($error_category) { ?>
                     <div class="text-danger"><?php echo $error_category; ?></div>
                     <?php } ?>
@@ -239,16 +240,6 @@
                 </div>
             </div>
         </fieldset>
-
-        <fieldset id="subscription_fees" style="display: none;">
-            <legend><?php echo $text_subscription_fees; ?></legend>
-            <div class="form-group required">
-                <label class="col-sm-2 control-label" for="input-subscription_fees"><?php echo $entry_subscription_amount; ?></label>
-                <div class="col-sm-10">
-                    <input type="text" name="subscription_fees" value="<?php echo $subscription_fees; ?>" placeholder="<?php echo $entry_subscription_fees; ?>" id="input-subscription_fees" class="form-control" />
-                </div>
-            </div>
-        </fieldset>
 <?php echo $captcha; ?>
 <?php if ($text_agree) { ?>
 <div class="buttons">
@@ -311,7 +302,6 @@
             $('#company_details').hide();
             $('#individual_details').hide();
             $('#address_details').hide();
-            $('#subscription_fees').hide();
             $('#your_address_legend').hide();
             $('#company_address_legend').hide();
             $('.buttons').hide();
@@ -323,7 +313,6 @@
             if(checkedSellerType == 'individual')
             {
                 $('#individual_details').slideDown('slow');
-                $('#subscription_fees').slideDown('slow');
                 $('#address_details').slideDown('slow');
                 $('#your_address_legend').show();
                 $('.buttons').slideDown('slow');
@@ -335,7 +324,6 @@
             }else if(checkedSellerType == 'company')
             {
                 $('#company_details').slideDown('slow');
-                $('#subscription_fees').slideDown('slow');
                 $('#address_details').slideDown('slow');
                 $('#company_address_legend').show();
                 $('.buttons').slideDown('slow');
@@ -394,6 +382,10 @@
             // Category Value
             $("select[name='category']").val($.trim(cat));
         }
+
+        $('[data-toggle="popover"]').popover({
+          trigger: 'focus'
+        });
     });
 </script>
 <?php echo $footer; ?>
