@@ -115,7 +115,7 @@
  [5] NO RESPONSIVE BOOTSTRAP
  [6] PRELOADING SCREEN
  [7] BANNER EFFECT
- [8] POPUP ADDED TO CART 
+ [8] POPUP ADDED TO CART
  ==============================================*/
 /*============BACK TO TOP ==================*/
 .back-to-top {
@@ -1143,7 +1143,7 @@ body > .alert .alert.fadeOut, .container > .alert .alert.fadeOut {
 }
 /*===============================================
  [SASS DIRECTORY ]
- [1] Pre-Loader 
+ [1] Pre-Loader
  ==============================================*/
 /*============START Pre-Loader CSS  ==================*/
 .so-pre-loader {
@@ -1959,7 +1959,7 @@ ul, ol {
  [1] PAGE ACCOUNT
  [2] PAGE INFORMATION
  [3] PAGE CHECKOUT
- [4] LANGUAGE CURENTY 
+ [4] LANGUAGE CURENTY
  [5] CSS FEAFURE MENU DEMO
  ==============================================*/
 /*============PAGE ACCOUNT ==================*/
@@ -4359,7 +4359,7 @@ textarea {
   height: 38px;
 }
 /* @end */
-/* @group 3. Dropdown 
+/* @group 3. Dropdown
  -------------------*/
 .header-top-right .top-link > li {
   position: relative;
@@ -4433,7 +4433,7 @@ header .open > .dropdown-menu {
   color: #667280;
 }
 /* @end */
-/* @group 4. Buttons 
+/* @group 4. Buttons
  ------------------*/
 .input-group .form-control:last-child, .input-group-addon:last-child, .input-group-btn:last-child > .btn, .input-group-btn:last-child > .dropdown-toggle, .input-group-btn:first-child > .btn:not(:first-child) {
   border-bottom-left-radius: 0;
@@ -4630,7 +4630,7 @@ table.table-bordered thead > * {
  [1] CONTACT PAGE
  [2] PAEG ABOUT US
  [3] PAGE BLOG
- [4] PAGE 404 
+ [4] PAGE 404
  ==============================================*/
 /*============ CONTACT PAGE ==============*/
 #map-canvas {
@@ -4937,7 +4937,7 @@ table.table-bordered thead > * {
  [SASS DIRECTORY ]
  [1] BOX SALE,NEW
  [2] RATE
- [3] TODAY'S DEALS 
+ [3] TODAY'S DEALS
  [4] PRODUCT CATEGORY
  [5] TOOLBAR
  [6] PRODUCT LIST SIMPLE
@@ -5901,8 +5901,8 @@ span.fa-stack .fa-star.fa-stack-2x:before {
  [SASS DIRECTORY ]
  [1] CONTENT PRODUCT OTHER
  [2] PRODUCT INFO
- [3] PRODUCT TABS 
- [3] RELATED PRODUCT 
+ [3] PRODUCT TABS
+ [3] RELATED PRODUCT
  ==============================================*/
 /*============CONTENT PRODUCT OTHER ==================*/
 /*.zoomContainer{z-index: 450;}*/
@@ -7541,7 +7541,7 @@ header.typeheader-3 .header-top {
   margin-top: 30px;
 }
 .common-home .header-center {
-  margin-bottom: 10px;
+  /*margin-bottom: 10px;*/
 }
 .head-title {
   border-top: 2px solid #dd3c7f;
@@ -7588,7 +7588,7 @@ header.typeheader-3 .header-top {
   }
 }
 /************************************************************************************************
- MODULE HOME SLIDER  
+ MODULE HOME SLIDER
  *************************************************************************************************/
 .module.sohomepage-slider {
   margin: 0;
