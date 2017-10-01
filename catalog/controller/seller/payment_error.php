@@ -24,7 +24,7 @@ class ControllerSellerPaymentError extends Controller {
 
       $data['breadcrumbs'][] = array(
         'text' => 'Seller',
-        'href' => $this->url->link('seller/seller', '', true)
+        'href' => $this->url->link('seller/landing', '', true)
       );
 
       $data['breadcrumbs'][] = array(

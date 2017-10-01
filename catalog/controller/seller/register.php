@@ -36,7 +36,7 @@ class ControllerSellerRegister extends Controller {
 
         $data['breadcrumbs'][] = array(
             'text' => $this->language->get('text_account'),
-            'href' => $this->url->link('seller/seller', '', true)
+            'href' => $this->url->link('seller/landing', '', true)
         );
 
         $data['breadcrumbs'][] = array(

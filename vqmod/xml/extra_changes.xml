@@ -449,4 +449,90 @@
 
       </file>
 
+
+      <!-- Seller Subscription Fees *per seller -->
+
+      <file name="admin/view/template/user/user_group_form.tpl">
+
+        <operation>
+          <search position="before"><![CDATA[
+            </form>
+          ]]></search>
+          <add><![CDATA[
+                <div class="form-group required">
+                  <label class="col-sm-2 control-label" for="input-name"><?php echo $entry_subscription_fees; ?></label>
+                  <div class="col-sm-10">
+                    <input type="text" name="subscription_fees" value="<?php echo $subscription_fees; ?>" placeholder="<?php echo $entry_subscription_fees; ?>" id="input-subscription_fees" class="form-control" />
+                  </div>
+                </div>
+          ]]></add>
+        </operation>
+
+      </file>
+
+      <file name="admin/language/en-gb/user/user_group.php">
+
+        <operation>
+          <search position="after"><![CDATA[
+            $_['entry_name']       = 'User Group Name';
+          ]]></search>
+          <add><![CDATA[
+            $_['entry_subscription_fees']       = 'Subscription Fees';
+          ]]></add>
+        </operation>
+
+      </file>
+
+
+      <file name="admin/controller/user/user_permission.php">
+
+        <operation>
+          <search position="after"><![CDATA[
+            $data['entry_name'] = $this->language->get('entry_name');
+          ]]></search>
+          <add><![CDATA[
+            $data['entry_subscription_fees'] = $this->language->get('entry_subscription_fees');
+          ]]></add>
+        </operation>
+
+        <operation>
+          <search position="before"><![CDATA[
+            if (isset($this->request->post['name'])) {
+          ]]></search>
+          <add><![CDATA[
+            if (isset($this->request->post['subscription_fees'])) {
+        			$data['subscription_fees'] = $this->request->post['subscription_fees'];
+        		} elseif (!empty($user_group_info)) {
+        			$data['subscription_fees'] = $user_group_info['subscription_fees'];
+        		} else {
+        			$data['subscription_fees'] = '0.00';
+        		}
+          ]]></add>
+        </operation>
+
+      </file>
+
+      <file name="admin/model/user/user_group.php">
+
+        <operation>
+          <search position="before"><![CDATA[
+            'permission' => json_decode($query->row['permission'], true)
+          ]]></search>
+          <add><![CDATA[
+            'subscription_fees' => ($query->row['subscription_fees']),
+          ]]></add>
+        </operation>
+
+        <operation>
+          <search position="replace"><![CDATA[
+            permission = '" . (isset($data['permission']) ? $this->db->escape(json_encode($data['permission'])) : '') . "'
+          ]]></search>
+          <add><![CDATA[
+            subscription_fees = '" . (float)$data['subscription_fees'] . "', permission = '" . (isset($data['permission']) ? $this->db->escape(json_encode($data['permission'])) : '') . "'
+          ]]></add>
+        </operation>
+
+      </file>
+
+
 </modification>
