@@ -19,7 +19,7 @@ class ControllerSellerPaymentProcess extends Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_account'),
-			'href' => $this->url->link('seller/seller','', true)
+			'href' => $this->url->link('seller/landing','', true)
 		);
 
 		$data['breadcrumbs'][] = array(
@@ -41,7 +41,7 @@ class ControllerSellerPaymentProcess extends Controller {
       // get Seller Info from Database
 
       $seller_info = $this->model_seller_seller->getSellerById($data['uID']);
-			
+
 			if(empty($seller_info))
 			{
 					// Redirect to Error page -- there was some error that got him to this page.
