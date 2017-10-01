@@ -10,3 +10,4 @@ config.php
 config-dist.php
 config_windows_git.php
 .htaccess
+image/
