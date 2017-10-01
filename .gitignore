@@ -1,8 +1,12 @@
-
-/Users/rohit/Desktop/sandbox/sezplus/souk/vqmod/vqcache/*.*
-/Users/rohit/Desktop/sandbox/sezplus/system/storage/cache/*.*
+image/cache/
+vqmod/vqcache/*.*
+system/storage/cache/
+system/storage/logs/
 *.cache
-
 admin/config.php
-
+admin/config_windows_git.php
+admin/config-dist.php
 config.php
+config-dist.php
+config_windows_git.php
+.htaccess
