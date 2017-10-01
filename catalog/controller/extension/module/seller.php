@@ -16,7 +16,7 @@ class ControllerExtensionModuleSeller extends Controller {
 		$data['register'] = $this->url->link('seller/register', '', true);
 		$data['login'] = $this->url->link('seller/login', '', true);
     $data['forgotten'] = $this->url->link('seller/forgotten', '', true);
-    $data['faq'] = $this->url->link('seller/faq', '', true);
+    $data['faq'] = $this->url->link('seller/landing#faqs', '', true);
     $data['pricing'] = $this->url->link('seller/pricing', '', true);
     $data['terms'] = $this->url->link('seller/terms', '', true);
 		$data['contact'] = $this->url->link('seller/contact', '', true);
