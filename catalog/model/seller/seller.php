@@ -208,4 +208,17 @@ class ModelSellerSeller extends Model {
       return $query->row['subscription_fees'];
     }
 
+    public function getAllSellerPricingForUI()
+    {
+      $retArr = array();
+      $query = $this->db->query("SELECT name, subscription_fees AS fees FROM " . DB_PREFIX . "user_group WHERE LOWER(name) NOT LIKE 'administrator' AND LOWER(name) NOT LIKE 'moderator' ");
+
+      foreach($query->rows as $row)
+      {
+        $retArr[] = $row;
+      }
+
+      return $retArr;
+    }
+
 }
