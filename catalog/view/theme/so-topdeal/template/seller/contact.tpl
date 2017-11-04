@@ -60,6 +60,9 @@
                   <textarea name="query" placeholder="<?php echo $entry_query; ?>" id="input-query" class="form-control"></textarea>
                 </div>
                 <div class="form-group">
+                  <?php echo $captcha; ?>
+                </div>
+                <div class="form-group">
                   <a href="javascript:void(1)" class="btn btn-default" id="btn-send" ><i class="fa fa-paper-plane" aria-hidden="true"></i><?php echo $button_send; ?></a>
                 </div>
               </form>

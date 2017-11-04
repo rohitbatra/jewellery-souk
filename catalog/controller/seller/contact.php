@@ -27,9 +27,11 @@ class ControllerSellerContact extends Controller {
         $data['error_warning'] = "";
         $data['success'] = "";
 
+
         // Form-Post Request -- Trigger email to Seller.Support & bcc to gmail
         if (($this->request->server['REQUEST_METHOD'] == 'POST'))
         {
+
           $subject = "Seller Contact Us Data | SEZPLUS";
 
     			$message  = "Howdy!" . "\n\n";
@@ -65,6 +67,13 @@ class ControllerSellerContact extends Controller {
         $data['entry_number'] = $this->language->get('entry_number');
         $data['entry_query'] = $this->language->get('entry_query');
         $data['button_send'] = $this->language->get('button_send');
+
+        // Captcha
+        if ($this->config->get($this->config->get('config_captcha') . '_status') && in_array('register', (array)$this->config->get('config_captcha_page'))) {
+            $data['captcha'] = $this->load->controller('extension/captcha/' . $this->config->get('config_captcha'), $this->error);
+        } else {
+            $data['captcha'] = '';
+        }
 
         $data['action'] = $this->url->link('seller/contact', '', true);
 
