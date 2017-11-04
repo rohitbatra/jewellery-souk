@@ -142,7 +142,7 @@
         <add><![CDATA[
           <?php if (!$logged) { ?>
             <li class="account" id="seller_drop">
-              <a href="javascript:void(1);" class="btn-xs dropdown-toggle" data-toggle="dropdown">
+              <a href="<?php echo $seller_landing; ?>" class="btn-xs dropdown-toggle" data-toggle="dropdown">
                 <span><?php echo 'Seller(s)'; ?></span>
                 <span class="fa fa-angle-down"></span>
               </a>
@@ -163,6 +163,7 @@
             $data['login'] = $this->url->link('account/login', '', true);
           ]]></search>
         <add><![CDATA[
+          $data['seller_landing'] = $this->url->link('seller/landing', '', true);
           $data['seller_login'] = $this->url->link('seller/login', '', true);
           $data['seller_register'] = $this->url->link('seller/register', '', true);
           ]]></add>
