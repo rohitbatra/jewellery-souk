@@ -536,4 +536,39 @@
       </file>
 
 
+      <!-- Remove Category link & filter from Product URL * Category Page * -->
+
+      <file name="catalog/controller/product/category.php">
+
+        <operation>
+          <search position="replace"><![CDATA[
+            'href'        => $this->url->link('product/product', 'path=' . $this->request->get['path'] . '&product_id=' . $result['product_id'] . $url)
+          ]]></search>
+          <add><![CDATA[
+            /*'href'        => $this->url->link('product/product', 'product_id=' . $result['product_id'] . $url)*/
+            'href'        => $this->url->link('product/product', 'product_id=' . $result['product_id'])
+          ]]></add>
+        </operation>
+
+      </file>
+
+      <!-- Remove Category link & filter from Product URL * Category Page * ENDS-->
+
+      <!-- Change(s) in Filter Module -->
+
+      <file name="catalog/model/catalog/category.php">
+
+      <!--  <operation>
+          <search position="replace"><![CDATA[
+              $query = $this->db->query("SELECT filter_id FROM " . DB_PREFIX . "category_filter WHERE category_id = '" . (int)$category_id . "'");
+          ]]></search>
+          <add><![CDATA[
+              $query = $this->db->query("SELECT cf.filter_id FROM " . DB_PREFIX . "category_filter AS cf LEFT OUTER JOIN filter f ON (f.filter_id = cf.filter_id) LEFT OUTER JOIN filter_group_description fgd ON (fgd.filter_group_id = f.filter_group_id) WHERE cf.category_id = '" . (int)$category_id . "' AND fgd.language_id = '1' AND fgd.name NOT LIKE 'Type' ");
+          ]]></add>
+        </operation>
+      -->
+      </file>
+
+      <!-- Change(s) in Filter Module -->
+
 </modification>
