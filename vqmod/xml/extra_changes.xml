@@ -569,6 +569,82 @@
       -->
       </file>
 
+      <file name="catalog/view/theme/default/template/extension/module/filter.tpl">
+
+        <!-- Hide 1st Filter "Type" from UI -->
+        <operation>
+          <search position="after"><![CDATA[
+              <?php foreach ($filter_groups as $filter_group) { ?>
+          ]]></search>
+          <add><![CDATA[
+              <?php $clasStr = ""; if($filter_group['name'] == "Type") { $clasStr = "hidden"; } ?>
+          ]]></add>
+        </operation>
+
+        <!-- Toggle/Accordion -->
+        <operation>
+          <search position="replace"><![CDATA[
+              <a class="list-group-item"><?php echo $filter_group['name']; ?></a>
+          ]]></search>
+          <add><![CDATA[
+              <a class="list-group-item <?php echo $clasStr; ?>" data-toggle="collapse" href="#filter-group-id-<?php echo $filter_group['filter_group_id']; ?>" aria-expanded="false" aria-controls="filter-group-id-<?php echo $filter_group['filter_group_id']; ?>"><?php echo $filter_group['name']; ?></a>
+          ]]></add>
+        </operation>
+
+        <operation>
+          <search position="replace"><![CDATA[
+              <div class="list-group-item">
+          ]]></search>
+          <add><![CDATA[
+              <div class="list-group-item <?php echo $clasStr; ?> collapse" id="filter-group-id-<?php echo $filter_group['filter_group_id']; ?>">
+          ]]></add>
+        </operation>
+
+        <!-- Any Checkbox/Radio Click should automatically trigger Refine Button -->
+        <operation>
+          <search position="replace"><![CDATA[
+              <input type="checkbox"
+          ]]></search>
+          <add><![CDATA[
+              <input type="checkbox" class="refineCheckBox"
+          ]]></add>
+        </operation>
+
+        <operation>
+          <search position="before"><![CDATA[
+              //--></script>
+          ]]></search>
+          <add><![CDATA[
+            $('.refineCheckBox').on('click', function() {
+              $('#button-filter').trigger('click');
+            });
+          ]]></add>
+        </operation>
+
+      </file>
+
       <!-- Change(s) in Filter Module -->
+
+      <!-- Remove UPSELL section -->
+      <file name="catalog/view/theme/so-topdeal/template/product/product.tpl">
+
+        <operation>
+          <search position="replace"><![CDATA[
+              <li><a data-toggle="tab" href="#product-upsell"><?php echo $objlang->get('text_upsell'); ?></a></li>
+          ]]></search>
+          <add><![CDATA[
+          ]]></add>
+        </operation>
+
+        <operation>
+          <search position="replace"><![CDATA[
+              <div id="product-upsell" class="tab-pane fade">
+          ]]></search>
+          <add><![CDATA[
+              <div id="product-upsell" class="tab-pane fade hidden">
+          ]]></add>
+        </operation>
+
+      </file>
 
 </modification>
