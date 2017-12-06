@@ -94,12 +94,10 @@ class User {
 		return $this->user_group_id;
 	}
 
-    public function isSeller() {
-
-        if($this->user_group_id == '11')
-        {
-            return true;
-        }
-        return false;
-    }
+	public function isSeller() {
+	    if($this->user_group_id !== '1' && $this->user_group_id !== '2') {
+				return true;
+	    }
+	    return false;
+	}
 }
