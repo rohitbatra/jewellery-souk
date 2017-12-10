@@ -42,7 +42,6 @@
           ]]></add>
       </operation>
 
-
       <operation>
           <search position="replace"><![CDATA[
               <label class="col-sm-2 control-label" for="input-image"><?php echo $entry_image; ?></label>
@@ -94,6 +93,28 @@
                         $('#input-meta-title1').val($(this).val());
                         $('#input-model').val($(this).val());
                     });
+                    <?php if($is_seller == "true") { ?>
+                      // Hide Filter Type from FORM - Auto-Select the type according to UG.
+                      $('#chk-filter-<?php echo $default_user_type; ?>').attr("checked","checked");
+                      $('#chk-filter-<?php echo $default_user_type; ?>').parents('div.form-group').hide();
+                      // Hide Product Label
+                      $('a[href="#tab-productlabel"]').hide();
+                    <?php } ?>
+
+                    // In EDIT functionality -- pre-populate filter checkboxes
+                    var filter_og = '<?php echo $filters_str; ?>';
+                    if(filter_og !== "")
+                    {
+                      var items = filter_og.split(',');
+                      $.each(items, function (index, value) {
+                          $('#chk-filter-'+value).attr("checked","checked");
+                      });
+                    }
+                    <?php if(isset($_GET['product_id'])) { ?>
+                      // Set Category in Select Drop Down for edit
+                      $('#input-category').val(<?php echo $product_categories[0]['category_id']; ?>);
+                    <?php } ?>
+
                 });
               </script>
           ]]></add>
@@ -122,18 +143,14 @@
           <search position="replace" offset="10"><![CDATA[
             <label class="col-sm-2 control-label" for="input-category"><span data-toggle="tooltip" title="<?php echo $help_category; ?>"><?php echo $entry_category; ?></span></label>
           ]]></search>
-          <add><![CDATA[
+          <add trim="true"><![CDATA[
               <label class="col-sm-2 control-label" for="input-category"><?php echo $entry_category; ?></label>
               <?php if($is_seller) { ?>
                 <div class="col-sm-10">
                   <select name="product_category" id="input-category" class="form-control">
                     <option value="*">Select Category</option>
                       <?php foreach($categories as $category) { ?>
-                          <?php if($category['category_id'] == $product['category_id']) { ?>
-                            <option selected value="<?php echo $category['category_id'];?>"><?php echo $category['name'];?></option>
-                          <?php } else { ?>
-                            <option value="<?php echo $category['category_id'];?>"><?php echo $category['name'];?></option>
-                          <?php } ?>
+                          <option value="<?php echo $category['category_id'];?>"><?php echo $category['name'];?></option>
                       <?php } ?>
                   </select>
                 </div>
@@ -149,11 +166,9 @@
                   </div>
                 </div>
               <?php } ?>
-
               <?php if ($error_product_category) { ?>
                 <div class="text-danger"><?php echo $error_product_category; ?></div>
               <?php } ?>
-
           ]]></add>
       </operation>
 
@@ -179,6 +194,84 @@
           ]]></add>
       </operation>
       <!-- Making Price/Category Compulsory ENDS-->
+
+      <!-- Filter Easy UI for SELLERS -->
+      <operation>
+          <search position="replace" offset="-1"><![CDATA[
+            <label class="col-sm-2 control-label" for="input-filter"><span data-toggle="tooltip" title="<?php echo $help_filter; ?>"><?php echo $entry_filter; ?></span></label>
+          ]]></search>
+          <add><![CDATA[
+            <label class="col-sm-2 control-label" for="input-filter"><span data-toggle="tooltip" title="<?php echo $help_filter; ?>"><?php echo $entry_filter; ?></span></label>
+            ]]></add>
+      </operation>
+
+      <operation>
+          <search position="replace" offset="14"><![CDATA[
+            <label class="col-sm-2 control-label" for="input-filter"><span data-toggle="tooltip" title="<?php echo $help_filter; ?>"><?php echo $entry_filter; ?></span></label>
+          ]]></search>
+          <add><![CDATA[
+              <?php if($is_seller) { ?>
+                <?php foreach ($all_product_filters as $filter_group) { ?>
+                  <div class="form-group" id="filter-group-<?php echo $filter_group['fg_id']; ?>">
+                      <label class="col-sm-2 control-label" for="input-filter"><?php echo $filter_group['name']; ?></label>
+                      <div class="col-sm-10">
+                        <?php foreach($filter_group['options'] as $filter_option) { ?>
+                          <div class="checkbox col-sm-2">
+                            <label>
+                                <input type="checkbox" value="<?php echo $filter_option['filter_id']; ?>" id="chk-filter-<?php echo $filter_option['filter_id']; ?>" name="product_filter[]" /> &nbsp; <?php echo $filter_option['name'];?>
+                            </label>
+                          </div>
+                        <?php } ?>
+                      </div>
+                  </div>
+                <?php } ?>
+              <?php } else { ?>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-filter"><?php echo $entry_filter; ?></label>
+                  <div class="col-sm-10">
+                    <input type="text" name="filter" value="" placeholder="<?php echo $entry_filter; ?>" id="input-filter" class="form-control" />
+                    <div id="product-filter" class="well well-sm" style="height: 150px; overflow: auto;">
+                      <?php foreach ($product_filters as $product_filter) { ?>
+                      <div id="product-filter<?php echo $product_filter['filter_id']; ?>"><i class="fa fa-minus-circle"></i> <?php echo $product_filter['name']; ?>
+                        <input type="hidden" name="product_filter[]" value="<?php echo $product_filter['filter_id']; ?>" />
+                      </div>
+                      <?php } ?>
+                    </div>
+                  </div>
+                </div>
+              <?php } ?>
+          ]]></add>
+      </operation>
+      <!-- Filter Easy UI for SELLERS -->
+
+      <!-- Restrict 5 Images per Product -->
+
+      <operation>
+          <search position="replace"><![CDATA[
+            function addImage() {
+          ]]></search>
+          <add><![CDATA[
+            function addImage() {
+              if(image_row > '4')
+              {
+                alert("Sorry only 5 Images per Product are Allowed!");
+              } else {
+                html  = '<tr id="image-row' + image_row + '">';
+                html += '  <td class="text-left"><a href="" id="thumb-image' + image_row + '"data-toggle="image" class="img-thumbnail"><img src="<?php echo $placeholder; ?>" alt="" title="" data-placeholder="<?php echo $placeholder; ?>" /><input type="hidden" name="product_image[' + image_row + '][image]" value="" id="input-image' + image_row + '" /></td>';
+                html += '  <td class="text-right"><input type="text" name="product_image[' + image_row + '][sort_order]" value="" placeholder="<?php echo $entry_sort_order; ?>" class="form-control" /></td>';
+                html += '  <td class="text-left"><button type="button" onclick="$(\'#image-row' + image_row  + '\').remove();" data-toggle="tooltip" title="<?php echo $button_remove; ?>" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+                html += '</tr>';
+
+                $('#images tbody').append(html);
+
+                image_row++;
+              }
+            }
+
+            function addImageOLD() {
+          ]]></add>
+      </operation>
+
 
     </file>
 
@@ -324,6 +417,119 @@
   </operation>
   <!-- Making Category Compulsory ENDS-->
 
+  <operation>
+      <search position="before"><![CDATA[
+          'filter_model' => $filter_model,
+      ]]></search>
+      <add><![CDATA[
+          'filter_seller_id' => $seller_id,
+      ]]></add>
+  </operation>
+
+  <operation>
+      <search position="before"><![CDATA[
+          if (isset($this->request->get['limit'])) {
+      ]]></search>
+      <add><![CDATA[
+        $seller_id = 0;
+        if($this->user->isSeller())
+        {
+            $seller_id = $this->user->getId();
+        }
+      ]]></add>
+  </operation>
+
+  <operation>
+      <search position="before"><![CDATA[
+          $data['products'] = array();
+      ]]></search>
+      <add><![CDATA[
+        $seller_id = 0;
+        $is_seller = false;
+        if($this->user->isSeller())
+        {
+            $seller_id = $this->user->getId();
+            $is_seller = true;
+        }
+      ]]></add>
+  </operation>
+
+  <operation>
+      <search position="before"><![CDATA[
+          'filter_model'	  => $filter_model,
+      ]]></search>
+      <add><![CDATA[
+          'filter_seller_id' => $seller_id,
+      ]]></add>
+  </operation>
+
+  <operation>
+      <search position="before"><![CDATA[
+          // Attributes
+      ]]></search>
+      <add><![CDATA[
+          $data['all_product_filters'] =  $temp = array();
+          $data['filters_str'] = '';
+          $data['default_user_type'] = 0;
+          $data['is_seller'] = 'false';
+          if($this->user->isSeller())
+          {
+            $data['is_seller'] = 'true';
+            $fg_raw = $this->model_catalog_filter->getFilterGroups();
+
+            foreach($fg_raw as $g)
+            {
+              $fg[] = array('name' => $g['name'],'fg_id' => $g['filter_group_id'], 'options' => $this->model_catalog_filter->getFiltersByGroupId($g['filter_group_id']));
+            }
+
+            $data['all_product_filters'] = $fg;
+
+            // Get Default User Type Filter
+            $ug = $this->user->getGroupId();
+
+            $data['default_user_type'] = $this->model_catalog_filter->getTypeFilterByUg($ug);
+
+            if(!empty($data['product_filters']))
+            {
+              foreach($data['product_filters'] as $filter)
+              {
+                $temp[] = $filter['filter_id'];
+              }
+
+              $data['filters_str'] = implode(',',$temp);
+            }
+          }
+      ]]></add>
+  </operation>
+
+</file>
+
+<file name="admin/model/catalog/filter.php">
+
+  <operation>
+      <search position="before"><![CDATA[
+          public function getTotalFilterGroups() {
+      ]]></search>
+      <add><![CDATA[
+        public function getFiltersByGroupId($filter_group_id) {
+          $sql = "SELECT fd.name, fd.filter_id FROM " . DB_PREFIX . "filter_description AS fd WHERE fd.filter_group_id = '" . (int)$filter_group_id . "'";
+
+          $query = $this->db->query($sql);
+
+          return $query->rows;
+        }
+
+        public function getTypeFilterByUg($user_group_id) {
+
+          $sql = "SELECT fd.filter_id FROM " . DB_PREFIX . "filter_description AS fd WHERE fd.name LIKE (SELECT ug.name FROM user_group as ug WHERE ug.user_group_id = '" . (int)$user_group_id . "') ";
+
+          $query = $this->db->query($sql);
+
+          return $query->row['filter_id'];
+        }
+      ]]></add>
+  </operation>
+
 </file>
 
 <file name="admin/model/soconfig/mproduct.php">
@@ -372,6 +578,17 @@
 
               return $query->row['username'];
           }
+      ]]></add>
+  </operation>
+
+  <operation>
+      <search position="before"><![CDATA[
+          if (!empty($data['filter_model'])) {
+      ]]></search>
+      <add><![CDATA[
+        if (!empty($data['filter_seller_id'])) {
+            $sql .= " AND p.seller_id = '" . (int)$data['filter_seller_id'] . "'";
+        }
       ]]></add>
   </operation>
 
