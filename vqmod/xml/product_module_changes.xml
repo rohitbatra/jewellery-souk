@@ -171,7 +171,7 @@
               <?php } ?>
           ]]></add>
       </operation>
-
+<!--
       <operation>
           <search position="replace" offset="-1"><![CDATA[
           <label class="col-sm-2 control-label" for="input-price"><?php echo $entry_price; ?></label>
@@ -193,6 +193,7 @@
               <?php } ?>
           ]]></add>
       </operation>
+-->
       <!-- Making Price/Category Compulsory ENDS-->
 
       <!-- Filter Easy UI for SELLERS -->
