@@ -147,7 +147,7 @@
               <label class="col-sm-2 control-label" for="input-category"><?php echo $entry_category; ?></label>
               <?php if($is_seller) { ?>
                 <div class="col-sm-10">
-                  <select name="product_category" id="input-category" class="form-control">
+                  <select name="product_category[]" id="input-category" class="form-control">
                     <option value="*">Select Category</option>
                       <?php foreach($categories as $category) { ?>
                           <option value="<?php echo $category['category_id'];?>"><?php echo $category['name'];?></option>
@@ -625,6 +625,32 @@
 
             return $query->rows;
           }
+      ]]></add>
+  </operation>
+
+</file>
+
+<file name="admin/view/template/catalog/product_list.tpl">
+
+  <operation>
+      <search position="replace"><![CDATA[
+          <button type="submit" form="form-product" formaction="<?php echo $copy; ?>" data-toggle="tooltip" title="<?php echo $button_copy; ?>" class="btn btn-default"><i class="fa fa-copy"></i></button>
+      ]]></search>
+      <add><![CDATA[
+
+      ]]></add>
+  </operation>
+
+</file>
+
+<file name="admin/view/template/extension/soconfig/mproduct_list.tpl">
+
+  <operation>
+      <search position="replace"><![CDATA[
+          <button type="submit" form="form-mproduct" formaction="<?php echo $copy; ?>" data-toggle="tooltip" title="<?php echo $button_copy; ?>" class="btn btn-default"><i class="fa fa-copy"></i></button>
+      ]]></search>
+      <add><![CDATA[
+
       ]]></add>
   </operation>
 
