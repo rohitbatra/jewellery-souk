@@ -85,8 +85,8 @@ class ControllerSellerPaymentProcess extends Controller {
 						// Check for Order Status
 						if(strtolower($this->request->post['order_status']) == 'success')
 						{
-
 								$this->model_seller_seller->addPaymentInfo($postData);
+								$this->model_seller_seller->approveSeller($postData['seller_id']);
 								$this->model_seller_seller->emailPaymentReceipt($postData);
 								$this->response->redirect($this->url->link('seller/payment_success', 'uID=' . base64_encode($data['uID']) , 'SSL'));
 
