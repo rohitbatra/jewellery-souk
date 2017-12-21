@@ -503,6 +503,20 @@
       ]]></add>
   </operation>
 
+
+  <operation>
+      <search position="before"><![CDATA[
+          $data['text_list'] = $this->language->get('text_list');
+      ]]></search>
+      <add><![CDATA[
+          $data['is_seller'] = 'false';
+          if($this->user->isSeller())
+          {
+            $data['is_seller'] = 'true';
+          }
+      ]]></add>
+  </operation>
+
 </file>
 
 <file name="admin/model/catalog/filter.php">
@@ -651,7 +665,20 @@
           <button type="submit" form="form-mproduct" formaction="<?php echo $copy; ?>" data-toggle="tooltip" title="<?php echo $button_copy; ?>" class="btn btn-default"><i class="fa fa-copy"></i></button>
       ]]></search>
       <add><![CDATA[
+        <?php if(!$is_seller) { ?>
+          <button type="submit" form="form-mproduct" formaction="<?php echo $copy; ?>" data-toggle="tooltip" title="<?php echo $button_copy; ?>" class="btn btn-default"><i class="fa fa-copy"></i></button>
+        <?php } ?>
+      ]]></add>
+  </operation>
 
+  <operation>
+      <search position="replace"><![CDATA[
+          <button type="button" data-toggle="tooltip" title="<?php echo $button_delete; ?>" class="btn btn-danger" onclick="confirm('<?php echo $text_confirm; ?>') ? $('#form-mproduct').submit() : false;"><i class="fa fa-trash-o"></i></button>
+      ]]></search>
+      <add><![CDATA[
+          <?php if(!$is_seller) { ?>
+            <button type="button" data-toggle="tooltip" title="<?php echo $button_delete; ?>" class="btn btn-danger" onclick="confirm('<?php echo $text_confirm; ?>') ? $('#form-mproduct').submit() : false;"><i class="fa fa-trash-o"></i></button>
+          <?php } ?>
       ]]></add>
   </operation>
 
