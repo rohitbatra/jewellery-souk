@@ -131,11 +131,11 @@ class ModelSellerSeller extends Model {
         return $q->row['email'];
     }
 
-    public function emailPaymentReceipt($data)
+    public function emailPaymentReceipt($postData)
     {
-        $seller_data = $this->getSellerById($data['seller_id']);
+        $seller_data = $this->getSellerById($postData['seller_id']);
 
-        $data['payment_status'] = strtolower($data['order_status']);
+        $data['payment_status'] = strtolower($postData['order_status']);
         $data['web_url'] = HTTPS_SERVER . "/";
         $data['logo_url'] = HTTPS_SERVER . "image/" .$this->config->get('config_logo');
         $data['firstname'] = $seller_data['firstname'];
@@ -143,7 +143,7 @@ class ModelSellerSeller extends Model {
         $data['login_url'] = $this->url->link('seller/login', '', true);
         $data['to_email'] = $seller_data['email'];
         $data['web_name'] = $this->config->get('config_name');
-        $data['payment_resume_url'] = $this->url->link('seller/payment_process', 'uID=' . base64_encode($data['user_id']), true);
+        $data['payment_resume_url'] = $this->url->link('seller/payment_process', 'uID=' . base64_encode($postData['user_id']), true);
         $data['support_email'] = 'seller.support@sezplus.com';
 
         $mail = new Mail();
@@ -162,11 +162,11 @@ class ModelSellerSeller extends Model {
         {
             // Payment Recieved
             $data['subject'] = "Seller Payment Success | ".$data['web_name'];
-            $data['receipt_id'] = $data['payment_id'];
+            $data['receipt_id'] = $postData['payment_id'];
             $data['date'] = date('d-m-Y');
             $data['description'] = "Seller Subscription Fees";
-            $data['amount'] = $this->config->get('subscription_fees');
-            $data['total'] = $data['amount'];
+            $data['amount'] = $postData['amount'];
+            $data['total'] = $postData['amount'];
             $mail->setSubject(html_entity_decode($data['subject'], ENT_QUOTES, 'UTF-8'));
             $mail->setHtml($this->load->view('mail/seller/payment_receipt', $data));
 
