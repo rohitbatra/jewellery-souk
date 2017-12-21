@@ -308,6 +308,7 @@
             ]]></search>
             <add><![CDATA[
                $_['entry_thumbnail_image']            = 'Thumbnail Image';
+               $_['entry_seller']         = 'Seller';
             ]]></add>
         </operation>
         <!-- Making Category & Price Compulsory ENDS-->
@@ -509,11 +510,51 @@
           $data['text_list'] = $this->language->get('text_list');
       ]]></search>
       <add><![CDATA[
-          $data['is_seller'] = 'false';
+          $data['entry_seller'] = $this->language->get('entry_seller');
+          $data['is_seller'] = false;
           if($this->user->isSeller())
           {
-            $data['is_seller'] = 'true';
+            $data['is_seller'] = true;
           }
+
+          // Get Seller List
+          $this->load->model('user/user');
+          $data['sellers'] = $this->model_user_user->getSellers();
+      ]]></add>
+  </operation>
+
+  <operation>
+      <search position="after"><![CDATA[
+          protected function getList() {
+      ]]></search>
+      <add><![CDATA[
+          if (isset($this->request->get['filter_seller'])) {
+              $filter_seller = $this->request->get['filter_seller'];
+          } else {
+              $filter_seller = null;
+          }
+          $data['filter_seller'] = $filter_seller;
+      ]]></add>
+  </operation>
+
+  <operation>
+      <search position="after"><![CDATA[
+          $data['products'] = array();
+      ]]></search>
+      <add><![CDATA[
+          $data['filter_seller'] = $filter_seller;
+          if (isset($this->request->get['filter_status'])) {
+      			$url .= '&filter_seller=' . $this->request->get['filter_seller'];
+      		}
+      ]]></add>
+  </operation>
+
+  <operation>
+      <search position="after" index="1"><![CDATA[
+          $filter_data = array(
+      ]]></search>
+      <add><![CDATA[
+          'filter_seller'	  => $filter_seller,
       ]]></add>
   </operation>
 
@@ -603,6 +644,10 @@
       <add><![CDATA[
         if (!empty($data['filter_seller_id'])) {
             $sql .= " AND p.seller_id = '" . (int)$data['filter_seller_id'] . "'";
+        }
+        
+        if (isset($data['filter_seller']) && !empty($data['filter_seller'])) {
+                $sql .= " AND p.seller_id = '" . (int)$data['filter_seller'] . "'";
         }
       ]]></add>
   </operation>

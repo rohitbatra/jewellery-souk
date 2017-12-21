@@ -69,12 +69,27 @@
                   <?php } ?>
                 </select>
               </div>
+              <?php if(!$is_seller) { ?>
+                <div class="form-group">
+                    <label class="control-label" for="input-seller"><?php echo $entry_seller; ?></label>
+                    <select name="filter_seller" id="input-seller" class="form-control">
+                        <option value="*">Select a Seller</option>
+                        <?php foreach($sellers as $seller) { ?>
+                          <?php if ($seller['user_id'] == $filter_seller) { ?>
+                            <option value="<?php echo $seller['user_id']; ?>" selected="selected"><?php echo $seller['username']; ?></option>
+                          <?php } else { ?>
+                            <option value="<?php echo $seller['user_id']; ?>"><?php echo $seller['username']; ?></option>
+                          <?php } ?>
+                        <?php } ?>
+                    </select>
+                </div>
+                <?php } ?>
               <button type="button" id="button-filter" class="btn btn-primary pull-right"><i class="fa fa-search"></i> <?php echo $button_filter; ?></button>
             </div>
           </div>
         </div>
         <form action="<?php echo $delete; ?>" method="post" enctype="multipart/form-data" id="form-mproduct">
-		
+
           <div class="table-responsive">
             <table class="table table-bordered table-hover">
               <thead>
@@ -119,11 +134,11 @@
                     <input type="checkbox" name="selected[]" value="<?php echo $product['product_id']; ?>" />
                     <?php } ?></td>
                   <td class="text-center"><?php if ($product['image']) { ?>
-				 
+
                     <img src="<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>" class="img-thumbnail" />
                     <?php } else { ?>
                     <span class="img-thumbnail list"><i class="fa fa-camera fa-2x"></i></span>
-					
+
                     <?php } ?></td>
                   <td class="text-left"><?php echo $product['name']  ; ?>  <?php if( !empty($product['video1']) || !empty($product['tab_title']) ) echo $featured = '<span class="label label-info">Featured</span>'; ?></td>
                   <td class="text-left"><?php echo $product['model']; ?></td>
@@ -192,6 +207,12 @@ $('#button-filter').on('click', function() {
 
 	if (filter_status != '*') {
 		url += '&filter_status=' + encodeURIComponent(filter_status);
+	}
+
+  var filter_seller = $('select[name=\'filter_seller\']').val();
+
+	if (filter_seller != '*') {
+		url += '&filter_seller=' + encodeURIComponent(filter_seller);
 	}
 
 	location = url;
