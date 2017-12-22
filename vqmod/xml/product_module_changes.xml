@@ -473,10 +473,10 @@
           $data['all_product_filters'] =  $temp = array();
           $data['filters_str'] = '';
           $data['default_user_type'] = 0;
-          $data['is_seller'] = 'false';
+          $data['is_seller'] = false;
           if($this->user->isSeller())
           {
-            $data['is_seller'] = 'true';
+            $data['is_seller'] = true;
             $fg_raw = $this->model_catalog_filter->getFilterGroups();
 
             foreach($fg_raw as $g)
@@ -645,7 +645,7 @@
         if (!empty($data['filter_seller_id'])) {
             $sql .= " AND p.seller_id = '" . (int)$data['filter_seller_id'] . "'";
         }
-        
+
         if (isset($data['filter_seller']) && !empty($data['filter_seller'])) {
                 $sql .= " AND p.seller_id = '" . (int)$data['filter_seller'] . "'";
         }
