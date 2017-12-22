@@ -632,6 +632,63 @@
           ]]></add>
         </operation>
 
+        <operation>
+          <search position="before"><![CDATA[
+              <?php if ($manufacturer): ?>
+          ]]></search>
+          <add><![CDATA[
+            <?php if ($location): ?>
+              <div class="brand"><span><?php echo $text_location; ?></span><?php echo $location; ?></div>
+            <?php endif; ?>
+          ]]></add>
+        </operation>
+
+        <operation>
+          <search position="replace"><![CDATA[
+              <div class="brand"><span><?php echo $text_manufacturer; ?></span><a href="<?php echo $manufacturers; ?>"><?php echo $manufacturer; ?></a></div>
+          ]]></search>
+          <add><![CDATA[
+              <div class="brand"><span><?php echo $text_manufacturer; ?></span><?php echo $brand; ?></div>
+          ]]></add>
+        </operation>
+
+        <operation>
+          <search position="replace"><![CDATA[
+              <?php if ($manufacturer): ?>
+          ]]></search>
+          <add><![CDATA[
+              <?php if ($brand): ?>
+          ]]></add>
+        </operation>
+
+      </file>
+
+      <file name="catalog/controller/product/product.php">
+
+        <operation>
+          <search position="after"><![CDATA[
+              $data['manufacturer'] = $product_info['manufacturer'];
+          ]]></search>
+          <add><![CDATA[
+              $data['text_location'] = "Location:";
+              $data['location'] = $product_info['location'];
+              $data['brand'] = $product_info['brand'];
+          ]]></add>
+        </operation>
+
+      </file>
+
+      <file name="catalog/model/catalog/product.php">
+
+        <operation>
+          <search position="after"><![CDATA[
+              'reviews'          => $query->row['reviews'] ? $query->row['reviews'] : 0,
+          ]]></search>
+          <add><![CDATA[
+              'brand'          => $query->row['brand'],
+          ]]></add>
+        </operation>
+
       </file>
 
 </modification>

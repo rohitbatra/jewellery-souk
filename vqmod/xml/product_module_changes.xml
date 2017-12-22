@@ -78,7 +78,7 @@
                 $(window).load(function()
                 {
                     // array of fields to not show
-                    var fields = ['input-model','input-sku','input-upc','input-ean','input-jan','input-isbn','input-mpn','input-tax-class','input-subtract','input-stock-status','input-sort-order','input-meta-description1','input-meta-keyword1','input-tag1','input-manufacturer','input-download'];
+                    var fields = ['input-manufacturer','input-model','input-sku','input-upc','input-ean','input-jan','input-isbn','input-mpn','input-tax-class','input-subtract','input-stock-status','input-sort-order','input-meta-description1','input-meta-keyword1','input-tag1','input-download'];
                     $.each(fields, function (index, value) {
                         $('#'+value).parents('div.form-group').hide();
                     });
@@ -169,6 +169,13 @@
               <?php if ($error_product_category) { ?>
                 <div class="text-danger"><?php echo $error_product_category; ?></div>
               <?php } ?>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-brand"><?php echo $entry_manufacturer; ?></label>
+                <div class="col-sm-10">
+                  <input type="text" name="brand" value="<?php echo $brand; ?>" placeholder="<?php echo $entry_manufacturer; ?>" id="input-brand" class="form-control" />
+                </div>
+              </div>
           ]]></add>
       </operation>
 <!--
@@ -312,6 +319,15 @@
             ]]></add>
         </operation>
         <!-- Making Category & Price Compulsory ENDS-->
+
+        <operation>
+            <search position="replace"><![CDATA[
+                $_['entry_manufacturer']     = 'Manufacturer';
+            ]]></search>
+            <add><![CDATA[
+               $_['entry_manufacturer']     = 'Brand';
+            ]]></add>
+        </operation>
     </file>
 
   <file name="admin/controller/catalog/mproduct.php">
@@ -470,6 +486,17 @@
           // Attributes
       ]]></search>
       <add><![CDATA[
+
+        if (isset($this->request->post['brand']))
+        {
+            $data['brand'] = $this->request->post['brand'];
+        } elseif (!empty($product_info) && !empty($product_info['brand']))
+        {
+            $data['brand'] = ($product_info['brand']);
+        } else {
+            $data['brand'] = '';
+        }
+
           $data['all_product_filters'] =  $temp = array();
           $data['filters_str'] = '';
           $data['default_user_type'] = 0;
@@ -595,7 +622,7 @@
           sku = '" . $this->db->escape($data['sku']) . "'
       ]]></search>
       <add><![CDATA[
-          sku = '" . $this->db->escape($data['sku']) . "' , tone_count = '" . $this->db->escape($data['tone_count']) . "' , silver_weight = '" . $this->db->escape($data['silver_weight']) . "' , gold_weight = '" . $this->db->escape($data['gold_weight']) . "' , diamond_weight = '" . $this->db->escape($data['diamond_weight']) . "' , parts_count = '" . $this->db->escape($data['parts_count']) . "' , created_using = '" . $this->db->escape($data['created_using']) . "'
+          brand = '" . $this->db->escape($data['brand']) . "' ,sku = '" . $this->db->escape($data['sku']) . "' , tone_count = '" . $this->db->escape($data['tone_count']) . "' , silver_weight = '" . $this->db->escape($data['silver_weight']) . "' , gold_weight = '" . $this->db->escape($data['gold_weight']) . "' , diamond_weight = '" . $this->db->escape($data['diamond_weight']) . "' , parts_count = '" . $this->db->escape($data['parts_count']) . "' , created_using = '" . $this->db->escape($data['created_using']) . "'
       ]]></add>
   </operation>
 
