@@ -111,4 +111,129 @@
       </operation>
     </file>
 
+    <file name="catalog/view/theme/so-topdeal/template/checkout/cart.tpl">
+
+      <operation>
+        <search position="replace" offset="1"><![CDATA[
+            <?php if ($modules) { ?>
+          ]]></search>
+        <add><![CDATA[
+            <?php if (!$modules) { ?>
+          ]]></add>
+      </operation>
+
+    </file>
+
+    <file name="catalog/view/theme/so-topdeal/template/checkout/checkout.tpl">
+
+      <operation>
+        <search position="replace" index="4,5,6"><![CDATA[
+            <div class="panel panel-default">
+          ]]></search>
+        <add><![CDATA[
+            <div class="panel panel-default hidden">
+          ]]></add>
+      </operation>
+
+      <operation>
+        <search position="replace"><![CDATA[
+            $('a[href=\'#collapse-payment-address\']').trigger('click');
+          ]]></search>
+        <add><![CDATA[
+            addOverLay();
+            $('#button-payment-address').trigger('click');
+          ]]></add>
+      </operation>
+
+      <operation>
+        <search position="replace"><![CDATA[
+            $('a[href=\'#collapse-shipping-address\']').trigger('click');
+          ]]></search>
+        <add><![CDATA[
+            $('#button-shipping-address').trigger('click');
+          ]]></add>
+      </operation>
+
+      <operation>
+        <search position="replace"><![CDATA[
+            $('a[href=\'#collapse-shipping-method\']').trigger('click');
+          ]]></search>
+        <add><![CDATA[
+            $('#button-shipping-method').trigger('click');
+          ]]></add>
+      </operation>
+
+      <operation>
+        <search position="replace"><![CDATA[
+            $('a[href=\'#collapse-payment-method\']').trigger('click');
+          ]]></search>
+        <add><![CDATA[
+            removeOverLay();
+            $('#button-payment-method').trigger('click');
+          ]]></add>
+      </operation>
+
+      <operation>
+        <search position="before"><![CDATA[
+            $(document).delegate('#button-payment-method', 'click', function() {
+          ]]></search>
+        <add><![CDATA[
+            function addOverLay()
+            {
+               $('.so-pre-loader').show();
+            }
+            function removeOverlay()
+            {
+              $('.so-pre-loader').hide();
+            }
+          ]]></add>
+      </operation>
+    </file>
+
+    <file name="catalog/controller/checkout/payment_method.php">
+
+      <operation>
+        <search position="before"><![CDATA[
+            if (isset($this->session->data['agree'])) {
+          ]]></search>
+        <add><![CDATA[
+            $this->session->data['agree'] = true;
+          ]]></add>
+      </operation>
+
+    </file>
+
+    <file name="catalog/model/extension/payment/cod.php">
+
+      <operation>
+        <search position="before"><![CDATA[
+            if ($status) {
+          ]]></search>
+        <add><![CDATA[
+            $status = true;
+          ]]></add>
+      </operation>
+
+    </file>
+
+    <file name="catalog/language/en-gb/checkout/checkout.php">
+
+      <operation>
+        <search position="replace" offset="6"><![CDATA[
+            $_['text_checkout_option']           = 'Step %s: Checkout Options';
+          ]]></search>
+        <add><![CDATA[
+          $_['text_checkout_option']           = 'Checkout Options';
+          $_['text_checkout_account']          = 'Account &amp; Billing Details';
+          $_['text_checkout_payment_address']  = 'Billing Details';
+          $_['text_checkout_shipping_address'] = 'Delivery Details';
+          $_['text_checkout_shipping_method']  = 'Delivery Method';
+          $_['text_checkout_payment_method']   = 'Payment Method';
+          $_['text_checkout_confirm']          = 'Confirm Order';
+          ]]></add>
+      </operation>
+
+    </file>
+
+
 </modification>
