@@ -126,7 +126,7 @@
 
                         $today = $this->model_sale_order->getTotalOrders(array('filter_date_added' => date('Y-m-d', strtotime('-1 day'))));
 
-		                $yesterday = $this->model_sale_order->getTotalOrders(array('filter_date_added' => date('Y-m-d', strtotime('-2 day'))));
+		                    $yesterday = $this->model_sale_order->getTotalOrders(array('filter_date_added' => date('Y-m-d', strtotime('-2 day'))));
 
                      }
             ]]></add>
@@ -320,7 +320,7 @@
             ]]></search>
             <add trim="true"><![CDATA[
                 $data['is_seller'] = false;
-                if($this->user->getGroupId() !== '1' && $this->user->getGroupId() !== '2')
+                if($this->user->isSeller())
                 {
                     $data['is_seller'] = true;
                 }
@@ -338,7 +338,7 @@
             ]]></search>
             <add><![CDATA[
                 $data['is_seller'] = false;
-                if($this->user->getGroupId() !== '1' && $this->user->getGroupId() !== '2')
+                if($this->user->isSeller())
                 {
                     $data['is_seller'] = true;
                 }
@@ -388,7 +388,7 @@
             ]]></search>
             <add><![CDATA[
                 $data['is_seller'] = false;
-                if($this->user->getGroupId() !== '1' && $this->user->getGroupId() !== '2')
+                if($this->user->isSeller())
                 {
                     $data['is_seller'] = true;
                 }
@@ -404,7 +404,7 @@
                 'filter_image'    => $filter_image,
             ]]></search>
             <add><![CDATA[
-                'filter_seller'    => (($this->user->getGroupId() !== '1' || $this->user->getGroupId() !== '2') ? $this->user->getId() : (isset($this->request->get['filter_seller']) ? $this->request->get['filter_seller'] : '0')) ,
+                'filter_seller'    => (($this->user->isSeller()) ? $this->user->getId() : (isset($this->request->get['filter_seller']) ? $this->request->get['filter_seller'] : '0')) ,
             ]]></add>
         </operation>
         <operation>
@@ -412,7 +412,7 @@
                 'filter_model' => $filter_model,
             ]]></search>
             <add><![CDATA[
-                'filter_seller'    => (($this->user->getGroupId() !== '1' || $this->user->getGroupId() !== '2') ? $this->user->getId() : (isset($this->request->get['filter_seller']) ? $this->request->get['filter_seller'] : '0')) ,
+                'filter_seller'    => (($this->user->isSeller()) ? $this->user->getId() : (isset($this->request->get['filter_seller']) ? $this->request->get['filter_seller'] : '0')) ,
             ]]></add>
         </operation>
 
@@ -476,7 +476,7 @@
             ]]></search>
             <add><![CDATA[
                 $data['is_seller'] = false;
-                if($this->user->getGroupId() !== '1' && $this->user->getGroupId() !== '2')
+                if($this->user->isSeller())
                 {
                     $data['is_seller'] = true;
                 }
@@ -488,7 +488,7 @@
             ]]></search>
             <add><![CDATA[
                 $data['is_seller'] = false;
-                if($this->user->getGroupId() !== '1' && $this->user->getGroupId() !== '2')
+                if($this->user->isSeller())
                 {
                     $data['is_seller'] = true;
                 }
@@ -505,7 +505,7 @@
                 'filter_date_modified' => $filter_date_modified,
             ]]></search>
             <add><![CDATA[
-                'filter_seller'    => (($this->user->getGroupId() !== '1' || $this->user->getGroupId() !== '2') ? $this->user->getId() : '0') ,
+                'filter_seller'    => (($this->user->isSeller()) ? $this->user->getId() : '0') ,
             ]]></add>
         </operation>
         <operation>
@@ -556,11 +556,10 @@
                 public function getTotalOrders($data = array())
                 {
                     $sql = "SELECT COUNT(DISTINCT(o.order_id)) AS total FROM `" . DB_PREFIX . "order` AS o
-                            /* LEFT OUTER JOIN `" . DB_PREFIX . "order_product` op
+                            LEFT OUTER JOIN `" . DB_PREFIX . "order_product` op
                             ON (op.order_id = o.order_id)
                             LEFT OUTER JOIN `" . DB_PREFIX . "product` p
                             ON (p.product_id = op.product_id)
-                            */
                             ";
 
                     if (isset($data['filter_order_status'])) {
@@ -767,7 +766,7 @@
                 'order' => 'DESC',
             ]]></search>
             <add><![CDATA[
-                 'filter_seller'    => ((($this->user->getGroupId() !== '1' && $this->user->getGroupId() !== '2')) ? $this->user->getId() : '0') ,
+                 'filter_seller'    => ((($this->user->isSeller())) ? $this->user->getId() : '0') ,
             ]]></add>
         </operation>
     </file>
