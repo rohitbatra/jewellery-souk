@@ -177,7 +177,7 @@
                   <div class="col-sm-10">
                     <input type="text" name="brand" value="<?php echo $brand; ?>" placeholder="<?php echo $entry_manufacturer; ?>" id="input-brand" class="form-control" />
                   </div>
-              
+
             <?php } else { ?>
                 <div class="form-group">
                   <label class="col-sm-2 control-label" for="input-brand"><?php echo $entry_manufacturer; ?></label>
@@ -596,6 +596,39 @@
       ]]></add>
   </operation>
 
+  <operation>
+      <search position="after"><![CDATA[
+          'video1'   => $result['video1'],
+      ]]></search>
+      <add><![CDATA[
+          'views'   => $result['viewed'],
+          'supplier_url'   => $this->url->link('seller/seller/edit', 'token=' . $this->session->data['token'] . '&user_id=' . $result['seller_id'], 'SSL'),
+          'supplier_name'   => $this->getSellerName($result['seller_id']),
+      ]]></add>
+  </operation>
+
+
+  <operation>
+      <search position="before"><![CDATA[
+          public function add() {
+      ]]></search>
+      <add><![CDATA[
+          protected function getSellerName($seller_id) {
+            $seller_info = array();
+            $this->load->model('seller/seller');
+            $seller_info = $this->model_seller_seller->getSeller($seller_id);
+
+            if(!empty($seller_info))
+            {
+                return $seller_info['username'];
+            }else{
+                return "";
+            }
+
+          }
+      ]]></add>
+  </operation>
+
 </file>
 
 <file name="admin/model/catalog/filter.php">
@@ -764,6 +797,17 @@
           <?php } ?>
       ]]></add>
   </operation>
+
+
+  <operation>
+      <search position="replace"><![CDATA[
+          <td class="text-left"><?php echo $product['name']  ; ?>  <?php if( !empty($product['video1']) || !empty($product['tab_title']) ) echo $featured = '<span class="label label-info">Featured</span>'; ?></td>
+      ]]></search>
+      <add><![CDATA[
+          <td class="text-left"><?php echo $product['name']  ; ?>  <?php if( !empty($product['video1']) || !empty($product['tab_title']) ) echo $featured = '<span class="label label-info">Featured</span>'; ?> <br/> <h6>- Views: <?php echo number_format($product['views']); ?> </h6> <?php if(!$is_seller && !empty($product['supplier_name'])) { ?><h6>- Supplier: <a href="<?php echo $product['supplier_url']; ?>"> <?php echo $product['supplier_name']; ?> </a> </h6><?php } ?> </td>
+      ]]></add>
+  </operation>
+
 
 </file>
 
