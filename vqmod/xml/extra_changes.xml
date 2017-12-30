@@ -590,10 +590,19 @@
         <!-- Any Checkbox/Radio Click should automatically trigger Refine Button -->
         <operation>
           <search position="replace"><![CDATA[
-              <input type="checkbox"
+              <input type="checkbox" name="filter[]" value="<?php echo $filter['filter_id']; ?>" checked="checked" />
           ]]></search>
           <add><![CDATA[
-              <input type="checkbox" class="refineCheckBox"
+              <input type="radio" class="refineCheckBox" name="filter[<?php echo $filter_group['filter_group_id']; ?>][]" value="<?php echo $filter['filter_id']; ?>" checked="checked" />
+          ]]></add>
+        </operation>
+
+        <operation>
+          <search position="replace"><![CDATA[
+              <input type="checkbox" name="filter[]" value="<?php echo $filter['filter_id']; ?>" />
+          ]]></search>
+          <add><![CDATA[
+              <input type="radio" class="refineCheckBox" name="filter[<?php echo $filter_group['filter_group_id']; ?>][]" value="<?php echo $filter['filter_id']; ?>" />
           ]]></add>
         </operation>
 
