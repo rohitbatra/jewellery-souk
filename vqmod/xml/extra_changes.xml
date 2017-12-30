@@ -368,6 +368,27 @@
         ]]></add>
       </operation>
 
+      <operation>
+        <search position="before"><![CDATA[
+          if ($this->user->hasPermission('access', 'catalog/filter')) {
+        ]]></search>
+        <add><![CDATA[
+          if (!$this->user->isSeller()) {
+        ]]></add>
+      </operation>
+
+      <operation>
+        <search position="replace" offset="2"><![CDATA[
+          'children' => $attribute
+        ]]></search>
+        <add><![CDATA[
+          'children' => $attribute
+          );
+  			}
+      }
+        ]]></add>
+      </operation>
+
     </file>
 
     <file name="admin/language/en-gb/common/column_left.php">
@@ -695,6 +716,19 @@
           ]]></search>
           <add><![CDATA[
               'brand'          => $query->row['brand'],
+          ]]></add>
+        </operation>
+
+      </file>
+
+      <file name="catalog/controller/extension/module/filter.php">
+
+        <operation>
+          <search position="replace"><![CDATA[
+              'name'      => $filter['name'] . ($this->config->get('config_product_count') ? ' (' . $this->model_catalog_product->getTotalProducts($filter_data) . ')' : '')
+          ]]></search>
+          <add><![CDATA[
+              'name'      => $filter['name']
           ]]></add>
         </operation>
 
