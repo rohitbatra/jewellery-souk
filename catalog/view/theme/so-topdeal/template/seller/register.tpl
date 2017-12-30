@@ -259,7 +259,7 @@
                       <div class="form-group">
                         <label class="col-sm-2 control-label"></label>
                         <div class="col-sm-10">
-                          <input type="submit" value="<?php echo $button_continue; ?>" class="btn btn-default" />
+                          <input type="submit" value="<?php echo $button_continue; ?>" id="btn_submit" class="btn btn-default" />
                         </div>
                       </div>
                   </fieldset>
@@ -347,14 +347,41 @@
           e.stopPropagation();
           $('select[name=\'country_id\']').prop('disabled',false);
           dryValidateForm();
-
           $('#seller_register_form').submit();
         });
 
         function dryValidateForm()
         {
-          // Check for Sellery type & category fields only
-          if($('input[name="seller_type"]:checked').val() == "undefined")
+
+          // Check for Seller EMail
+          if($.trim($('input[name="email"]').val()) == "")
+          {
+            // Break error
+            alert('Please enter your E-Mail!');
+            $('input[name="email"]').focus();
+            throw new Error("Seller E-Mail not found");
+          }
+
+          // Check for Seller username
+          if($.trim($('input[name="username"]').val()) == "")
+          {
+            // Break error
+            alert('Please enter your desired username!');
+            $('input[name="username"]').focus();
+            throw new Error("Seller username not found");
+          }
+
+          // Check for Seller telephone
+          if($.trim($('input[name="telephone"]').val()) == "")
+          {
+            // Break error
+            alert('Please enter your Telephone Number!');
+            $('input[name="telephone"]').focus();
+            throw new Error("Seller telephone not found");
+          }
+
+          // Check for Seller type & category fields only
+          if($.trim($('input[name="seller_type"]:checked').val()) == "undefined")
           {
             // Break error
             alert('Please Select any one Seller Type!');
@@ -362,7 +389,7 @@
             throw new Error("Seller Type not selected error");
           }
 
-          if($('select[name="category"] option:selected').val() == "*")
+          if($.trim($('select[name="category"] option:selected').val()) == "*")
           {
             // Break error
             alert('Please Select one Category!');
