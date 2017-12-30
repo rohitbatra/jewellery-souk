@@ -335,8 +335,6 @@
                 // Disable the fields to prevent them being sent in form post
                 $('.individual').attr('disabled','disabled');
                 $('.company').removeAttr('disabled');
-
-
             }
         });
 
@@ -354,7 +352,7 @@
         {
 
           // Check for Seller EMail
-          if($.trim($('input[name="email"]').val()) == "")
+          if($('input[name="email"]').val() == "")
           {
             // Break error
             alert('Please enter your E-Mail!');
@@ -363,7 +361,7 @@
           }
 
           // Check for Seller username
-          if($.trim($('input[name="username"]').val()) == "")
+          if($('input[name="username"]').val() == "")
           {
             // Break error
             alert('Please enter your desired username!');
@@ -372,7 +370,7 @@
           }
 
           // Check for Seller telephone
-          if($.trim($('input[name="telephone"]').val()) == "")
+          if($('input[name="telephone"]').val() == "")
           {
             // Break error
             alert('Please enter your Telephone Number!');
@@ -381,7 +379,7 @@
           }
 
           // Check for Seller type & category fields only
-          if($.trim($('input[name="seller_type"]:checked').val()) == "undefined")
+          if($('input[name="seller_type"]:checked').val() == "undefined")
           {
             // Break error
             alert('Please Select any one Seller Type!');
@@ -389,7 +387,7 @@
             throw new Error("Seller Type not selected error");
           }
 
-          if($.trim($('select[name="category"] option:selected').val()) == "*")
+          if($('select[name="category"] option:selected').val() == "*")
           {
             // Break error
             alert('Please Select one Category!');
