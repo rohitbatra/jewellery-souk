@@ -352,16 +352,16 @@
         {
 
           // Check for Seller EMail
-          if($('input[name="email"]').val() == "")
+          if($('#input-email').val() == "")
           {
             // Break error
             alert('Please enter your E-Mail!');
-            $('input[name="email"]').focus();
+            $('#input-email').focus();
             throw new Error("Seller E-Mail not found");
           }
 
           // Check for Seller username
-          if($('input[name="username"]').val() == "")
+          if($('#input-username').val() == "")
           {
             // Break error
             alert('Please enter your desired username!');
@@ -370,7 +370,7 @@
           }
 
           // Check for Seller telephone
-          if($('input[name="telephone"]').val() == "")
+          if($('#input-telephone').val() == "")
           {
             // Break error
             alert('Please enter your Telephone Number!');
