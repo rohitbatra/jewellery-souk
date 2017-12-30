@@ -120,9 +120,9 @@ class ModelSellerSeller extends Model {
       return $retArr;
     }
 
-    public function approveSeller($data)
+    public function approveSeller($seller_id)
     {
-        $this->db->query("UPDATE " . DB_PREFIX . "user SET status = '1'  WHERE user_id = '{$data['user_id']}' ");
+        $this->db->query("UPDATE " . DB_PREFIX . "user SET status = '1'  WHERE user_id = '{$seller_id}' ");
     }
 
     public function getSellerEmail($user_id)
@@ -138,12 +138,9 @@ class ModelSellerSeller extends Model {
         $data['payment_status'] = strtolower($postData['order_status']);
         $data['web_url'] = HTTPS_SERVER . "/";
         $data['logo_url'] = HTTPS_SERVER . "image/" .$this->config->get('config_logo');
-        $data['firstname'] = $seller_data['firstname'];
-        $data['username'] = $seller_data['username'];
-        $data['login_url'] = $this->url->link('seller/login', '', true);
         $data['to_email'] = $seller_data['email'];
         $data['web_name'] = $this->config->get('config_name');
-        $data['payment_resume_url'] = $this->url->link('seller/payment_process', 'uID=' . base64_encode($postData['user_id']), true);
+
         $data['support_email'] = 'seller.support@sezplus.com';
 
         $mail = new Mail();
@@ -167,14 +164,18 @@ class ModelSellerSeller extends Model {
             $data['description'] = "Seller Subscription Fees";
             $data['amount'] = $postData['amount'];
             $data['total'] = $postData['amount'];
+            $data['firstname'] = $seller_data['firstname'];
+            $data['username'] = $seller_data['username'];
+            $data['login_url'] = $this->url->link('seller/login', '', true);
             $mail->setSubject(html_entity_decode($data['subject'], ENT_QUOTES, 'UTF-8'));
             $mail->setHtml($this->load->view('mail/seller/payment_receipt', $data));
 
         } else {
             // Payment Issue ** NOT Recieved **
             $data['subject'] = "Seller Payment Failed | ".$data['web_name'];
+            $data['payment_resume_url'] = $this->url->link('seller/payment_process', 'uID=' . base64_encode($postData['user_id']), true);
             $mail->setSubject(html_entity_decode($data['subject'], ENT_QUOTES, 'UTF-8'));
-            $mail->setHtml($this->load->view('mail/seller/payment_receipt', $data));
+            $mail->setHtml($this->load->view('mail/seller/payment_failed', $data));
         }
 
         $mail->send();

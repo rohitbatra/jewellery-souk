@@ -413,73 +413,36 @@
                     <td class="content-cell">
                       <h1>Hi <?php echo $firstname; ?>,</h1>
                       <p>Thanks for registering at <?php echo $web_name; ?>. </p>
-                      <p>This email is the receipt for your recent payment transaction at <?php echo $web_name; ?>.</p>
+                        <p>Your recent Payment transaction has <strong style="color:red;">FAILED</strong></p>
+                          <p>Please try-again using the Button below:</p>
 
-                        <table class="purchase" width="100%" cellpadding="0" cellspacing="0">
-                          <tr>
-                            <td>
-                              <h3><?php echo $receipt_id; ?></h3>
-                            </td>
-                            <td>
-                              <h3 class="align-right"><?php echo $date; ?></h3></td>
-                          </tr>
-                          <tr>
-                            <td colspan="2">
-                              <table class="purchase_content" width="100%" cellpadding="0" cellspacing="0">
-                                <tr>
-                                  <th class="purchase_heading">
-                                    <p>Description</p>
-                                  </th>
-                                  <th class="purchase_heading">
-                                    <p class="align-right">Amount</p>
-                                  </th>
-                                </tr>
-
-                                <tr>
-                                  <td width="80%" class="purchase_item"><?php echo $description; ?></td>
-                                  <td class="align-right" width="20%" class="purchase_item"><?php echo $amount; ?></td>
-                                </tr>
-
-                                <tr>
-                                  <td width="80%" class="purchase_footer" valign="middle">
-                                    <p class="purchase_total purchase_total--label">Total</p>
-                                  </td>
-                                  <td width="20%" class="purchase_footer" valign="middle">
-                                    <p class="purchase_total"><?php echo $total; ?></p>
-                                  </td>
-                                </tr>
-                              </table>
-                            </td>
-                          </tr>
-                        </table>
-
-                        <p>Your Seller Account is now <strong>Activated</strong>. </p>
-                        <p>Please use the below details to login.</p>
-                        <p>For reference, here's your login information:</p>
-                        <table class="attributes" width="100%" cellpadding="0" cellspacing="0">
-                          <tr>
-                            <td class="attributes_content">
-                              <table width="100%" cellpadding="0" cellspacing="0">
-                                <tr>
-                                  <td class="attributes_item">
-                                    <strong>Login Page:</strong> <?php echo $login_url; ?>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td class="attributes_item">
-                                    <strong>Username:</strong> <?php echo $username; ?>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td class="attributes_item">
-                                    <strong>E-Mail:</strong> <?php echo $to_email; ?>
-                                  </td>
-                                </tr>
-                              </table>
-                            </td>
-                          </tr>
-                        </table>
-
+                            <table class="body-action" align="center" width="100%" cellpadding="0" cellspacing="0">
+                              <tr>
+                                <td align="center">
+                                  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                      <td align="center">
+                                        <table border="0" cellspacing="0" cellpadding="0">
+                                          <tr>
+                                            <td>
+                                              <a href="<?php echo $payment_resume_url; ?>" class="button button--" target="_blank">Pay Now</a>
+                                            </td>
+                                          </tr>
+                                        </table>
+                                      </td>
+                                    </tr>
+                                  </table>
+                                </td>
+                              </tr>
+                            </table>
+                            <table class="body-sub">
+                              <tr>
+                                <td>
+                                  <p class="sub">If you’re having trouble with the button above, copy and paste the URL below into your web browser.</p>
+                                  <p class="sub"><?php echo $payment_resume_url; ?></p>
+                                </td>
+                              </tr>
+                            </table>
                       <p>If you have any questions, simply email to our <a href="mailto:<?php echo $support_email; ?>">support team</a> .</p>
                       <p>Cheers,
                         <br><?php echo $web_name; ?> Team</p>
