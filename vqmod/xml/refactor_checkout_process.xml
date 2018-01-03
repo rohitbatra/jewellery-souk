@@ -109,7 +109,7 @@
             $data['text_message'] = sprintf($this->language->get('text_customer'), $this->url->link('account/account', '', true), $this->url->link('account/order', '', true), $this->url->link('account/download', '', true), $this->url->link('information/contact'));
           ]]></search>
         <add><![CDATA[
-            $data['text_message'] = sprintf($this->language->get('text_customer'), $this->url->link('account/account', '', true), $this->url->link('account/order', '', true), $this->url->link('information/contact'));
+            $data['text_message'] = sprintf($this->language->get('text_customer'), $this->url->link('account/account', '', true), $this->url->link('account/order', '', true), $this->url->link('information/contact','', true));
           ]]></add>
       </operation>
 
@@ -189,7 +189,7 @@
             $data['heading_title'] = $this->language->get('heading_title');
           ]]></search>
         <add><![CDATA[
-            $data['ajax_url'] = $this->url->link('checkout/oneclickcheckout/sellerEmail');
+            $data['ajax_url'] = $this->url->link('checkout/oneclickcheckout/sellerEmail','', true);
           ]]></add>
       </operation>
 

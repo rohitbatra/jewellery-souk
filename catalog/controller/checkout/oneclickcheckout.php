@@ -8,7 +8,7 @@ class ControllerCheckoutOneClickCheckout extends Controller {
 
       if(!$this->customer->isLogged())
       {
-        $json['redirect_url'] = ($this->url->link('account/login'));
+        $json['redirect_url'] = ($this->url->link('account/login','', true));
         $json['alert_msg'] = "Please login to checkout!";
         echo json_encode($json);
         exit;
@@ -149,7 +149,7 @@ class ControllerCheckoutOneClickCheckout extends Controller {
       // Confirm all Params
       $redirect = false;
       if ((!$this->cart->hasProducts() && empty($this->session->data['vouchers'])) || (!$this->cart->hasStock() && !$this->config->get('config_stock_checkout'))) {
-  			$redirect = $this->url->link('checkout/cart');
+  			$redirect = $this->url->link('checkout/cart','', true);
   		}
 
       // Validate minimum quantity requirements.
@@ -165,7 +165,7 @@ class ControllerCheckoutOneClickCheckout extends Controller {
   			}
 
   			if ($product['minimum'] > $product_total) {
-  				$redirect = $this->url->link('checkout/cart');
+  				$redirect = $this->url->link('checkout/cart','', true);
 
   				break;
   			}
@@ -448,7 +448,7 @@ class ControllerCheckoutOneClickCheckout extends Controller {
             'subtract'   => $product['subtract'],
             'price'      => $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']),
             'total'      => $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')) * $product['quantity'], $this->session->data['currency']),
-            'href'       => $this->url->link('product/product', 'product_id=' . $product['product_id'])
+            'href'       => $this->url->link('product/product', 'product_id=' . $product['product_id'], true)
           );
         }
 
@@ -476,14 +476,14 @@ class ControllerCheckoutOneClickCheckout extends Controller {
     if(isset($this->session->data['order_id']) && !empty($this->session->data['order_id']))
     {
       // Redirect to Success
-      $json['redirect_url'] = ($this->url->link('checkout/success','&order_id='.$this->session->data['order_id']));
+      $json['redirect_url'] = ($this->url->link('checkout/success','&order_id='.$this->session->data['order_id'], true));
       $json['alert_msg'] = "Thank You for showing Interest in these Products, the respective Seller(s) will get in touch with you soon!";
 
       echo json_encode($json);
       exit;
     }else {
       // Error in order generation
-      $json['redirect_url'] = ($this->url->link('checkout/cart'));
+      $json['redirect_url'] = ($this->url->link('checkout/cart','', true));
       $json['alert_msg'] = "There seems to be some issue with the Products, can you please contact our support via email!";
 
       echo json_encode($json);
