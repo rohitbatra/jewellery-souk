@@ -135,7 +135,7 @@ class ModelSellerSeller extends Model {
     {
         $seller_data = $this->getSellerById($postData['seller_id']);
 
-        $data['payment_status'] = strtolower($postData['order_status']);
+        $data['order_status'] = $data['payment_status'] = strtolower($postData['order_status']);
         $data['web_url'] = HTTPS_SERVER . "/";
         $data['logo_url'] = HTTPS_SERVER . "image/" .$this->config->get('config_logo');
         $data['to_email'] = $seller_data['email'];
