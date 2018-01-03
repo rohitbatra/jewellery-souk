@@ -131,6 +131,17 @@ class ModelSellerSeller extends Model {
         return $q->row['email'];
     }
 
+    public function getSellerName($user_id,$full_name=false)
+    {
+        $str = "firstname";
+        if($full_name)
+        {
+          $str = "CONCAT(firstname,' ',lastname)";
+        }
+        $q = $this->db->query("SELECT {$str} as `name` FROM " . DB_PREFIX . "user WHERE user_id = '{$user_id}'");
+        return $q->row['name'];
+    }
+
     public function emailPaymentReceipt($postData)
     {
         $seller_data = $this->getSellerById($postData['seller_id']);
