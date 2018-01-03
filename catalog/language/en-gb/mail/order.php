@@ -1,12 +1,12 @@
 <?php
 // Text
-$_['text_new_subject']          = '%s - Order %s';
-$_['text_new_greeting']         = 'Thank you for your interest in %s products. Your order has been received and will be processed once payment has been confirmed.';
+$_['text_new_subject']          = '%s - Enquiry  [SEZ-%s]';
+$_['text_new_greeting']         = 'Thank you for your interest in %s products. Your enquiry has been sent to the Seller, they will get in touch with you ASAP!';
 $_['text_new_received']         = 'You have received an order.';
 $_['text_new_link']             = 'To view your order click on the link below:';
-$_['text_new_order_detail']     = 'Order Details';
+$_['text_new_order_detail']     = 'Details';
 $_['text_new_instruction']      = 'Instructions';
-$_['text_new_order_id']         = 'Order ID:';
+$_['text_new_order_id']         = 'Enquiry Number:';
 $_['text_new_date_added']       = 'Date Added:';
 $_['text_new_order_status']     = 'Order Status:';
 $_['text_new_payment_method']   = 'Payment Method:';
@@ -25,8 +25,7 @@ $_['text_new_order_total']      = 'Order Totals';
 $_['text_new_total']            = 'Total';
 $_['text_new_download']         = 'Once your payment has been confirmed you can click on the link below to access your downloadable products:';
 $_['text_new_comment']          = 'The comments for your order are:';
-//$_['text_new_footer']           = 'Please reply to this e-mail if you have any questions.';
-$_['text_new_footer']           = 'This is a computer generated Bill, it does not require any Signatures/Stamp. Please do not reply to this email, If you have any questions or queries please email us at <a href="mailto:support@sezplus.com">support@sezplus.com</a> .';
+$_['text_new_footer']           = 'Please do not reply to this email, If you have any questions or queries please email us at <a href="mailto:support@sezplus.com">support@sezplus.com</a> .';
 $_['text_update_subject']       = '%s - Order Update %s';
 $_['text_update_order']         = 'Order ID:';
 $_['text_update_date_added']    = 'Date Ordered:';

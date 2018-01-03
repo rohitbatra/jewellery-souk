@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+    <id>Refactor Default Checkout Process - SOUK Store</id>
+    <version>1.0.0</version>
+    <author>Rohit Batra</author>
+
+    <file name="catalog/view/theme/so-topdeal/template/checkout/cart.tpl">
+
+      <operation>
+          <search position="replace" offset="1"><![CDATA[
+            foreach ($totals as $total) { ?>
+            ]]></search>
+          <add><![CDATA[
+            foreach ($totals as $total) { ?>
+            <tr class="hidden">
+            ]]></add>
+      </operation>
+
+      <operation>
+          <search position="replace"><![CDATA[
+            <div class="pull-right"><a href="<?php echo $checkout; ?>" class="btn btn-primary"><?php echo $button_checkout; ?></a></div>
+            ]]></search>
+          <add><![CDATA[
+            <div class="pull-right"><a href="javascript:void(1)" id="btn_checkout" class="btn btn-primary"><?php echo $button_checkout; ?></a></div>
+            ]]></add>
+      </operation>
+
+      <operation>
+          <search position="before"><![CDATA[
+            <?php echo $footer; ?>
+            ]]></search>
+          <add><![CDATA[
+            <script>
+              $(document).ready(function()
+              {
+                  $('#btn_checkout').on('click', function(e)
+                  {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      $('#btn_checkout').html("");
+                      $('#btn_checkout').attr("disabled","disabled");
+                      // Show preloader
+                      $('#btn_checkout').html("Loading...");
+                      // AJAX
+                      $.ajax({
+                        url: '<?php echo $ajax_url; ?>',
+                        dataType: 'json',
+                        type: 'post',
+                        success: function (response) {
+                            alert(response.alert_msg);
+                            window.location.href = decodeURIComponent(response.redirect_url);
+                         },
+                        error: function(jqXhr, textStatus, errorThrown)
+                        {
+                            console.log(errorThrown);
+                        }
+                      });
+                  });
+              });
+            </script>
+            ]]></add>
+      </operation>
+
+    </file>
+
+    <file name="catalog/controller/checkout/cart.php">
+
+      <operation>
+          <search position="after"><![CDATA[
+            $data['checkout'] = $this->url->link('checkout/checkout', '', true);
+            ]]></search>
+          <add><![CDATA[
+            $data['ajax_url'] = $this->url->link('checkout/oneclickcheckout', '', true);
+            ]]></add>
+      </operation>
+
+    </file>
+
+    <file name="catalog/controller/checkout/payment_method.php">
+
+      <operation>
+        <search position="before"><![CDATA[
+            if (isset($this->session->data['agree'])) {
+          ]]></search>
+        <add><![CDATA[
+            $this->session->data['agree'] = true;
+          ]]></add>
+      </operation>
+
+    </file>
+
+    <file name="catalog/model/extension/payment/cod.php">
+
+      <operation>
+        <search position="before"><![CDATA[
+            if ($status) {
+          ]]></search>
+        <add><![CDATA[
+            $status = true;
+          ]]></add>
+      </operation>
+
+    </file>
+
+    <file name="catalog/controller/checkout/success.php">
+
+      <operation>
+        <search position="replace"><![CDATA[
+            $data['text_message'] = sprintf($this->language->get('text_customer'), $this->url->link('account/account', '', true), $this->url->link('account/order', '', true), $this->url->link('account/download', '', true), $this->url->link('information/contact'));
+          ]]></search>
+        <add><![CDATA[
+            $data['text_message'] = sprintf($this->language->get('text_customer'), $this->url->link('account/account', '', true), $this->url->link('account/order', '', true), $this->url->link('information/contact'));
+          ]]></add>
+      </operation>
+
+    </file>
+
+    <file name="catalog/language/en-gb/checkout/success.php">
+
+      <operation>
+        <search position="replace"><![CDATA[
+            $_['text_customer']        = '<p>Your order has been successfully processed!</p><p>You can view your order history by going to the <a href="%s">my account</a> page and by clicking on <a href="%s">history</a>.</p><p>If your purchase has an associated download, you can go to the account <a href="%s">downloads</a> page to view them, you will also find the Downloads link in your Order Notification Email.</p><p>Please direct any questions you have to the <a href="%s">store owner</a>.</p><p>Thanks for shopping with us online!</p>';
+          ]]></search>
+        <add><![CDATA[
+            $_['text_customer']        = '<p>Your enquiry has been successfully processed!</p><p>You can also view your enquiry history by going to the <a href="%s">my account</a> page and by clicking on <a href="%s">history</a>.</p><p>Please direct any questions you have to the <a href="%s">store owner</a>.</p><p>Thanks for browsing with us!</p>';
+          ]]></add>
+      </operation>
+
+      <operation>
+        <search position="replace"><![CDATA[
+            $_['heading_title']        = 'Your order has been placed!';
+          ]]></search>
+        <add><![CDATA[
+            $_['heading_title']        = 'Thank you for Enquiry!';
+          ]]></add>
+      </operation>
+
+
+    </file>
+
+    <file name="catalog/view/theme/so-topdeal/template/common/cart.tpl">
+
+      <operation>
+        <search position="replace"><![CDATA[
+            <a href="<?php echo $checkout; ?>" class="btn btn-checkout pull-right"><?php echo $text_checkout; ?></a>
+          ]]></search>
+        <add><![CDATA[
+          ]]></add>
+      </operation>
+
+    </file>
+
+    <file name="catalog/view/theme/default/template/common/success.tpl">
+
+      <operation>
+        <search position="before"><![CDATA[
+            <?php echo $footer; ?>
+          ]]></search>
+        <add><![CDATA[
+          <?php if(isset($_GET['amp;order_id'])) { ?>
+            <script>
+              $(document).ready(function()
+              {
+                // Seller E-Mail Ajax
+                $.ajax({
+                  url: '<?php echo $ajax_url; ?>'+'&order_id=<?php echo $_GET['amp;order_id']; ?>',
+                  type: 'get',
+                  success: function (response) {
+
+                   },
+                  error: function(jqXhr, textStatus, errorThrown)
+                  {
+                      console.log(errorThrown);
+                  }
+                });
+              });
+            </script>
+
+          <?php } ?>
+          ]]></add>
+      </operation>
+
+    </file>
+
+    <file name="catalog/controller/checkout/success.php">
+
+      <operation>
+        <search position="before"><![CDATA[
+            $data['heading_title'] = $this->language->get('heading_title');
+          ]]></search>
+        <add><![CDATA[
+            $data['ajax_url'] = $this->url->link('checkout/oneclickcheckout/sellerEmail');
+          ]]></add>
+      </operation>
+
+    </file>
+
+</modification>
