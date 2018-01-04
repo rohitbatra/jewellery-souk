@@ -24,24 +24,21 @@
 
 					<div  class="tabBlock" id="TabBlock-1">
 						<ul class="top-link list-inline">
-							<li class="account hidden" id="my_account"><a href="<?php echo $account; ?>" title="<?php echo $text_account; ?>" class="btn-xs dropdown-toggle" data-toggle="dropdown"> <span><?php echo $text_account; ?></span> <span class="fa fa-angle-down"></span></a>
+							<?php if ($logged) { ?>
+							<li class="account" id="my_account"><a href="<?php echo $account; ?>" title="<?php echo $text_account; ?>" class="btn-xs dropdown-toggle" data-toggle="dropdown"> <span><?php echo $text_account; ?></span> <span class="fa fa-angle-down"></span></a>
 								<ul class="dropdown-menu ">
-
 									<li><a href="<?php echo $account; ?>"><?php echo $text_account; ?></a></li>
 									<li><a href="<?php echo $order; ?>"><?php echo $text_order; ?></a></li>
-									<li><a href="<?php echo $transaction; ?>"><?php echo $text_transaction; ?></a></li>
-									<li><a href="<?php echo $download; ?>"><?php echo $text_download; ?></a></li>
-
 									<?php if($checkout_status):?><li class="checkout"><a href="<?php echo $checkout; ?>" class="btn-link" title="<?php echo $text_checkout; ?>"><span ><?php echo $text_checkout; ?></span></a></li><?php endif; ?>
 								</ul>
 							</li>
+							<?php } ?>
 							<?php if (!$logged) { ?>
 								<li class="account"><a href="<?php echo $seller_landing; ?>"><?php echo 'Seller(s)'; ?></a></li>
 							<?php } ?>
-							<li class="login" >
+							<li class="login">
 								<?php if ($logged) { ?>
 								<a class="link-lg" href="<?php echo $logout; ?>"><?php echo $text_logout; ?></a>
-
 								<?php } else { ?>
 								<a class="link-lg" href="<?php echo $login; ?>"><?php echo $text_login; ?></a>/
 								<a class="link-lg res" href="<?php echo $register; ?>"><?php echo $text_register; ?></a>
