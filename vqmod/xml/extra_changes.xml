@@ -733,5 +733,49 @@
         </operation>
 
       </file>
+<!--
+      <file name="catalog/view/theme/so-topdeal/template/product/product.tpl">
+
+        <operation>
+          <search position="replace"><![CDATA[
+              <li class="wishlist">
+          ]]></search>
+          <add><![CDATA[
+              <li class="wishlist hidden">
+          ]]></add>
+        </operation>
+
+      </file>
+
+      <file name="catalog/view/theme/so-topdeal/template/extension/module/so_quickview/product.tpl">
+
+        <operation>
+          <search position="replace"><![CDATA[
+              <button type="button" data-toggle="tooltip" class="btn btn-default" title="<?php echo $button_wishlist; ?>" onclick="wishlist.add('<?php echo $product_id; ?>');"><i class="fa fa-heart-o"></i></button>
+          ]]></search>
+          <add><![CDATA[
+              <button type="button" data-toggle="tooltip" class="btn btn-default hidden" title="<?php echo $button_wishlist; ?>" onclick="wishlist.add('<?php echo $product_id; ?>');"><i class="fa fa-heart-o"></i></button>
+          ]]></add>
+        </operation>
+
+      </file>
+-->
+      <file name="admin/controller/common/multifilemanager.php">
+
+        <operation>
+          <search position="after"><![CDATA[
+              $files = glob($directory . '/' . $filter_name . '*.{jpg,jpeg,png,gif,JPG,JPEG,PNG,GIF}', GLOB_BRACE);
+          ]]></search>
+          <add><![CDATA[
+            usort($files, function($a, $b) {
+                return filemtime($a) < filemtime($b);
+            });
+          ]]></add>
+        </operation>
+
+      </file>
+
+
+
 
 </modification>
