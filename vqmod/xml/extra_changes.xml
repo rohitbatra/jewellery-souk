@@ -760,22 +760,4 @@
 
       </file>
 -->
-      <file name="admin/controller/common/multifilemanager.php">
-
-        <operation>
-          <search position="after"><![CDATA[
-              $files = glob($directory . '/' . $filter_name . '*.{jpg,jpeg,png,gif,JPG,JPEG,PNG,GIF}', GLOB_BRACE);
-          ]]></search>
-          <add><![CDATA[
-            usort($files, function($a, $b) {
-                return filemtime($a) < filemtime($b);
-            });
-          ]]></add>
-        </operation>
-
-      </file>
-
-
-
-
 </modification>

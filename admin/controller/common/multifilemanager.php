@@ -2,7 +2,7 @@
 class ControllerCommonMultifileManager extends Controller {
 	public function index() {
 		$this->load->language('common/multifilemanager');
-		
+
 		$this->load->model('tool/image');
 		$data['placeholder'] = $this->model_tool_image->resize('no_image.png', 100, 100);
 		$data['entry_sort_order'] = 'Sort Order';
@@ -45,6 +45,11 @@ class ControllerCommonMultifileManager extends Controller {
 		// Get files
 		$files = glob($directory . '/' . $filter_name . '*.{jpg,jpeg,png,gif,JPG,JPEG,PNG,GIF}', GLOB_BRACE);
 
+		// Sort Images w.r.t Modified Time
+		usort($files, function($a, $b) {
+				return filemtime($a) < filemtime($b);
+		});
+		
 		if (!$files) {
 			$files = array();
 		}
@@ -289,7 +294,7 @@ class ControllerCommonMultifileManager extends Controller {
 		$this->response->addHeader('Content-Type: application/json');
 		$this->response->setOutput(json_encode($json));
 	}
-	
+
 	public function multiupload() {
 		error_reporting(E_ALL | E_STRICT);
 		// Make sure we have the correct directory
@@ -303,10 +308,10 @@ class ControllerCommonMultifileManager extends Controller {
 		} else {
 			$directory = DIR_IMAGE . 'catalog';
 		}
-		
+
 		$options['upload_dir'] = $directory . '/';
 		$options['image_versions'] = array();
-		
+
 		$multifile_upload = new MultifileUpload();
 		$multifile_upload->initset($options);
 	}
