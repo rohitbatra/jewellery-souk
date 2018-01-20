@@ -28,6 +28,7 @@
 							<li class="account" id="my_account"><a href="<?php echo $account; ?>" title="<?php echo $text_account; ?>" class="btn-xs dropdown-toggle" data-toggle="dropdown"> <span><?php echo $text_account; ?></span> <span class="fa fa-angle-down"></span></a>
 								<ul class="dropdown-menu ">
 									<li><a href="<?php echo $account; ?>"><?php echo $text_account; ?></a></li>
+									<li><a href="<?php echo $wishlist; ?>"><?php echo $text_wishlist; ?></a></li>
 									<li><a href="<?php echo $order; ?>"><?php echo $text_order; ?></a></li>
 									<?php if($checkout_status):?><li class="checkout"><a href="<?php echo $checkout; ?>" class="btn-link" title="<?php echo $text_checkout; ?>"><span ><?php echo $text_checkout; ?></span></a></li><?php endif; ?>
 								</ul>
