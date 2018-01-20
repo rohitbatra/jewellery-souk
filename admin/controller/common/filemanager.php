@@ -47,6 +47,11 @@ class ControllerCommonFileManager extends Controller {
 			// Get files
 			$files = glob($directory . '/' . $filter_name . '*.{jpg,jpeg,png,gif,JPG,JPEG,PNG,GIF}', GLOB_BRACE);
 
+			// Sort Images w.r.t Modified Time
+			usort($files, function($a, $b) {
+					return filemtime($a) < filemtime($b);
+			});
+			
 			if (!$files) {
 				$files = array();
 			}
@@ -250,7 +255,7 @@ class ControllerCommonFileManager extends Controller {
 					if ((utf8_strlen($filename) < 3) || (utf8_strlen($filename) > 255)) {
 						$json['error'] = $this->language->get('error_filename');
 					}
-					
+
 					// Allowed file extension types
 					$allowed = array(
 						'jpg',
@@ -258,11 +263,11 @@ class ControllerCommonFileManager extends Controller {
 						'gif',
 						'png'
 					);
-	
+
 					if (!in_array(utf8_strtolower(utf8_substr(strrchr($filename, '.'), 1)), $allowed)) {
 						$json['error'] = $this->language->get('error_filetype');
 					}
-					
+
 					// Allowed file mime types
 					$allowed = array(
 						'image/jpeg',
@@ -271,7 +276,7 @@ class ControllerCommonFileManager extends Controller {
 						'image/x-png',
 						'image/gif'
 					);
-	
+
 					if (!in_array($file['type'], $allowed)) {
 						$json['error'] = $this->language->get('error_filetype');
 					}
