@@ -389,7 +389,7 @@
         $sort = 'pd.name';
         ]]></search>
         <add><![CDATA[
-        $sort = 'p.date_modified';
+        $sort = 'p.date_added';
         ]]></add>
     </operation>
 
@@ -734,7 +734,7 @@
           'p.status',
       ]]></search>
       <add><![CDATA[
-          'p.date_modified',
+          'p.date_added',
       ]]></add>
   </operation>
 
