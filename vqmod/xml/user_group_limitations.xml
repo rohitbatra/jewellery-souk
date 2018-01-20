@@ -693,11 +693,11 @@
         </operation>
 
         <operation>
-            <search position="replace" index="2"><![CDATA[
-              <div class="col-md-4">
+            <search position="replace" index="5"><![CDATA[
+              <div class="panel panel-default">
             ]]></search>
             <add><![CDATA[
-            <div class="col-md-4 <?php if($is_seller) { ?> hidden <?php } ?>">
+            <div class="panel panel-default <?php if($is_seller) { ?> hidden <?php } ?>">
             ]]></add>
         </operation>
 
