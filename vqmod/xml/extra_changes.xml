@@ -760,4 +760,22 @@
 
       </file>
 -->
+
+      <file name="admin/controller/common/login.php">
+
+        <operation>
+          <search position="replace"><![CDATA[
+              $this->response->redirect($this->url->link('common/dashboard', 'token=' . $this->session->data['token'], true));
+          ]]></search>
+          <add><![CDATA[
+              if($this->user->isSeller())
+              {
+                $this->response->redirect($this->url->link('catalog/mproduct', 'token=' . $this->session->data['token'], true));
+              }else{
+                $this->response->redirect($this->url->link('common/dashboard', 'token=' . $this->session->data['token'], true));
+              }
+          ]]></add>
+        </operation>
+
+      </file>
 </modification>
