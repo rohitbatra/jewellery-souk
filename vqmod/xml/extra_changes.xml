@@ -122,12 +122,13 @@
 
     <file name="admin/controller/sale/order.php">
         <operation>
-            <search position="before"><![CDATA[
-            'href'     		   => $this->url->link('catalog/mproduct/edit', 'token=' . $this->session->data['token'] . '&product_id=' . $product['product_id'], true)
+            <search position="replace"><![CDATA[
+            'href'     		   => $this->url->link('catalog/product/edit', 'token=' . $this->session->data['token'] . '&product_id=' . $product['product_id'], true)
             ]]></search>
             <add><![CDATA[
             'seller_username' => $this->model_sale_order->getSellerDetails(array('product_id' => $product['product_id'], 'searchFor' => 'username')),
             'seller_href' => $this->url->link('user/user/edit', 'token=' . $this->session->data['token'] . '&user_id=' . $this->model_sale_order->getSellerDetails(array('product_id' => $product['product_id'], 'searchFor' => 'user_id')), true),
+            'href'     		   => $this->url->link('catalog/mproduct/edit', 'token=' . $this->session->data['token'] . '&product_id=' . $product['product_id'], true)
             ]]></add>
         </operation>
     </file>
