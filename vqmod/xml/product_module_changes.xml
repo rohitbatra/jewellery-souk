@@ -385,6 +385,24 @@
     </operation>
 
     <operation>
+        <search position="replace"><![CDATA[
+        $sort = 'pd.name';
+        ]]></search>
+        <add><![CDATA[
+        $sort = 'p.date_modified';
+        ]]></add>
+    </operation>
+
+    <operation>
+        <search position="replace"><![CDATA[
+        $order = 'ASC';
+        ]]></search>
+        <add><![CDATA[
+        $order = 'DESC';
+        ]]></add>
+    </operation>
+
+    <operation>
       <search position="before"><![CDATA[
           if (isset($this->request->post['height'])) {
       ]]></search>
@@ -708,6 +726,15 @@
       ]]></search>
       <add><![CDATA[
           brand = '" . $this->db->escape($data['brand']) . "' ,sku = '" . $this->db->escape($data['sku']) . "' , tone_count = '" . $this->db->escape($data['tone_count']) . "' , silver_weight = '" . $this->db->escape($data['silver_weight']) . "' , gold_weight = '" . $this->db->escape($data['gold_weight']) . "' , diamond_weight = '" . $this->db->escape($data['diamond_weight']) . "' , parts_count = '" . $this->db->escape($data['parts_count']) . "' , created_using = '" . $this->db->escape($data['created_using']) . "'
+      ]]></add>
+  </operation>
+
+  <operation>
+      <search position="after"><![CDATA[
+          'p.status',
+      ]]></search>
+      <add><![CDATA[
+          'p.date_modified',
       ]]></add>
   </operation>
 
