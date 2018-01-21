@@ -470,6 +470,21 @@
     </file>
 
     <file name="admin/controller/sale/order.php">
+
+        <operation>
+            <search position="replace"><![CDATA[
+              $data['customer'] = $this->url->link('customer/customer/edit', 'token=' . $this->session->data['token'] . '&customer_id=' . $order_info['customer_id'], true);
+            ]]></search>
+            <add><![CDATA[
+              if($this->user->isSeller())
+              {
+                $data['customer'] = "javascript:void(1);";
+              }else{
+                $data['customer'] = $this->url->link('customer/customer/edit', 'token=' . $this->session->data['token'] . '&customer_id=' . $order_info['customer_id'], true);
+              }
+            ]]></add>
+        </operation>
+
         <operation>
             <search position="after"><![CDATA[
                 $data['order'] = $order;
@@ -684,11 +699,12 @@
     <file name="admin/view/template/sale/order_info.tpl">
 
         <operation>
-            <search position="replace" index="2"><![CDATA[
-              <div class="col-md-4">
+            <search position="replace" offset="-1"><![CDATA[
+              <td><button data-toggle="tooltip" title="<?php echo $text_payment_method; ?>" class="btn btn-info btn-xs"><i class="fa fa-credit-card fa-fw"></i></button></td>
             ]]></search>
             <add><![CDATA[
-            <div class="col-md-4 <?php if($is_seller) { ?> hidden <?php } ?>">
+            <tr class="<?php if($is_seller) { ?> hidden <?php } ?>">
+              <td><button data-toggle="tooltip" title="<?php echo $text_payment_method; ?>" class="btn btn-info btn-xs"><i class="fa fa-credit-card fa-fw"></i></button></td>
             ]]></add>
         </operation>
 
@@ -701,13 +717,21 @@
             ]]></add>
         </operation>
 
-
         <operation>
-            <search position="replace" index="1"><![CDATA[
-              <table class="table table-bordered">
+            <search position="replace"><![CDATA[
+              <td style="width: 50%;" class="text-left"><?php echo $text_payment_address; ?></td>
             ]]></search>
             <add><![CDATA[
-              <table class="table table-bordered <?php if($is_seller) { ?> hidden <?php } ?>">
+              <td style="width: 50%;" class="text-left"><?php echo "Customer Address"; ?></td>
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search position="replace" index="3"><![CDATA[
+              <div class="col-md-4">
+            ]]></search>
+            <add><![CDATA[
+              <div class="col-md-4 <?php if($is_seller) { ?> hidden <?php } ?>">
             ]]></add>
         </operation>
 
