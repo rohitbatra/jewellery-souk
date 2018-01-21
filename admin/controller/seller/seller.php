@@ -612,10 +612,10 @@ class ControllerSellerSeller extends Controller {
 
 		if (isset($this->request->post['country_id'])) {
 			$data['country_id'] = $this->request->post['country_id'];
-		} elseif (!empty($seller_details)) {
+		} elseif (!empty($seller_details) && array_key_exists('country_id',$seller_details)) {
 			$data['country_id'] = $seller_details['country_id'];
 		} else {
-			$data['country_id'] = '';
+			$data['country_id'] = '99';
 		}
 
 		if (isset($this->request->post['telephone'])) {
