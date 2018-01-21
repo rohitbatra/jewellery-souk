@@ -47,8 +47,8 @@
             <h2><?php echo $text_returning_customer; ?></h2>
             <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" id="loginForm">
               <div class="form-group">
-                <label class="control-label" for="input-username"><?php echo $entry_username; ?></label>
-                <input type="text" name="username" value="<?php echo $username; ?>" placeholder="<?php echo $entry_username; ?>" id="input-username" class="form-control" />
+                <label class="control-label" for="input-username"><?php echo $entry_email; ?></label>
+                <input type="text" name="username" value="<?php echo $username; ?>" placeholder="<?php echo $entry_email; ?>" id="input-username" class="form-control" />
               </div>
               <div class="form-group">
                 <label class="control-label" for="input-password"><?php echo $entry_password; ?></label>

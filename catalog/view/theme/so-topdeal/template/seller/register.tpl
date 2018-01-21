@@ -48,7 +48,8 @@
                               <?php } ?>
                           </div>
                       </div>
-                      <div class="form-group required">
+
+                      <div class="form-group hidden">
                           <label class="col-sm-2 control-label" for="input-username"><?php echo $entry_username; ?></label>
                           <div class="col-sm-10">
                               <input type="text" name="username" value="<?php echo $username; ?>" placeholder="<?php echo $entry_username; ?>" id="input-username" class="form-control" />
@@ -57,6 +58,7 @@
                               <?php } ?>
                           </div>
                       </div>
+
                       <div class="form-group required">
                           <label class="col-sm-2 control-label" for="input-password"><?php echo $entry_password; ?></label>
                           <div class="col-sm-10">
@@ -285,6 +287,12 @@
 <script type="text/javascript">
     $(document).ready(function()
     {
+        // Email & Username should've same value.
+        $('input[name="email"]').on('change', function (e)
+        {
+          $('input[name="username"]').val($('input[name="email"]').val());
+        });
+
         // Set Country to India
         $('#input-country').val(99);
 
@@ -358,6 +366,8 @@
             alert('Please enter your E-Mail!');
             $('#input-email').focus();
             throw new Error("Seller E-Mail not found");
+          }else{
+            $('input[name="username"]').val($('input[name="email"]').val());
           }
 
           // Check for Seller username

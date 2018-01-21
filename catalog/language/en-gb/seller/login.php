@@ -12,7 +12,7 @@ $_['text_returning_customer']      = 'Registered Seller';
 $_['text_forgotten']               = 'Forgot Your Password ?';
 
 // Entry
-$_['entry_username']               = 'Username';
+$_['entry_email']               = 'Email';
 $_['entry_password']               = 'Password';
 
 // Error

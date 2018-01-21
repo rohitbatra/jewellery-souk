@@ -33,7 +33,7 @@ class ControllerSellerLogin extends Controller {
 		$data['text_returning_customer'] = $this->language->get('text_returning_customer');
 		$data['text_forgotten'] = $this->language->get('text_forgotten');
 
-		$data['entry_username'] = $this->language->get('entry_username');
+		$data['entry_email'] = $this->language->get('entry_email');
 		$data['entry_password'] = $this->language->get('entry_password');
 
 		$data['button_continue'] = $this->language->get('button_continue');
