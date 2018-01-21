@@ -671,6 +671,10 @@
             <?php if ($location): ?>
               <div class="brand"><span><?php echo $text_location; ?></span><?php echo $location; ?></div>
             <?php endif; ?>
+            <?php if (1==1): ?>
+              <div class="brand"><span><?php echo $text_dimensions; ?></span><?php echo number_format($length,2); ?> x <?php echo number_format($width,2); ?> x <?php echo number_format($height,2); ?> <?php echo ($length_class); ?></div>
+              <div class="brand"><span><?php echo $text_weight; ?></span><?php echo number_format($weight,2); ?> <?php echo ($weight_class); ?></div>
+            <?php endif; ?>
           ]]></add>
         </operation>
 
@@ -694,6 +698,21 @@
 
       </file>
 
+      <file name="catalog/language/en-gb/product/product.php">
+
+        <operation>
+          <search position="after"><![CDATA[
+              $_['text_year']                = 'year';
+          ]]></search>
+          <add><![CDATA[
+              $_['text_location']                = 'Location:';
+              $_['text_dimensions']                = 'Dimensions (L x W x H):';
+              $_['text_weight']                = 'Weight:';
+          ]]></add>
+        </operation>
+
+      </file>
+
       <file name="catalog/controller/product/product.php">
 
         <operation>
@@ -701,9 +720,26 @@
               $data['manufacturer'] = $product_info['manufacturer'];
           ]]></search>
           <add><![CDATA[
-              $data['text_location'] = "Location:";
               $data['location'] = $product_info['location'];
               $data['brand'] = $product_info['brand'];
+              $data['length'] = $product_info['length'];
+              $data['width'] = $product_info['width'];
+              $data['height'] = $product_info['height'];
+              $data['weight'] = $product_info['weight'];
+              $data['weight_class'] = $this->model_catalog_product->getWeightClassSuffix($product_info['weight_class_id']);
+              $data['length_class'] = $this->model_catalog_product->getLengthClassSuffix($product_info['length_class_id']);
+
+          ]]></add>
+        </operation>
+
+        <operation>
+          <search position="after"><![CDATA[
+              $data['text_write'] = $this->language->get('text_write');
+          ]]></search>
+          <add><![CDATA[
+              $data['text_location'] = $this->language->get('text_location');
+              $data['text_dimensions'] = $this->language->get('text_dimensions');
+              $data['text_weight'] = $this->language->get('text_weight');
           ]]></add>
         </operation>
 
@@ -719,6 +755,27 @@
               'brand'          => $query->row['brand'],
           ]]></add>
         </operation>
+
+
+        <operation>
+          <search position="before"><![CDATA[
+              public function getProduct($product_id) {
+          ]]></search>
+          <add><![CDATA[
+              public function getWeightClassSuffix($weightClassId) {
+                $query = $this->db->query("SELECT wcr.unit FROM " . DB_PREFIX . "weight_class_description AS wcr WHERE wcr.weight_class_id = '" . (int)$weightClassId . "' ");
+
+                return $query->row['unit'];
+              }
+
+              public function getLengthClassSuffix($lengthClassId) {
+                $query = $this->db->query("SELECT lcr.unit FROM " . DB_PREFIX . "length_class_description AS lcr WHERE lcr.length_class_id = '" . (int)$lengthClassId . "' ");
+
+                return $query->row['unit'];
+              }
+          ]]></add>
+        </operation>
+
 
       </file>
 
