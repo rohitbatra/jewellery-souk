@@ -290,7 +290,7 @@
         // Email & Username should've same value.
         $('input[name="email"]').on('change', function (e)
         {
-          $('input[name="username"]').val($('input[name="email"]').val());
+          $('input[name="username"]').val($('#input-email').val());
         });
 
         // Set Country to India
@@ -367,7 +367,7 @@
             $('#input-email').focus();
             throw new Error("Seller E-Mail not found");
           }else{
-            $('input[name="username"]').val($('input[name="email"]').val());
+            $('input[name="username"]').val($('#input-email').val());
           }
 
           // Check for Seller username
