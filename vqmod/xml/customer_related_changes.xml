@@ -236,7 +236,28 @@
 
     </file>
 
+    <file name="catalog/controller/account/order.php">
+      <operation>
+        <search position="before"><![CDATA[
+            'return'   => $this->url->link('account/return/add', 'order_id=' . $order_info['order_id'] . '&product_id=' . $product['product_id'], true)
+          ]]></search>
+        <add><![CDATA[
+            'href'   => $this->url->link('product/product', 'product_id=' . $product['product_id']),
+          ]]></add>
+      </operation>
+    </file>
+
     <file name="catalog/view/theme/so-topdeal/template/account/order_info.tpl">
+
+    <operation>
+      <search position="replace"><![CDATA[
+          <td class="text-left"><?php echo $product['name']; ?>
+        ]]></search>
+      <add><![CDATA[
+          <td class="text-left"><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a>
+        ]]></add>
+    </operation>
+
 
       <operation>
         <search position="replace" offset="2"><![CDATA[
