@@ -424,7 +424,7 @@
 
         $('[data-toggle="popover"]').popover({
           trigger: 'focus'
-        });
+        }).popover('show');;
     });
 </script>
 <?php echo $footer; ?>
