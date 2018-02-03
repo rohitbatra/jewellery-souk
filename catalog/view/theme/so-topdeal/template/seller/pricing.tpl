@@ -256,7 +256,7 @@ fieldset[disabled] .btn-dark-brd {
                             <div class="pricing-list-v4 radius-10">
                                 <div class="pricing-list-v4-header">
                                     <h4 class="pricing-list-v4-title"><?php echo $st['name']; ?></h4>
-                                    <span class="pricing-list-v4-subtitle">Lorem Ipsum</span>
+                                    <span class="pricing-list-v4-subtitle">First Registration Offer</span>
                                 </div>
                                 <div class="pricing-list-v4-content">
                                     <div class="margin-b-40">
