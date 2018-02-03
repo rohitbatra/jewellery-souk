@@ -850,4 +850,18 @@
 
       </file>
 
+      <file name="admin/language/en-gb/common/login.php">
+
+        <operation>
+          <search position="replace"><![CDATA[
+              $_['entry_username'] = 'Username';
+          ]]></search>
+          <add><![CDATA[
+              $_['entry_username'] = 'Email';
+          ]]></add>
+        </operation>
+
+      </file>
+
+
 </modification>
