@@ -1,0 +1,183 @@
+<modification>
+    <id>Map Filter Group to User Groups - SOUK</id>
+    <version>1.0.0</version>
+    <vqmver>2.1.5</vqmver>
+    <author>Rohit Batra (rohit@rohitbatra.in)</author>
+
+    <!-- Mapping Filter Group to User Group -->
+
+    <file name="admin/controller/catalog/filter.php">
+        <operation>
+            <search position="after"><![CDATA[
+              $data['entry_sort_order'] = $this->language->get('entry_sort_order');
+            ]]></search>
+            <add><![CDATA[
+              $data['entry_user_group'] = $this->language->get('entry_user_group');
+              $data['error_user_group'] = $this->language->get('entry_user_group');
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search position="after"><![CDATA[
+                $data['languages'] = $this->model_localisation_language->getLanguages();
+            ]]></search>
+            <add><![CDATA[
+                $data['user_groups'] = $this->model_catalog_filter->getAllUserGroups();
+            ]]></add>
+        </operation>
+
+        <operation>
+          <search position="after"><![CDATA[
+              $filter_group_info = $this->model_catalog_filter->getFilterGroup($this->request->get['filter_group_id']);
+          ]]></search>
+          <add><![CDATA[
+              $fgug_info = $this->model_catalog_filter->getUserGroups($this->request->get['filter_group_id']);
+          ]]></add>
+        </operation>
+
+        <operation>
+          <search position="before"><![CDATA[
+              $data['languages'] = $this->model_localisation_language->getLanguages();
+          ]]></search>
+          <add><![CDATA[
+            if (isset($this->error['user_group'])) {
+              $data['error_user_group'] = $this->error['user_group'];
+            } else {
+              $data['error_user_group'] = array();
+            }
+          ]]></add>
+        </operation>
+
+        <operation>
+          <search position="before"><![CDATA[
+              foreach ($this->request->post['filter_group_description'] as $language_id => $value) {
+          ]]></search>
+          <add><![CDATA[
+            foreach ($this->request->post['user_group'] as $value) {
+              if ((utf8_strlen(value) < 1)) {
+                $this->error['user_group'] = $this->language->get('error_user_group');
+              }
+            }
+          ]]></add>
+        </operation>
+
+
+        <operation>
+          <search position="before"><![CDATA[
+              $this->load->model('localisation/language');
+          ]]></search>
+          <add><![CDATA[
+            $data['fgug'] = array();
+
+            if(isset($fgug_info))
+            {
+              foreach ($fgug_info as $fgug) {
+                  $data['fgug'][] = $fgug['user_group_id'];
+              }
+            }
+          ]]></add>
+        </operation>
+
+        <operation>
+            <search position="after"><![CDATA[
+                $this->model_catalog_filter->deleteFilter($filter_group_id);
+            ]]></search>
+            <add><![CDATA[
+                $this->model_catalog_filter->deleteFilterUserGroupMapping($filter_group_id);
+            ]]></add>
+        </operation>
+
+    </file>
+
+    <file name="admin/language/en-gb/catalog/filter.php">
+        <operation>
+            <search position="after"><![CDATA[
+                $_['entry_sort_order']  = 'Sort Order';
+            ]]></search>
+            <add><![CDATA[
+                $_['entry_user_group']  =  'User Group(s)';
+                $_['error_user_group']  =  'Please select at-least one User Group for this Filter Group!';
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/model/catalog/filter.php">
+      <operation>
+          <search position="before"><![CDATA[
+              public function getTotalFilterGroups() {
+          ]]></search>
+          <add><![CDATA[
+              public function getAllUserGroups() {
+                  $query = $this->db->query("SELECT user_group_id, name FROM " . DB_PREFIX . "user_group  WHERE user_group_id NOT IN ('1','2')");
+
+                  return $query->rows;
+              }
+
+              public function getUserGroups($filter_group_id) {
+                  $query = $this->db->query("SELECT fgug.user_group_id, ug.name  FROM " . DB_PREFIX . "filter_group_user_group_mapper AS fgug LEFT JOIN user_group ug ON (ug.user_group_id = fgug.user_group_id) WHERE fgug.filter_group_id = '" . (int)$filter_group_id . "'");
+
+                  return $query->rows;
+              }
+
+              public function deleteFilterUserGroupMapping($filter_group_id) {
+                $this->db->query("DELETE FROM " . DB_PREFIX . "filter_group_user_group_mapper WHERE filter_group_id = '" . (int)$filter_group_id . "'");
+              }
+          ]]></add>
+      </operation>
+
+      <operation>
+          <search position="before"><![CDATA[
+              foreach ($data['filter_group_description'] as $language_id => $value) {
+          ]]></search>
+          <add><![CDATA[
+              if (isset($data['user_group'])) {
+                  // Delete Query to remove all existing links between User Group & Filter Group
+                  $this->db->query("DELETE FROM " . DB_PREFIX . "filter_group_user_group_mapper WHERE filter_group_id = '" . (int)$filter_group_id . "'");
+
+                  // Insert the new relation records
+                  foreach($data['user_group'] as $ug) {
+                      $this->db->query("INSERT into " . DB_PREFIX . "filter_group_user_group_mapper (filter_group_id, user_group_id) VALUES  ('" . (int)$filter_group_id . "', '" . (int)$ug . "')");
+                  }
+              }
+          ]]></add>
+      </operation>
+
+    </file>
+
+    <file name="admin/view/template/catalog/filter_form.tpl">
+        <operation>
+            <search position="before"><![CDATA[
+                <table id="filter" class="table table-striped table-bordered table-hover">
+            ]]></search>
+            <add><![CDATA[
+              <div class="form-group required">
+                  <label class="col-sm-2 control-label" for="select-usergroup"><?php echo $entry_user_group; ?></label>
+                  <div class="well well-sm" style="height: 150px; overflow: auto;">
+                      <div class="col-sm-10">
+                          <?php foreach ($user_groups as $user_group) { ?>
+                              <div class="checkbox">
+                                <label>
+                                  <?php if(in_array($user_group['user_group_id'],$fgug)) { ?>
+                                    <input type="checkbox" name="user_group[]" value="<?php echo $user_group['user_group_id']; ?>" checked="checked" />
+                                  <?php } else { ?>
+                                    <input type="checkbox" name="user_group[]" value="<?php echo $user_group['user_group_id']; ?>" />
+                                  <?php } ?>
+                                  <?php echo ucwords($user_group['name']); ?>
+                                </label>
+                              </div>
+                          <?php } ?>
+                        <?php if ($error_user_group) { ?>
+                          <div class="text-danger"><?php echo $error_user_group; ?></div>
+                        <?php } ?>
+                      </div>
+                  </div>
+              </div>
+            ]]></add>
+        </operation>
+
+    </file>
+    
+    <!-- Mapping Filter Group to User Group ENDS -->
+
+
+</modification>

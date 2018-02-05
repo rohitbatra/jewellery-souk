@@ -574,7 +574,9 @@
           if($this->user->isSeller())
           {
             $data['is_seller'] = true;
-            $fg_raw = $this->model_catalog_filter->getFilterGroups();
+            //$fg_raw = $this->model_catalog_filter->getFilterGroups();
+            $fg_raw = $this->model_catalog_filter->getFilterGroupsByUg($this->user->getGroupId());
+
 
             foreach($fg_raw as $g)
             {
@@ -704,6 +706,16 @@
 
           return $query->rows;
         }
+
+        public function getFilterGroupsByUg($user_group_id) {
+
+          $sql = "SELECT fgug.filter_group_id, fgd.name FROM " . DB_PREFIX . "filter_group_user_group_mapper AS fgug LEFT OUTER JOIN filter_group_description fgd ON (fgd.filter_group_id = fgug.filter_group_id) WHERE fgug.user_group_id = '" . (int)$user_group_id . "' ";
+
+          $query = $this->db->query($sql);
+
+          return $query->rows;
+        }
+
 
         public function getTypeFilterByUg($user_group_id) {
 
