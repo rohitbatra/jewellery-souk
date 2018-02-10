@@ -21,7 +21,16 @@
             <div class="pull-right"><a href="<?php echo $checkout; ?>" class="btn btn-primary"><?php echo $button_checkout; ?></a></div>
             ]]></search>
           <add><![CDATA[
-            <div class="pull-right"><a href="javascript:void(1)" id="btn_checkout" class="btn btn-primary"><?php echo $button_checkout; ?></a></div>
+            <div class="pull-right"><a href="javascript:void(1)" id="btn_checkout" class="btn btn-default"><?php echo $button_checkout; ?></a></div>
+            ]]></add>
+      </operation>
+
+      <operation>
+          <search position="replace"><![CDATA[
+            <div class="pull-left"><a href="<?php echo $continue; ?>" class="btn btn-default"><?php echo $button_shopping; ?></a></div>
+            ]]></search>
+          <add><![CDATA[
+            <div class="pull-left"><a href="<?php echo $continue; ?>" class="btn btn-primary"><?php echo $button_shopping; ?></a></div>
             ]]></add>
       </operation>
 
