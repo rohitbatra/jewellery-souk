@@ -650,8 +650,8 @@ class ControllerSellerSeller extends Controller {
 			$this->error['email'] = $this->language->get('error_email');
 		}
 
-		if ((utf8_strlen($this->request->post['username']) < 4) || (utf8_strlen($this->request->post['username']) > 20)) {
-			$this->error['username'] = $this->language->get('error_username');
+		if ((utf8_strlen($this->request->post['username']) > 96) || !filter_var($this->request->post['username'], FILTER_VALIDATE_EMAIL)) {
+			$this->error['username'] = $this->language->get('error_email');
 		}
 
 
