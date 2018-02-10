@@ -97,13 +97,12 @@
                     // No Id field & Default Model Value
                     $('input:radio[name="shipping"]').parents('div.form-group').hide();
                     $('input:radio[name="shipping"][value="0"]').prop('checked','checked');
-                    $('#input-model').val("<?php echo time(); ?>");
                     $('#input-quantity').val("1000000");
 
                     $('#input-name1').on('change', function() {
                         $('#input-meta-title1').val($(this).val());
-                        $('#input-model').val($(this).val());
                     });
+
                     <?php if($is_seller == "true") { ?>
                       // Hide Filter Type from FORM - Auto-Select the type according to UG.
                       $('#chk-filter-<?php echo $default_user_type; ?>').attr("checked","checked");
@@ -124,6 +123,8 @@
                     <?php if(isset($_GET['product_id'])) { ?>
                       // Set Category in Select Drop Down for edit
                       $('#input-category').val(<?php echo $product_categories[0]['category_id']; ?>);
+                    <?php } else { ?>
+                      $('#input-model').val("<?php echo time(); ?>");
                     <?php } ?>
 
                 });
