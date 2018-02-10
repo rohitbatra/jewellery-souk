@@ -456,8 +456,8 @@
             $data['web_name'] = $this->config->get('config_name');
             $data['action_url'] = $this->url->link('account/reset', 'code=' . $code, true);
             $data['ip_address'] = $this->request->server['REMOTE_ADDR'];
-            $data['support_email'] = 'support@sezplus.com';
-            $data['support_email_link'] = 'support@sezplus.com';
+            $data['support_email'] = 'mailto:support@sezplus.com';
+            $data['support_email_link'] = 'mailto:support@sezplus.com';
           ]]></add>
         </operation>
 
