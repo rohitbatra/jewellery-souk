@@ -804,6 +804,21 @@
       ]]></add>
   </operation>
 
+
+    <operation>
+        <search position="replace"><![CDATA[
+            $this->db->query("INSERT INTO " . DB_PREFIX . "product_image SET product_id = '" . (int)$product_id . "', image = '" . $this->db->escape($product_image['image']) . "', sort_order = '" . (int)$product_image['sort_order'] . "'");
+        ]]></search>
+        <add><![CDATA[
+          if($this->user->isSeller()){
+              $this->db->query("INSERT INTO " . DB_PREFIX . "product_image SET product_id = '" . (int)$product_id . "', image = '" . $this->db->escape($product_image['image']) . "', sort_order = '" . (int)$product_image['sort_order'] . "', seller_id = '".$this->user->getId()."' ");
+          }else{
+              $this->db->query("INSERT INTO " . DB_PREFIX . "product_image SET product_id = '" . (int)$product_id . "', image = '" . $this->db->escape($product_image['image']) . "', sort_order = '" . (int)$product_image['sort_order'] . "'");
+          }
+        ]]></add>
+    </operation>
+
+
 </file>
 
 <file name="admin/model/catalog/category.php">
