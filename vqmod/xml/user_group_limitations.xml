@@ -55,7 +55,7 @@
                 }
             ]]></add>
         </operation>
-
+<!--
         <operation>
             <search position="after"><![CDATA[
                 $images = array_merge($directories, $files);
@@ -76,7 +76,7 @@
                 }
             ]]></add>
         </operation>
-
+-->
         <operation>
             <search position="replace"><![CDATA[
                 unlink($path);
