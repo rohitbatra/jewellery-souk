@@ -829,9 +829,33 @@
           <add><![CDATA[
               if($this->user->isSeller())
               {
+                // Check for Image(s) folder exist or else create it!
+                $this->checkForImageFolder();
                 $this->response->redirect($this->url->link('catalog/mproduct', 'token=' . $this->session->data['token'], true));
               }else{
                 $this->response->redirect($this->url->link('common/dashboard', 'token=' . $this->session->data['token'], true));
+              }
+          ]]></add>
+        </operation>
+
+        <operation>
+          <search position="before"><![CDATA[
+              public function index() {
+          ]]></search>
+          <add><![CDATA[
+              protected function checkForImageFolder(){
+                $seller_id = $this->user->getId();
+                $dirname = DIR_IMAGE.'/catalog/seller/SEZ_'.$seller_id;
+
+                if (!file_exists($dirname)) {
+                    mkdir($dirname, 0777);
+                    chmod($dirname, 0777);
+                    @touch($dirname'/' . 'index.html');
+                    #echo "The directory $dirname was successfully created.";
+                    #exit;
+                } else {
+                    #echo "The directory $dirname exists.";
+                }
               }
           ]]></add>
         </operation>
