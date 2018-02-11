@@ -31,6 +31,7 @@
     </file>
 
     <file name="admin/controller/common/filemanager.php">
+
         <operation>
             <search position="replace"><![CDATA[
                 move_uploaded_file($file['tmp_name'], $directory . '/' . $filename);
@@ -89,19 +90,7 @@
                 }
             ]]></add>
         </operation>
-    </file>
 
-    <file name="admin/view/template/common/filemanager.tpl">
-        <operation error="log">
-            <search position="replace"><![CDATA[
-          <button type="button" data-toggle="tooltip" title="<?php echo $button_folder; ?>" id="button-folder" class="btn btn-default"><i class="fa fa-folder"></i></button>
-            ]]></search>
-            <add><![CDATA[
-                <?php if($user_type !== "seller") { ?>
-                    <button type="button" data-toggle="tooltip" title="<?php echo $button_folder; ?>" id="button-folder" class="btn btn-default"><i class="fa fa-folder"></i></button>
-                <?php } ?>
-            ]]></add>
-        </operation>
     </file>
 
     <!-- Image Upload Box Restrictions ENDS-->
