@@ -845,7 +845,7 @@
           <add><![CDATA[
               protected function checkForImageFolder(){
                 $seller_id = $this->user->getId();
-                $dirname = DIR_IMAGE . "/catalog/seller/SEZ_{$seller_id}";
+                $dirname = DIR_IMAGE . "/catalog/seller/sez_{$seller_id}";
 
                 if (!file_exists($dirname)) {
                     mkdir($dirname, 0777);

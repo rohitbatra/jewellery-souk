@@ -96,11 +96,11 @@
                 $directory = DIR_IMAGE . 'catalog';
             ]]></search>
             <add><![CDATA[
-                if($this->user->isSeller()){
-                    $directory = DIR_IMAGE . 'catalog/seller/SEZ_'.$this->user->getId();
-                }else{
-                    $directory = DIR_IMAGE . 'catalog';
-                }
+                  if($this->user->isSeller()){
+                      $directory = DIR_IMAGE . 'catalog/seller/sez_'.$this->user->getId();
+                  }else{
+                      $directory = DIR_IMAGE . 'catalog';
+                  }
             ]]></add>
         </operation>
 
