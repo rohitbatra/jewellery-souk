@@ -52,14 +52,26 @@ class ModelSellerSeller extends Model {
             }
         }
 
+        // Make Image Folder for User
+        $this->makeImageFolder($seller_id);
+
         // Trigger Registration/Welcome email to Seller
         $this->sendWelcomeEmailToSeller($seller_id);
 
         return $seller_id;
     }
 
-    protected function sendWelcomeEmailToSeller($seller_id)
-    {
+    protected function makeImageFolder($seller_id){
+      $directory = DIR_IMAGE .'/catalog/seller';
+      $folder = "SEZ_{$seller_id}";
+      mkdir($directory . '/' . $folder, 0777);
+      chmod($directory . '/' . $folder, 0777);
+
+      @touch($directory . '/' . $folder . '/' . 'index.html');
+
+    }
+
+    protected function sendWelcomeEmailToSeller($seller_id){
 
       $seller_data = $this->getSellerById($seller_id);
 
