@@ -845,16 +845,12 @@
           <add><![CDATA[
               protected function checkForImageFolder(){
                 $seller_id = $this->user->getId();
-                $dirname = DIR_IMAGE.'/catalog/seller/SEZ_'.$seller_id;
+                $dirname = DIR_IMAGE . "/catalog/seller/SEZ_{$seller_id}";
 
                 if (!file_exists($dirname)) {
                     mkdir($dirname, 0777);
                     chmod($dirname, 0777);
-                    @touch($dirname'/' . 'index.html');
-                    #echo "The directory $dirname was successfully created.";
-                    #exit;
-                } else {
-                    #echo "The directory $dirname exists.";
+                    @touch($dirname. '/' . 'index.html');
                 }
               }
           ]]></add>
