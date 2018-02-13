@@ -63,7 +63,7 @@ class ModelSellerSeller extends Model {
 
     protected function makeImageFolder($seller_id){
       $directory = DIR_IMAGE .'/catalog/seller';
-      $folder = "SEZ_{$seller_id}";
+      $folder = "sez_{$seller_id}";
       mkdir($directory . '/' . $folder, 0777);
       chmod($directory . '/' . $folder, 0777);
 
