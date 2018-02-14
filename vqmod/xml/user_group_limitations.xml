@@ -33,6 +33,17 @@
     <file name="admin/controller/common/filemanager.php">
 
         <operation>
+            <search position="replace"><![CDATA[$directory = DIR_IMAGE . 'catalog';]]></search>
+            <add trim="true"><![CDATA[
+                  if($this->user->isSeller()){
+                      $directory = DIR_IMAGE . 'catalog/seller/sez_'.$this->user->getId();
+                  }else{
+                      $directory = DIR_IMAGE . 'catalog';
+                  }
+            ]]></add>
+        </operation>
+        
+        <operation>
             <search position="replace"><![CDATA[
                 move_uploaded_file($file['tmp_name'], $directory . '/' . $filename);
             ]]></search>
@@ -89,16 +100,6 @@
             ]]></add>
         </operation>
 
-        <operation>
-            <search position="replace"><![CDATA[$directory = DIR_IMAGE . 'catalog';]]></search>
-            <add trim="true"><![CDATA[
-                  if($this->user->isSeller()){
-                      $directory = DIR_IMAGE . 'catalog/seller/sez_'.$this->user->getId();
-                  }else{
-                      $directory = DIR_IMAGE . 'catalog';
-                  }
-            ]]></add>
-        </operation>
 <!--
         <operation>
             <search position="replace"><![CDATA[
