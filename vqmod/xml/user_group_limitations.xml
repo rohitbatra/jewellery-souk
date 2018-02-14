@@ -42,7 +42,7 @@
                   }
             ]]></add>
         </operation>
-        
+
         <operation>
             <search position="replace"><![CDATA[
                 move_uploaded_file($file['tmp_name'], $directory . '/' . $filename);
@@ -100,20 +100,23 @@
             ]]></add>
         </operation>
 
-<!--
         <operation>
             <search position="replace"><![CDATA[
                 $directory = rtrim(DIR_IMAGE . 'catalog/' . $this->request->get['directory'], '/');
             ]]></search>
             <add><![CDATA[
                   if($this->user->isSeller()){
-                      $directory = rtrim(DIR_IMAGE . 'catalog/' . $this->request->get['directory'], '/');
+                      if(empty($this->request->get['directory'])){
+                        $directory = rtrim(DIR_IMAGE . 'catalog/seller/sez_'.$this->user->getId() .'/', '/');
+                      }else{
+                        $directory = rtrim(DIR_IMAGE . 'catalog/' . $this->request->get['directory'], '/');
+                      }
                   }else{
                       $directory = rtrim(DIR_IMAGE . 'catalog/' . $this->request->get['directory'], '/');
                   }
             ]]></add>
         </operation>
--->
+
     </file>
 
     <!-- Image Upload Box Restrictions ENDS-->
