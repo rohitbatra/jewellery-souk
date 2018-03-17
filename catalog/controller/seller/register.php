@@ -386,7 +386,7 @@ class ControllerSellerRegister extends Controller {
         }
 
         // User Group Categories
-        $categoryArr = ['jewellery_manufacturer','jewellery_retailer','jewellery_wholeseller','jewellery_institute','cam_processing','freelancer','used_machinery_seller','others'];
+        $categoryArr = ['jewellery_manufacturer','jewellery_retailer','jewellery_wholeseller','jewellery_institute','cam_processing','freelancer','used_machinery_seller','diamond_seller','gemstone_seller','tools_&_machinery','others'];
 
         foreach($categoryArr as $cat)
         {

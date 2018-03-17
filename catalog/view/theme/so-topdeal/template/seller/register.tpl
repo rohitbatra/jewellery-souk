@@ -100,7 +100,7 @@
                                   <option value="<?php echo $category_c['value']; ?>"><?php echo $category_c['name']; ?></option>
                               <?php } ?>
                             </select>
-                            <a id="popover_btn" tabindex="0" class="btn btn-primary" role="button" data-toggle="popover" data-html="true" data-trigger="focus" title="Other(s) Category:" data-content="<ul><li>Raw Gold Merchant</li><li>Model(s)</li><li>Mould(s)</li><li>Packaging & Displays</li><li>Tools & Machinery </li><li>Book(s), Catalogue & Magazine(s) </li><li>Diamond & Gem Stone(s)</li></ul>"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
+                            <a id="popover_btn" tabindex="0" class="btn btn-primary" role="button" data-toggle="popover" data-html="true" data-trigger="focus" title="Other(s) Category:" data-content="<ul><li>Raw Gold Merchant</li><li>Model(s)</li><li>Mould(s)</li><li>Packaging & Displays</li><li>Book(s), Catalogue & Magazine(s) </li></ul>"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
                               <?php if ($error_category) { ?>
                               <div class="text-danger"><?php echo $error_category; ?></div>
                               <?php } ?>

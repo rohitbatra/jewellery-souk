@@ -22,7 +22,7 @@ class ModelSellerSeller extends Model {
         $data['user_group'] = 'others';
         $data['user_group_id'] = 0;
         // Check for Category to determine which user_group to choose
-        $associativeUG = array('manufacturer' => array('jewellery_manufacturer'), 'wholeseller' => array('jewellery_wholeseller'), 'retailer' => array('jewellery_retailer'), 'service' => array('jewellery_institute','cam_processing'), 'others' => array('others'), 'freelance' => array('freelancer'), 'used_item_seller' => array('used_machinery_seller'));
+        $associativeUG = array('manufacturer' => array('jewellery_manufacturer'), 'wholeseller' => array('jewellery_wholeseller'), 'retailer' => array('jewellery_retailer'), 'service' => array('jewellery_institute','cam_processing'), 'others' => array('others'), 'freelance' => array('freelancer'), 'used_item_seller' => array('used_machinery_seller'), 'diamond_seller' => array('diamond_seller'), 'gemstone_seller' => array('gemstone_seller'),'tools_&_machinery' => array('tools_&_machinery'));
 
         foreach($associativeUG as $user_group => $possibleCategories)
         {
