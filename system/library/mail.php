@@ -1,6 +1,8 @@
 <?php
 class Mail {
 	protected $to;
+	protected $cc;
+	protected $bcc;
 	protected $from;
 	protected $sender;
 	protected $reply_to;
@@ -25,6 +27,14 @@ class Mail {
 
 	public function setTo($to) {
 		$this->to = $to;
+	}
+
+	public function setCc($cc) {
+		$this->cc = $cc;
+	}
+
+	public function setBcc($bcc) {
+		$this->bcc = $bcc;
 	}
 
 	public function setFrom($from) {
@@ -91,15 +101,61 @@ class Mail {
 			$header .= 'Subject: =?UTF-8?B?' . base64_encode($this->subject) . '?=' . PHP_EOL;
 		}
 
+		if($this->cc){
+			if (is_array($this->cc)) {
+				if (is_array($this->to)) {
+					foreach($this->to as $to_email) {
+						foreach (array_keys($this->cc, $to_email) as $key) {
+							unset($this->cc[$key]);
+						}
+					}
+			}else{
+				foreach (array_keys($this->cc, $this->to) as $key) {
+					unset($this->cc[$key]);
+				}
+			}
+
+			$this->bcc = array_values(array_unique($this->cc));
+			$bcc = implode(',', $this->cc);
+			$header .= "cc: ".$cc."\n";
+		}else if(($this->bcc != $this->to) || (is_array($this->to) && !in_array($this->bcc,$this->to))){
+			$bcc = $this->bcc;
+			$header .= "cc: ".$cc."\n";
+			}
+		}
+
+		if($this->bcc){
+			if (is_array($this->bcc)) {
+				if (is_array($this->to)) {
+					foreach($this->to as $to_email) {
+						foreach (array_keys($this->bcc, $to_email) as $key) {
+							unset($this->bcc[$key]);
+						}
+					}
+			}else{
+				foreach (array_keys($this->bcc, $this->to) as $key) {
+					unset($this->bcc[$key]);
+				}
+			}
+
+			$this->bcc = array_values(array_unique($this->bcc));
+			$bcc = implode(',', $this->bcc);
+			$header .= "bcc: ".$bcc."\n";
+		}else if(($this->bcc != $this->to) || (is_array($this->to) && !in_array($this->bcc,$this->to))){
+			$bcc = $this->bcc;
+			$header .= "bcc: ".$bcc."\n";
+			}
+		}
+
 		$header .= 'Date: ' . date('D, d M Y H:i:s O') . PHP_EOL;
 		$header .= 'From: =?UTF-8?B?' . base64_encode($this->sender) . '?= <' . $this->from . '>' . PHP_EOL;
-		
+
 		if (!$this->reply_to) {
 			$header .= 'Reply-To: =?UTF-8?B?' . base64_encode($this->sender) . '?= <' . $this->from . '>' . PHP_EOL;
 		} else {
 			$header .= 'Reply-To: =?UTF-8?B?' . base64_encode($this->reply_to) . '?= <' . $this->reply_to . '>' . PHP_EOL;
 		}
-		
+
 		$header .= 'Return-Path: ' . $this->from . PHP_EOL;
 		$header .= 'X-Mailer: PHP/' . phpversion() . PHP_EOL;
 		$header .= 'Content-Type: multipart/mixed; boundary="' . $boundary . '"' . PHP_EOL . PHP_EOL;
@@ -172,8 +228,8 @@ class Mail {
 				if (substr(PHP_OS, 0, 3) != 'WIN') {
 					socket_set_timeout($handle, $this->smtp_timeout, 0);
 				}
-	
-		
+
+
 				while ($line = fgets($handle, 515)) {
 					if (substr($line, 3, 1) == ' ') {
 						break;
