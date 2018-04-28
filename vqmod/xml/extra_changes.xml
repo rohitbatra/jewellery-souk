@@ -741,7 +741,7 @@
                  $seller_type = $row['name'];
               }
 
-              $data['seller_type'] = seller_type;
+              $data['seller_type'] = $seller_type;
           ]]></add>
         </operation>
 
