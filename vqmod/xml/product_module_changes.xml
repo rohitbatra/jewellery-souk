@@ -897,6 +897,15 @@
       ]]></add>
   </operation>
 
+  <operation>
+      <search position="after"><![CDATA[
+          tax:     item.tax,
+      ]]></search>
+      <add><![CDATA[
+          seller_type: item.seller_type,
+      ]]></add>
+  </operation>
+
 </file>
 
 <file name="catalog/controller/extension/module/so_searchpro.php">
