@@ -18,7 +18,7 @@
       </operation>
 
       <operation>
-          <search position="replace" offset="3"><![CDATA[
+          <search position="replace" offset="2"><![CDATA[
               <li><a href="#tab-option" data-toggle="tab"><?php echo $tab_option; ?></a></li>
           ]]></search>
           <add><![CDATA[
