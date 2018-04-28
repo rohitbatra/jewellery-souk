@@ -1,10 +1,10 @@
-<?php  
+<?php
 class ControllerExtensionModuleSosearchpro extends Controller {
-	
+
 	private $data = array();
 
-	public function index( $setting ) { 
-		
+	public function index( $setting ) {
+
 		static $module = 0;
 		$this->load->language('extension/module/so_searchpro');
 		$this->load->model('tool/image');
@@ -12,17 +12,17 @@ class ControllerExtensionModuleSosearchpro extends Controller {
 		$this->load->model('catalog/product');
 		$this->load->model('extension/module/so_searchpro');
 		$this->document->addStyle('catalog/view/javascript/so_searchpro/css/so_searchpro.css');
-		
+
 		/*Entry */
-		$this->data['text_search'] 			= $this->language->get('text_search');	
-		$this->data['text_category_all'] 	= $this->language->get('text_category_all');	
-		$this->data['text_tax'] 			= $this->language->get('text_tax');	
-		$this->data['text_price'] 			= $this->language->get('text_price');	
+		$this->data['text_search'] 			= $this->language->get('text_search');
+		$this->data['text_category_all'] 	= $this->language->get('text_category_all');
+		$this->data['text_tax'] 			= $this->language->get('text_tax');
+		$this->data['text_price'] 			= $this->language->get('text_price');
 		$this->data['button_cart'] 			= $this->language->get('button_cart');
 		$this->data['button_wishlist'] 		= $this->language->get('button_wishlist');
-		$this->data['button_compare'] 		= $this->language->get('button_compare');	
+		$this->data['button_compare'] 		= $this->language->get('button_compare');
 		/*End Entry */
-		
+
 		/*Data */
 		$this->data['disp_title_module'] = (int)$setting['disp_title_module'] ;
 		$this->data['additional_class'] = isset($setting['class']) ? $setting['class']:'';
@@ -31,19 +31,19 @@ class ControllerExtensionModuleSosearchpro extends Controller {
 		$this->data['width'] = isset($setting['width']) ? $setting['width'] : 50 ;
 		$this->data['character'] = isset($setting['character']) ? $setting['character'] : 2 ;
 		$this->data['showimage'] = isset($setting['showimage']) ? $setting['showimage'] : '1';
-		$this->data['showprice'] = isset($setting['showprice']) ? $setting['showprice'] : '1';		
+		$this->data['showprice'] = isset($setting['showprice']) ? $setting['showprice'] : '1';
 		$this->data['showcategory'] = isset($setting['showcategory']) ? $setting['showcategory']:'1';
-		
+
 		//=== Theme Custom Code====
 		$this->data['type_layout'] = isset($setting['type_layout']) ? $setting['type_layout']:'0';
 		$this->data['typeheader']  = $this->soconfig->get_settings('typeheader');
-		
+
 		if (isset($setting['module_description'][$this->config->get('config_language_id')])) {
 			$this->data['head_name'] = html_entity_decode($setting['module_description'][$this->config->get('config_language_id')]['head_name'], ENT_QUOTES, 'UTF-8');
 		}else{
 			$data['head_name']  = html_entity_decode($setting['head_name'], ENT_QUOTES, 'UTF-8');
 		}
-		
+
 		if(!isset($setting['str_keyword'])){
 			$setting['str_keyword']= "Keywords";
 		}
@@ -58,23 +58,23 @@ class ControllerExtensionModuleSosearchpro extends Controller {
 			$this->data['str_keyword']  = $setting['str_keyword'];
 		}
 		$this->data['categories'] = array();
-		
+
 		/*End Data //Code by tunghv */
 		if($this->data['showcategory'] && $this->data['showcategory'] == 1){
-	
+
 			$this->data['categories'] = array();
 			$this->data['category_id'] = 0;
-			/* Level 1 */	
+			/* Level 1 */
 			$categories = $this->model_catalog_category->getCategories(0);
 
 			foreach ($categories as $category) {
 				$children_2 = array();
-				/* Level 2 */	
+				/* Level 2 */
 				$categories_lv2 = $this->model_catalog_category->getCategories($category['category_id']);
 
 				foreach ($categories_lv2 as $category_lv2) {
 					$children_3 = array();
-					/* Level 3 */	
+					/* Level 3 */
 					$categories_lv3 = $this->model_catalog_category->getCategories($category_lv2['category_id']);
 
 					foreach ($categories_lv3 as $category_lv3) {
@@ -85,12 +85,12 @@ class ControllerExtensionModuleSosearchpro extends Controller {
 					}
 
 					$children_2[] = array(
-						'category_id' => $category_lv2['category_id'],	
+						'category_id' => $category_lv2['category_id'],
 						'name'        => $category_lv2['name'],
 						'children'    => $children_3
-					);					
+					);
 				}
-				
+
 				$this->data['categories'][] = array(
 					'category_id' => $category['category_id'],
 					'name'        => $category['name'],
@@ -99,9 +99,9 @@ class ControllerExtensionModuleSosearchpro extends Controller {
 			}
 
 		}
-		
+
 		$this->data['module'] = $module++;
-		
+
 		if(!isset($setting['show_keyword'])){
 			$setting['show_keyword'] = 1;
 		}
@@ -110,7 +110,7 @@ class ControllerExtensionModuleSosearchpro extends Controller {
 		}
 		$this->data['list_products'] = self::getProducts($setting);
 		$this->data['show_keyword'] = $setting['show_keyword'];
-		
+
 		// caching
 		$use_cache = (int)$setting['use_cache'];
 		$cache_time = (int)$setting['cache_time'];
@@ -124,7 +124,7 @@ class ControllerExtensionModuleSosearchpro extends Controller {
 			'cacheDir' => $folder_cache,
 			'lifeTime' => $cache_time
 		);
-		
+
 		//=== Theme Custom Code====
 		$Cache_Lite = new Cache_Lite($options);
 		if ($use_cache){
@@ -134,7 +134,7 @@ class ControllerExtensionModuleSosearchpro extends Controller {
 				// Check Version
 				if(version_compare(VERSION, '2.1.0.2', '>')) {
 					$_data = $this->getLayoutMod('so_searchpro',$setting,$this->data,$this->data['type_layout']);
-				
+
 				}else{
 					$tem_url = $this->config->get('config_template') . '/template/extension/module/so_searchpro/default.tpl';
 					$template_file = DIR_TEMPLATE . $tem_url ? DIR_TEMPLATE . $tem_url : '';
@@ -155,7 +155,7 @@ class ControllerExtensionModuleSosearchpro extends Controller {
 			if(version_compare(VERSION, '2.1.0.2', '>')) {
 				$_data = $this->getLayoutMod('so_searchpro',$setting,$this->data,$this->data['type_layout'],$this->data['typeheader'],$this->getHeader());
 				return  $_data;
-				
+
 			}else{
 				$tem_url = $this->config->get('config_template') . '/template/extension/module/so_searchpro/default.tpl';
 				$template_file = DIR_TEMPLATE . $tem_url ? DIR_TEMPLATE . $tem_url : '';
@@ -164,30 +164,30 @@ class ControllerExtensionModuleSosearchpro extends Controller {
 				}
 			}
 		}
-		
+
 	}
-	
+
 	//=== Theme Custom Code====
 	public function getHeader(){
 		$fileNames_header='';
 		$header_directory  = DIR_TEMPLATE.$this->config->get('theme_default_directory').'/template/header';
 		if (is_dir($header_directory)) {
 			$file_header = scandir($header_directory);
-			
+
 			foreach ($file_header as  $item_header) {
 				if (strpos($item_header, '.tpl') == true) {
-					
-					list($fileName_header) = explode('.tpl',$item_header); 
+
+					list($fileName_header) = explode('.tpl',$item_header);
 					$fileNames_header[] = ucfirst($fileName_header);
-					
+
 				}
 			}
-		} 
+		}
 		return  isset($fileNames_header) ? $fileNames_header : '' ;
 	}
-	
+
 	public function getLayoutMod($name=null,$setting,$data,$type_layout,$typeheader,$getHeader){
-		
+
 		$log_directory  = DIR_TEMPLATE.$this->config->get('theme_default_directory').'/template/extension/module/'.$name;
 		$type_morelayout = '';
 		$header_display='';
@@ -198,26 +198,26 @@ class ControllerExtensionModuleSosearchpro extends Controller {
 					$fileNames[] = $value;
 				}
 			}
-		} 
+		}
 
 		if(!empty($getHeader)){
 			$fileNames = isset($fileNames) ? $fileNames : '';
-			
+
 			foreach($getHeader as $header_id => $header_value){
 				$header_id++;
 				if($header_id == $typeheader){
-					
+
 					if (isset($setting['header_display'.$header_id])) $header_display = $setting['header_display'.$header_id];
-					
+
 				}
-				
+
 			}
-			
+
 			if($header_display){
 				foreach($fileNames as $option_id => $option_value){
-					
+
 					if($option_id == $type_layout){
-						
+
 						$type_morelayout = $this->load->view('extension/module/'.$name.'/'.$option_value, $data);
 					}
 				}
@@ -232,12 +232,12 @@ class ControllerExtensionModuleSosearchpro extends Controller {
 			'sort'			=> 'p.viewed',
 			'order'			=> 'DESC',
 			'limit'        	=> $setting['limit_keyword'] ,
-			'start'        	=> '0' 
+			'start'        	=> '0'
 		);
 		$data['products'] = '';
 		$data['list_products']= array();
 		$products_arr = $this->model_extension_module_so_searchpro->getProducts($filter_data);
-		
+
 		foreach($products_arr as $product_info){
 			// Name
 			$name = $product_info['name'];
@@ -252,7 +252,7 @@ class ControllerExtensionModuleSosearchpro extends Controller {
 		}
 		return $data['list_products'];
 	}
-	
+
 	public function autocomplete() {
 		$json = array();
 
@@ -261,7 +261,7 @@ class ControllerExtensionModuleSosearchpro extends Controller {
 			$this->load->model('tool/image');
 			$this->load->model('catalog/product');
 			$this->load->model('catalog/category');
-			
+
 			if (isset($this->request->get['filter_name'])) {
 				$filter_name = $this->request->get['filter_name'];
 			} else {
@@ -275,22 +275,22 @@ class ControllerExtensionModuleSosearchpro extends Controller {
 			}
 
 			if (isset($this->request->get['limit'])) {
-				$limit = $this->request->get['limit'];	
+				$limit = $this->request->get['limit'];
 			} else {
-				$limit = 20;	
+				$limit = 20;
 			}
-			
+
 			if (isset($this->request->get['width'])) {
-				$width = $this->request->get['width'];	
+				$width = $this->request->get['width'];
 			} else {
-				$width = 64;	
+				$width = 64;
 			}
 
 			if (isset($this->request->get['height'])) {
-				$height = $this->request->get['height'];	
+				$height = $this->request->get['height'];
 			} else {
-				$height = 64;	
-			}			
+				$height = 64;
+			}
 
 			$data = array(
 				'filter_name'  => $filter_name,
@@ -299,8 +299,9 @@ class ControllerExtensionModuleSosearchpro extends Controller {
 				'start'        => 0,
 				'limit'        => $limit
 			);
-			
+
 			$results = $this->model_catalog_product->getProducts($data);
+			print_r($results);exit;
 			$total = $this->model_catalog_product->getTotalProducts($data);
 			foreach ($results as $result) {
 				if ($result['image']) {
@@ -365,14 +366,14 @@ class ControllerExtensionModuleSosearchpro extends Controller {
 				   $categories_info = $this->model_catalog_category->getCategory($categories[0]['category_id']);
 				   $path=	$this->getCategoryPath($categories[0]['category_id']);
 				   $category_name = (isset($categories_info['name']) && $categories_info['name']) ? $categories_info['name'] : '';
-				}   
-  
-				
+				}
+
+
 				$json[] = array(
 					'total' => $total,
 					'product_id' => $result['product_id'],
-					'name'       => strip_tags(html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8')),	
-					'category_name' => strip_tags(html_entity_decode($category_name, ENT_QUOTES, 'UTF-8')),	
+					'name'       => strip_tags(html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8')),
+					'category_name' => strip_tags(html_entity_decode($category_name, ENT_QUOTES, 'UTF-8')),
 					'model'      => $result['model'],
 					'image'		 => $image,
 					'link'		 => $this->url->link('product/product','path='.$path.'&product_id='.$result['product_id']),
@@ -380,24 +381,24 @@ class ControllerExtensionModuleSosearchpro extends Controller {
 					'tax'		 => $tax,
 					'price'      => $price,
 					'minimum'    =>  $result['minimum']
-				);	
+				);
 			}
-			
+
 		}
-		
+
 		$this->response->setOutput(json_encode($json));
 	}
-	
+
 	public function getCategoryPath($category_id){
         $path = '';
 			$category = $this->db->query("SELECT * FROM " . DB_PREFIX . "category c WHERE c.category_id = " .(int)($category_id));
-	   
+
 		if($category->row['parent_id'] != 0){
 			$path .= $this->getCategoryPath($category->row['parent_id']) . '_';
 		}
-	   
+
 	   $path .= $category->row['category_id'];
-	   
+
 		return $path;
 	}
 }
