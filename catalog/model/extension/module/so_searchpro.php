@@ -138,7 +138,7 @@ class ModelExtensionModuleSosearchpro extends Model {
 		}
 
 		$product_data = array();
-print($sql);
+
 		$query = $this->db->query($sql);
 		foreach ($query->rows as $result) {
 			$product_data[$result['product_id']] = $this->model_catalog_product->getProduct($result['product_id']);
