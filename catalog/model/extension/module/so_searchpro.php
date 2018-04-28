@@ -1,14 +1,14 @@
 <?php
 class ModelExtensionModuleSosearchpro extends Model {
-	
+
 	public function getImageProduct_basic_products($product_id) {
 		$sql = "SELECT * FROM " . DB_PREFIX . "product_image WHERE  product_id ='".$product_id."' ORDER BY sort_order ASC;";
 		$query = $this->db->query($sql);
 		return $query->rows;
 	}
-	
+
 	public function getProducts($data = array()) {
-		
+
 		$sql = "SELECT p.product_id, (SELECT AVG(rating) AS total FROM " . DB_PREFIX . "review r1 WHERE r1.product_id = p.product_id AND r1.status = '1' GROUP BY r1.product_id) AS rating, (SELECT price FROM " . DB_PREFIX . "product_discount pd2 WHERE pd2.product_id = p.product_id AND pd2.customer_group_id = '" . (int)$this->config->get('config_customer_group_id') . "' AND pd2.quantity = '1' AND ((pd2.date_start = '0000-00-00' OR pd2.date_start < NOW()) AND (pd2.date_end = '0000-00-00' OR pd2.date_end > NOW())) ORDER BY pd2.priority ASC, pd2.price ASC LIMIT 1) AS discount, (SELECT price FROM " . DB_PREFIX . "product_special ps WHERE ps.product_id = p.product_id AND ps.customer_group_id = '" . (int)$this->config->get('config_customer_group_id') . "' AND ((ps.date_start = '0000-00-00' OR ps.date_start < NOW()) AND (ps.date_end = '0000-00-00' OR ps.date_end > NOW())) ORDER BY ps.priority ASC, ps.price ASC LIMIT 1) AS special,(SELECT SUM(op.quantity) AS total FROM " . DB_PREFIX . "order_product op LEFT JOIN `" . DB_PREFIX . "order` o ON (op.order_id = o.order_id)  WHERE o.order_status_id > '0' AND op.product_id = p.product_id GROUP BY op.product_id ORDER BY total) AS sales";
 
 		if (!empty($data['filter_category_id'])) {
@@ -33,7 +33,7 @@ class ModelExtensionModuleSosearchpro extends Model {
 			if (!empty($data['filter_sub_category'])) {
 				$sql .= " AND cp.path_id = '" . (int)$data['filter_category_id'] . "'";
 			} else {
-				
+
 				$sql .= " AND p2c.category_id IN (" . $data['filter_category_id'] . ")";
 			}
 			if (!empty($data['filter_filter'])) {
@@ -138,7 +138,7 @@ class ModelExtensionModuleSosearchpro extends Model {
 		}
 
 		$product_data = array();
-
+print($sql);
 		$query = $this->db->query($sql);
 		foreach ($query->rows as $result) {
 			$product_data[$result['product_id']] = $this->model_catalog_product->getProduct($result['product_id']);
