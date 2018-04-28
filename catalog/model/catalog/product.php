@@ -196,7 +196,7 @@ class ModelCatalogProduct extends Model {
 		}
 
 		$product_data = array();
-print($sql);
+
 		$query = $this->db->query($sql);
 
 		foreach ($query->rows as $result) {
