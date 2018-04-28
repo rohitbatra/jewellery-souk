@@ -98,7 +98,7 @@
 
 				$(this).siblings('ul.dropdown-menu').css({
 					top: pos.top + $(this).outerHeight(),
-					
+
 				});
 
 				$(this).siblings('ul.dropdown-menu').show();
@@ -223,6 +223,7 @@ $(document).ready(function() {
 								price:   item.price,
 								special: item.special,
 								tax:     item.tax,
+								seller_type: item.seller_type,
 								label:   item.name,
 								cate_name:   (item.category_name) ? item.category_name + ' > ' : '',
 								image:   item.image,
