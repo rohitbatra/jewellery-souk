@@ -669,6 +669,9 @@
               <?php if ($manufacturer): ?>
           ]]></search>
           <add><![CDATA[
+            <?php if ($seller_type && !empty($seller_type)){ ?>
+              <div class="brand"><span><?php echo $text_seller_type; ?></span><?php echo $seller_type; ?></div>
+            <?php } ?>
             <?php if ($location): ?>
               <div class="brand"><span><?php echo $text_location; ?></span><?php echo $location; ?></div>
             <?php endif; ?>
@@ -707,6 +710,7 @@
           ]]></search>
           <add><![CDATA[
               $_['text_location']                = 'Location:';
+              $_['text_seller_type']                = 'Seller Type:';
               $_['text_dimensions']                = 'Dimensions (L x W x H):';
               $_['text_weight']                = 'Weight:';
           ]]></add>
@@ -730,6 +734,14 @@
               $data['weight_class'] = $this->model_catalog_product->getWeightClassSuffix($product_info['weight_class_id']);
               $data['length_class'] = $this->model_catalog_product->getLengthClassSuffix($product_info['length_class_id']);
 
+              $seller_type = "";
+              $sql_seller_type = "SELECT ug.name FROM product AS p INNER JOIN `user` u ON (p.seller_id = u.user_id) INNER JOIN user_group ug ON (ug.user_group_id = u.user_group_id) WHERE p.product_id = '{$product_info['product_id']}'";
+              $query = $this->db->query($sql_seller_type);
+              foreach ($query->rows as $row) {
+                 $seller_type = $row['name'];
+              }
+
+              $data['seller_type'] = seller_type;
           ]]></add>
         </operation>
 
@@ -738,6 +750,7 @@
               $data['text_write'] = $this->language->get('text_write');
           ]]></search>
           <add><![CDATA[
+              $data['text_seller_type'] = $this->language->get('text_seller_type');
               $data['text_location'] = $this->language->get('text_location');
               $data['text_dimensions'] = $this->language->get('text_dimensions');
               $data['text_weight'] = $this->language->get('text_weight');
