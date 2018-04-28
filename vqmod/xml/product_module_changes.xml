@@ -892,7 +892,7 @@
           html += '<span class="price-tax hidden"><?php echo $text_tax;?> : ' + json[i]['tax'] + '</span>';
         }
         if (json[i]['seller_type'] && json[i]['seller_type'] !== "") {
-          html += '<span class="price-tax"> ' + json[i]['seller_type'] + '</span>';
+          html += '<br/><span class="label-product label-sale"> ' + json[i]['seller_type'] + '</span>';
         }
       ]]></add>
   </operation>
