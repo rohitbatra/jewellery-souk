@@ -203,7 +203,6 @@
                     <div class="text-danger"><?php echo $error_product_category; ?></div>
                   <?php } ?>
                 </div>
-
               <?php } ?>
           ]]></add>
       </operation>
@@ -260,15 +259,13 @@
       <!-- Filter Easy UI for SELLERS -->
 
       <!-- Restrict 5 Images per Product -->
-
       <operation>
           <search position="replace"><![CDATA[
             function addImage() {
           ]]></search>
           <add><![CDATA[
             function addImage() {
-              if(image_row > '4')
-              {
+              if(image_row > '4') {
                 alert("Sorry only 5 Images per Product are Allowed!");
               } else {
                 html  = '<tr id="image-row' + image_row + '">';
@@ -328,7 +325,7 @@
     </file>
 
     <file name="admin/language/en-gb/soconfig/mproduct.php">
-      <!-- Making Category & Price Compulsory -->
+        <!-- Making Category & Price Compulsory -->
         <operation>
             <search position="before"><![CDATA[
               $_['error_model']            = 'Product Model must be greater than 1 and less than 64 characters!';
@@ -408,21 +405,17 @@
           if (isset($this->request->post['height'])) {
       ]]></search>
       <add><![CDATA[
-
           // Seller
-          if (isset($this->request->post['created_using']))
-          {
+          if (isset($this->request->post['created_using'])) {
               $data['seller'] = $this->request->post['seller'];
-          } elseif (!empty($product_info) && !empty($product_info['seller_id']))
-          {
+          } elseif (!empty($product_info) && !empty($product_info['seller_id'])) {
               $data['seller'] = $this->model_soconfig_mproduct->getSellerName($product_info['seller_id']);
           } else {
               $data['seller'] = 'Me';
           }
 
           $data['is_seller'] = false;
-          if($this->user->isSeller())
-          {
+          if($this->user->isSeller()) {
               $data['is_seller'] = true;
               // Fetch Categories if Seller
               $this->load->model('catalog/category');
@@ -433,16 +426,13 @@
   </operation>
 
   <!-- Making Category Compulsory -->
-
   <operation>
       <search position="before"><![CDATA[
           if ((utf8_strlen($this->request->post['model']) < 1) || (utf8_strlen($this->request->post['model']) > 64)) {
       ]]></search>
       <add><![CDATA[
-            if($this->user->isSeller())
-            {
-              if(isset($this->request->post['product_category']))
-              {
+            if($this->user->isSeller()) {
+              if(isset($this->request->post['product_category'])) {
                 foreach($this->request->post['product_category'] as $category)
                 {
                   if (trim($category) == "*") {
@@ -452,8 +442,7 @@
               }
             }else{
 
-              if(!empty($this->request->post['product_category']))
-              {
+              if(!empty($this->request->post['product_category'])) {
                   foreach($this->request->post['product_category'] as $category_id)
                   {
                       if (empty($category_id)) {
@@ -473,6 +462,7 @@
 
       ]]></add>
   </operation>
+
   <operation>
       <search position="before"><![CDATA[
           if (isset($this->error['name'])) {
@@ -521,8 +511,7 @@
       ]]></search>
       <add><![CDATA[
         $seller_id = 0;
-        if($this->user->isSeller())
-        {
+        if($this->user->isSeller()) {
             $seller_id = $this->user->getId();
         }
       ]]></add>
@@ -535,8 +524,7 @@
       <add><![CDATA[
         $seller_id = 0;
         $is_seller = false;
-        if($this->user->isSeller())
-        {
+        if($this->user->isSeller()) {
             $seller_id = $this->user->getId();
             $is_seller = true;
         }
@@ -558,29 +546,24 @@
       ]]></search>
       <add><![CDATA[
 
-        if (isset($this->request->post['brand']))
-        {
-            $data['brand'] = $this->request->post['brand'];
-        } elseif (!empty($product_info) && !empty($product_info['brand']))
-        {
-            $data['brand'] = ($product_info['brand']);
-        } else {
-            $data['brand'] = '';
-        }
+          if (isset($this->request->post['brand'])) {
+              $data['brand'] = $this->request->post['brand'];
+          } elseif (!empty($product_info) && !empty($product_info['brand'])) {
+              $data['brand'] = ($product_info['brand']);
+          } else {
+              $data['brand'] = '';
+          }
 
           $data['all_product_filters'] =  $temp = array();
           $data['filters_str'] = '';
           $data['default_user_type'] = 0;
           $data['is_seller'] = false;
-          if($this->user->isSeller())
-          {
+          if($this->user->isSeller()) {
             $data['is_seller'] = true;
             //$fg_raw = $this->model_catalog_filter->getFilterGroups();
             $fg_raw = $this->model_catalog_filter->getFilterGroupsByUg($this->user->getGroupId());
 
-
-            foreach($fg_raw as $g)
-            {
+            foreach($fg_raw as $g) {
               $fg[] = array('name' => $g['name'],'fg_id' => $g['filter_group_id'], 'options' => $this->model_catalog_filter->getFiltersByGroupId($g['filter_group_id']));
             }
 
@@ -591,19 +574,16 @@
 
             $data['default_user_type'] = $this->model_catalog_filter->getTypeFilterByUg($ug);
 
-            if(!empty($data['product_filters']))
-            {
+            if(!empty($data['product_filters'])) {
               foreach($data['product_filters'] as $filter)
               {
                 $temp[] = $filter['filter_id'];
               }
-
               $data['filters_str'] = implode(',',$temp);
             }
           }
       ]]></add>
   </operation>
-
 
   <operation>
       <search position="before"><![CDATA[
@@ -612,8 +592,7 @@
       <add><![CDATA[
           $data['entry_seller'] = $this->language->get('entry_seller');
           $data['is_seller'] = false;
-          if($this->user->isSeller())
-          {
+          if($this->user->isSeller()) {
             $data['is_seller'] = true;
           }
 
@@ -669,7 +648,6 @@
       ]]></add>
   </operation>
 
-
   <operation>
       <search position="before"><![CDATA[
           public function add() {
@@ -680,13 +658,11 @@
             $this->load->model('seller/seller');
             $seller_info = $this->model_seller_seller->getSeller($seller_id);
 
-            if(!empty($seller_info))
-            {
+            if(!empty($seller_info)) {
                 return $seller_info['username'];
             }else{
                 return "";
             }
-
           }
       ]]></add>
   </operation>
@@ -720,7 +696,7 @@
 
         public function getTypeFilterByUg($user_group_id) {
 
-          $sql = "SELECT fd.filter_id FROM " . DB_PREFIX . "filter_description AS fd RIGHT JOIN filter_group_description fgd ON (fgd.filter_group_id = fd.filter_group_id)  WHERE fd.name LIKE (SELECT ug.name FROM user_group as ug WHERE ug.user_group_id = '" . (int)$user_group_id . "') AND LOWER(fgd.name) LIKE 'type' ";
+          $sql = "SELECT fd.filter_id FROM " . DB_PREFIX . "filter_description AS fd WHERE fd.name LIKE (SELECT ug.name FROM user_group as ug WHERE ug.user_group_id = '" . (int)$user_group_id . "') ";
 
           $query = $this->db->query($sql);
 
@@ -804,20 +780,18 @@
       ]]></add>
   </operation>
 
-
-    <operation>
-        <search position="replace"><![CDATA[
+  <operation>
+      <search position="replace"><![CDATA[
+          $this->db->query("INSERT INTO " . DB_PREFIX . "product_image SET product_id = '" . (int)$product_id . "', image = '" . $this->db->escape($product_image['image']) . "', sort_order = '" . (int)$product_image['sort_order'] . "'");
+      ]]></search>
+      <add><![CDATA[
+        if($this->user->isSeller()){
+            $this->db->query("INSERT INTO " . DB_PREFIX . "product_image SET product_id = '" . (int)$product_id . "', image = '" . $this->db->escape($product_image['image']) . "', sort_order = '" . (int)$product_image['sort_order'] . "', seller_id = '".$this->user->getId()."' ");
+        }else{
             $this->db->query("INSERT INTO " . DB_PREFIX . "product_image SET product_id = '" . (int)$product_id . "', image = '" . $this->db->escape($product_image['image']) . "', sort_order = '" . (int)$product_image['sort_order'] . "'");
-        ]]></search>
-        <add><![CDATA[
-          if($this->user->isSeller()){
-              $this->db->query("INSERT INTO " . DB_PREFIX . "product_image SET product_id = '" . (int)$product_id . "', image = '" . $this->db->escape($product_image['image']) . "', sort_order = '" . (int)$product_image['sort_order'] . "', seller_id = '".$this->user->getId()."' ");
-          }else{
-              $this->db->query("INSERT INTO " . DB_PREFIX . "product_image SET product_id = '" . (int)$product_id . "', image = '" . $this->db->escape($product_image['image']) . "', sort_order = '" . (int)$product_image['sort_order'] . "'");
-          }
-        ]]></add>
-    </operation>
-
+        }
+      ]]></add>
+  </operation>
 
 </file>
 
@@ -894,7 +868,6 @@
       ]]></add>
   </operation>
 
-
   <operation>
       <search position="replace"><![CDATA[
           <td class="text-left"><?php echo $product['name']  ; ?>  <?php if( !empty($product['video1']) || !empty($product['tab_title']) ) echo $featured = '<span class="label label-info">Featured</span>'; ?></td>
@@ -904,7 +877,57 @@
       ]]></add>
   </operation>
 
+</file>
+
+
+<!-- Search List Edits -->
+
+<file name="catalog/view/theme/so-topdeal/template/extension/module/so_searchpro/default.tpl">
+
+  <operation>
+      <search position="replace" offset="2"><![CDATA[
+          if (json[i]['tax']) {
+      ]]></search>
+      <add><![CDATA[
+        if (json[i]['tax']) {
+          html += '<span class="price-tax hidden"><?php echo $text_tax;?> : ' + json[i]['tax'] + '</span>';
+        }
+        if (json[i]['seller_type'] && json[i]['seller_type'] !== "") {
+          html += '<span class="price-tax"> ' + json[i]['seller_type'] + '</span>';
+        }
+      ]]></add>
+  </operation>
 
 </file>
+
+<file name="catalog/controller/extension/module/so_searchpro.php">
+
+  <operation>
+      <search position="before"><![CDATA[
+          $json[] = array(
+      ]]></search>
+      <add><![CDATA[
+        // Check for Seller Type
+				$seller_type = "";
+				$sql_seller_type = "SELECT ug.name FROM product AS p INNER JOIN `user` u ON (p.seller_id = u.user_id) INNER JOIN user_group ug ON (ug.user_group_id = u.user_group_id) WHERE p.product_id = '{$result['product_id']}'";
+				$query = $this->db->query($sql_seller_type);
+				foreach ($query->rows as $row) {
+					 $seller_type = $row['name'];
+				}
+      ]]></add>
+  </operation>
+
+  <operation>
+      <search position="after"><![CDATA[
+          'price'      => $price,
+      ]]></search>
+      <add><![CDATA[
+        'seller_type' => $seller_type,
+      ]]></add>
+  </operation>
+
+</file>
+
+<!-- Search List Edits -- ENDS -->
 
 </modification>
