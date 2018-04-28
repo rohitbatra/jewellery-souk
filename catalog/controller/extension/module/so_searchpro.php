@@ -367,14 +367,6 @@ class ControllerExtensionModuleSosearchpro extends Controller {
 				   $category_name = (isset($categories_info['name']) && $categories_info['name']) ? $categories_info['name'] : '';
 				}
 
-				// Check for Seller Type
-				$seller_type = "";
-				$sql_seller_type = "SELECT ug.name FROM product AS p INNER JOIN `user` u ON (p.seller_id = u.user_id) INNER JOIN user_group ug ON (ug.user_group_id = u.user_group_id) WHERE p.product_id = '{$result['product_id']}'";
-				$query = $this->db->query($sql_seller_type);
-				foreach ($query->rows as $row) {
-					 $seller_type = $row['name'];
-				}
-
 
 				$json[] = array(
 					'total' => $total,
@@ -387,7 +379,6 @@ class ControllerExtensionModuleSosearchpro extends Controller {
 					'special'	 => $special,
 					'tax'		 => $tax,
 					'price'      => $price,
-					'seller_type' => $seller_type,
 					'minimum'    =>  $result['minimum']
 				);
 			}
