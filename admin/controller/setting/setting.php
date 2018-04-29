@@ -1016,8 +1016,8 @@ class ControllerSettingSetting extends Controller {
 
 		if (isset($this->request->post['config_mail_alert'])) {
 			$data['config_mail_alert'] = $this->request->post['config_mail_alert'];
-		} elseif ($this->config->has('config_mail_alert_email')) {
-		   	$data['config_mail_alert'] = $this->config->get('config_mail_alert_email');
+		} elseif ($this->config->has('config_mail_alert')) {
+		   	$data['config_mail_alert'] = $this->config->get('config_mail_alert');
 		} else {
 			$data['config_mail_alert'] = array();
 		}
@@ -1047,7 +1047,7 @@ class ControllerSettingSetting extends Controller {
 		if (isset($this->request->post['config_alert_email'])) {
 			$data['config_alert_email'] = $this->request->post['config_alert_email'];
 		} else {
-			$data['config_alert_email'] = $this->config->get('config_alert_email');
+			$data['config_alert_email'] = $this->config->get('config_mail_alert_email');
 		}
 
 		if (isset($this->request->post['config_secure'])) {
