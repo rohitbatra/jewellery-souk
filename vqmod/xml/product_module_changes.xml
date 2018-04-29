@@ -696,7 +696,7 @@
 
         public function getTypeFilterByUg($user_group_id) {
 
-          $sql = "SELECT fd.filter_id FROM " . DB_PREFIX . "filter_description AS fd WHERE fd.name LIKE (SELECT ug.name FROM user_group as ug WHERE ug.user_group_id = '" . (int)$user_group_id . "') ";
+          $sql = "SELECT fd.filter_id FROM " . DB_PREFIX . "filter_description AS fd RIGHT JOIN filter_group_description fgd ON (fgd.filter_group_id = fd.filter_group_id)  WHERE fd.name LIKE (SELECT ug.name FROM user_group as ug WHERE ug.user_group_id = '" . (int)$user_group_id . "') AND LOWER(fgd.name) LIKE 'type' ";
 
           $query = $this->db->query($sql);
 
