@@ -214,7 +214,7 @@ $('#button-filter').on('click', function() {
 		url += '&filter_status=' + encodeURIComponent(filter_status);
 	}
 
-  var filter_seller = $('select[name=\'filter_seller\']').val();
+  var filter_seller = $('input[name=\'filter_seller\']').val();
 
 	if (filter_seller != '*') {
 		url += '&filter_seller=' + encodeURIComponent(filter_seller);
