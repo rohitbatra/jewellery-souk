@@ -427,7 +427,9 @@
         });
 
         $("select[name='category']").on('change',function(){
-          $('#popover_btn').trigger('click');
+          if ($('#popover_btn').prop('popShown') == undefined) {
+             $('#popover_btn').trigger('click');
+          }
         });
 
     });
