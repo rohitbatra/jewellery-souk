@@ -426,7 +426,7 @@
           trigger: 'click'
         });
 
-        $("elect[name='category']").on('change',function(){
+        $("select[name='category']").on('change',function(){
           $('#popover_btn').trigger('click');
         });
 
