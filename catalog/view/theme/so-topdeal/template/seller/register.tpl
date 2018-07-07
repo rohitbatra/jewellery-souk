@@ -426,8 +426,8 @@
           trigger: 'click'
         });
 
-        $("elect[name='category']").on('click',function(){
-          $('#popover_btn').delay(1000).trigger('click');
+        $("elect[name='category']").on('change',function(){
+          $('#popover_btn').trigger('click');
         });
 
     });
