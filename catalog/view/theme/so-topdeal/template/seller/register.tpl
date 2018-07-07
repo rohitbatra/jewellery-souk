@@ -426,7 +426,10 @@
           trigger: 'click'
         });
 
-        $('#popover_btn').delay(5000).trigger('click');
+        $("elect[name='category']").on('click',function(){
+          $('#popover_btn').delay(1000).trigger('click');
+        });
+
     });
 </script>
 <?php echo $footer; ?>
