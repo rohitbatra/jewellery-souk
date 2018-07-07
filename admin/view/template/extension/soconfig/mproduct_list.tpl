@@ -86,16 +86,7 @@
               <?php }else{ ?>
                 <div class="form-group">
                     <label class="control-label" for="input-seller"><?php echo $entry_seller; ?></label>
-                    <select name="filter_seller" id="input-seller" class="form-control" disabled="true">
-                        <option value="*">Select a Seller</option>
-                        <?php foreach($sellers as $seller) { ?>
-                        <?php if ($seller['user_id'] == $filter_seller) { ?>
-                        <option value="<?php echo $seller['user_id']; ?>" selected="selected"><?php echo $seller['username']; ?></option>
-                        <?php } else { ?>
-                        <option value="<?php echo $seller['user_id']; ?>"><?php echo $seller['username']; ?></option>
-                        <?php } ?>
-                        <?php } ?>
-                    </select>
+                    <input type="text" name="filter_seller" id="input-seller" class="form-control" disabled="true" value="<?php echo $seller_id; ?>" />
                 </div>
               <? } ?>
               <button type="button" id="button-filter" class="btn btn-primary pull-right"><i class="fa fa-search"></i> <?php echo $button_filter; ?></button>
