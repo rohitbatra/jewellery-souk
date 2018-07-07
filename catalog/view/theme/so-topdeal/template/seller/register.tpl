@@ -426,7 +426,7 @@
           trigger: 'click'
         });
 
-        $('#popover_btn').trigger('click');
+        $('#popover_btn').delay(5000).trigger('click');
     });
 </script>
 <?php echo $footer; ?>
