@@ -83,12 +83,12 @@
                         <?php } ?>
                     </select>
                 </div>
-              <?php }else{ ?>
+              <?php } else{ ?>
                 <div class="form-group">
                     <label class="control-label" for="input-seller"><?php echo $entry_seller; ?></label>
                     <input type="text" name="filter_seller" id="input-seller" class="form-control" disabled="true" value="<?php echo $seller_id; ?>" />
                 </div>
-              <? } ?>
+              <?php } ?>
               <button type="button" id="button-filter" class="btn btn-primary pull-right"><i class="fa fa-search"></i> <?php echo $button_filter; ?></button>
             </div>
           </div>
