@@ -417,7 +417,7 @@
           $data['is_seller'] = false;
           if($this->user->isSeller()) {
               $data['is_seller'] = true;
-              $data['seller_id'] = $this->user->getiId();
+              $data['seller_id'] = $this->user->getId();
               // Fetch Categories if Seller
               $this->load->model('catalog/category');
               $data['categories'] = $this->model_catalog_category->getCategoriesForUserGroup($this->user->getGroupId());
@@ -563,7 +563,7 @@
             $data['is_seller'] = true;
             //$fg_raw = $this->model_catalog_filter->getFilterGroups();
             $fg_raw = $this->model_catalog_filter->getFilterGroupsByUg($this->user->getGroupId());
-            $data['seller_id'] = $this->user->getiId();
+            $data['seller_id'] = $this->user->getId();
             foreach($fg_raw as $g) {
               $fg[] = array('name' => $g['name'],'fg_id' => $g['filter_group_id'], 'options' => $this->model_catalog_filter->getFiltersByGroupId($g['filter_group_id']));
             }
@@ -595,7 +595,7 @@
           $data['is_seller'] = false;
           if($this->user->isSeller()) {
             $data['is_seller'] = true;
-            $data['seller_id'] = $this->user->getiId();
+            $data['seller_id'] = $this->user->getId();
           }
 
           // Get Seller List
