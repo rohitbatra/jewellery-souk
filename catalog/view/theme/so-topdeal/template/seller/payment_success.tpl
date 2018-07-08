@@ -38,7 +38,9 @@
                     <div class="block-top font-ct">
                         <h2><span>Thank You!</span></h2>
                         <p><?php echo $name; ?>, your Seller Account is now <strong>Activated</strong>.</p>
+                        <?php if(!isset($_GET['nopay'])) { ?>
                         <p>We will also send you an email with the Payment Reciept of this Transaction for your reference. </p><p>If you have any questions, please email our <strong><a href="mailto:seller.support@sezplus.com">Support Team</a></strong>.</p>
+                        <?php } ?>
                         <p> You can login using the below Button:</p>
                     </div>
 

@@ -253,4 +253,35 @@ class ModelSellerSeller extends Model {
       return $retArr;
     }
 
+    public function sendNoPayWelcomeEmail($userId) {
+
+      $seller_data = $this->getSellerById($userId);
+
+      $data['web_url'] = HTTPS_SERVER . "/";
+      $data['logo_url'] = HTTPS_SERVER . "image/" .$this->config->get('config_logo');
+      $data['to_email'] = $seller_data['email'];
+      $data['web_name'] = $this->config->get('config_name');
+      $data['firstname'] = $seller_data['firstname'];
+      $data['username'] = $seller_data['username'];
+      $data['login_url'] = $this->url->link('seller/login', '', true);
+      $data['support_email'] = 'seller.support@sezplus.com';
+
+      $mail = new Mail();
+      $mail->protocol = $this->config->get('config_mail_protocol');
+      $mail->parameter = $this->config->get('config_mail_parameter');
+      $mail->smtp_hostname = $this->config->get('config_mail_smtp_hostname');
+      $mail->smtp_username = $this->config->get('config_mail_smtp_username');
+      $mail->smtp_password = html_entity_decode($this->config->get('config_mail_smtp_password'), ENT_QUOTES, 'UTF-8');
+      $mail->smtp_port = $this->config->get('config_mail_smtp_port');
+      $mail->smtp_timeout = $this->config->get('config_mail_smtp_timeout');
+      $mail->setTo($data['to_email']);
+      $mail->setFrom($this->config->get('config_email'));
+      $mail->setSender(html_entity_decode($data['web_name'], ENT_QUOTES, 'UTF-8'));
+      $mail->setSubject(html_entity_decode($data['subject'], ENT_QUOTES, 'UTF-8'));
+      $mail->setHtml($this->load->view('mail/seller/nopay_welcome', $data));
+
+      $mail->send();
+
+    }
+
 }

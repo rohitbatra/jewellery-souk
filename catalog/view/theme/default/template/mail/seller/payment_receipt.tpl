@@ -493,7 +493,7 @@
                 <table class="email-footer" align="center" width="570" cellpadding="0" cellspacing="0">
                   <tr>
                     <td class="content-cell" align="center">
-                      <p class="sub align-center">&copy; 2017 <?php echo $web_name; ?>. All rights reserved.</p>
+                      <p class="sub align-center">&copy; <?php echo date('Y'); ?> <?php echo $web_name; ?>. All rights reserved.</p>
                       <p class="sub align-center">
                         RK SEZPLUS Services Pvt. Ltd.
                         <br>M.I.D.C, Andheri East

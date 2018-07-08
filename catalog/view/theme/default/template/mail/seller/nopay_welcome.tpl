@@ -3,7 +3,7 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Reset your password | <?php echo $web_name; ?></title>
+    <title>Welcome Seller | <?php echo $web_name; ?></title>
     <!--
     The style block is collapsed on page load to save you some scrolling.
     Postmark automatically inlines all CSS properties for maximum email client
@@ -392,7 +392,7 @@
     </style>
   </head>
   <body>
-    <span class="preheader">Use this link to reset your password. The link is only valid for 24 hours.</span>
+    <span class="preheader">This is a receipt for your recent payment transaction on <?php echo $web_name; ?>.</span>
     <table class="email-wrapper" width="100%" cellpadding="0" cellspacing="0">
       <tr>
         <td align="center">
@@ -412,40 +412,38 @@
                   <tr>
                     <td class="content-cell">
                       <h1>Hi <?php echo $firstname; ?>,</h1>
-                      <p>You recently requested to reset your password for your <?php echo $web_name; ?> account. Use the button below to reset it. <strong>This password reset is only valid for the next 24 hours.</strong></p>
-                      <!-- Action -->
-                      <table class="body-action" align="center" width="100%" cellpadding="0" cellspacing="0">
-                        <tr>
-                          <td align="center">
+                      <p>Thanks for registering at <?php echo $web_name; ?>. </p>
 
-                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                              <tr>
-                                <td align="center">
-                                  <table border="0" cellspacing="0" cellpadding="0">
-                                    <tr>
-                                      <td>
-                                        <a href="<?php echo $action_url; ?>" class="button button--green" target="_blank">Reset your password</a>
-                                      </td>
-                                    </tr>
-                                  </table>
-                                </td>
-                              </tr>
-                            </table>
-                          </td>
-                        </tr>
-                      </table>
-                      <p>For security, this request was received from IP address: <?php echo $ip_address; ?> <br/>If you did not request a password reset, please ignore this email or <a href="<?php echo $support_email_link; ?>">contact support</a> if you have questions.</p>
-                      <p>Thanks,
+                        <p>Your Seller Account is now <strong>Activated</strong>. </p>
+                        <p>Please use the below details to login.</p>
+                        <p>For reference, here's your login information:</p>
+                        <table class="attributes" width="100%" cellpadding="0" cellspacing="0">
+                          <tr>
+                            <td class="attributes_content">
+                              <table width="100%" cellpadding="0" cellspacing="0">
+                                <tr>
+                                  <td class="attributes_item">
+                                    <strong>Login Page:</strong> <?php echo $login_url; ?>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="attributes_item">
+                                    <strong>Username:</strong> <?php echo $username; ?>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="attributes_item">
+                                    <strong>E-Mail:</strong> <?php echo $to_email; ?>
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                        </table>
+
+                      <p>If you have any questions, simply email to our <a href="mailto:<?php echo $support_email; ?>">support team</a> .</p>
+                      <p>Cheers,
                         <br><?php echo $web_name; ?> Team</p>
-                      <!-- Sub copy -->
-                      <table class="body-sub">
-                        <tr>
-                          <td>
-                            <p class="sub">If you’re having trouble with the button above, copy and paste the URL below into your web browser.</p>
-                            <p class="sub"><?php echo $action_url; ?></p>
-                          </td>
-                        </tr>
-                      </table>
                     </td>
                   </tr>
                 </table>

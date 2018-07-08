@@ -70,7 +70,16 @@ $(document).ready(function()
         var action_url = $('#sellerData').attr('action');
         $('#btn_submit').click(function(e)
         {
-            $('#sellerData').submit();
+            // Check if the Subscription Fees is 0 or NOT
+            if($.trim($('input[name="amount"]').val()) == '0'){
+
+                // Don't Submit the Form instead just redirect to a Different Success page & Different emails to be triggered.
+                // Keep the Old Functionality in-tact just in case we need it later on.
+                window.location.href = "<?php echo HTTP_SERVER; ?>index.php?route=seller/payment_process&nopay=true&uId=<?php echo $uID; ?>";
+
+            }else{
+              $('#sellerData').submit();
+            }
         });
     <?php } ?>
 

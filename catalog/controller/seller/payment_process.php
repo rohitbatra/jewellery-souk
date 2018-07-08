@@ -63,14 +63,12 @@ class ControllerSellerPaymentProcess extends Controller {
       $data['action'] = "";
 
 
-    }else if(isset($this->request->get['error']) && !empty($this->request->get['error']))
-    {
+    } else if(isset($this->request->get['error']) && !empty($this->request->get['error'])) {
         // Payment Cancelled by USER from CCAVENUE
 				// Redirect to Payment Not Completed Error Page
 				$this->response->redirect($this->url->link('seller/payment_error', 'uID=' . base64_encode($data['uID']) , 'SSL'));
 
-    }else if(isset($this->request->get['payment']) && !empty($this->request->get['payment']))
-		{
+    } else if(isset($this->request->get['payment']) && !empty($this->request->get['payment'])) {
 
         // Also check for Success in the POST method from CCAVENUE
 				if(isset($this->request->post['order_status']) && !empty($this->request->post['order_status']))
@@ -97,7 +95,14 @@ class ControllerSellerPaymentProcess extends Controller {
 						}
 
 				}
-    } else {
+    }else if(isset($this->request->get['nopay']) && !empty($this->request->get['nopay'])) {
+
+			// Condition to Handle the Seller(s) Registration with '0' Subscript Fees
+			$this->model_seller_seller->approveSeller($this->request->get['uId']);
+			$this->model_seller_seller->sendNoPayWelcomeEmail($this->request->get['uId']);
+			$this->response->redirect($this->url->link('seller/payment_success', 'uID=' . base64_encode($this->request->get['uId']) .'&nopay=1' , 'SSL'));
+
+		} else {
 			toError:
 				// unknown error landing to this page
       // Show error message
