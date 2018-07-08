@@ -190,7 +190,7 @@
             $header .= 'Reply-To: =?UTF-8?B?' . base64_encode($this->sender) . '?= <' . $this->from . '>' . PHP_EOL;
           ]]></search>
         <add><![CDATA[
-            $header .= 'Reply-To: =?UTF-8?B?' . base64_encode($this->default_reply_to) . '?= <' . $this->from . '>' . PHP_EOL;
+            $header .= 'Reply-To: =?UTF-8?B?' . base64_encode($this->default_reply_to) . '?= <' . $this->default_reply_to . '>' . PHP_EOL;
           ]]></add>
       </operation>
 
