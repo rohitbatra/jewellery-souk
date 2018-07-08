@@ -77,7 +77,7 @@ class ModelSellerSeller extends Model {
 
       $data['web_url'] = HTTPS_SERVER . "/";
       $data['logo_url'] = HTTPS_SERVER . "image/" .$this->config->get('config_logo');
-      $data['subject'] = "Welcome to ".$this->config->get('config_name').", ".$seller_data['firstname']."!" ;
+      $data['subject'] = "Welcome to ".$this->config->get('config_name')."!" ;
       $data['firstname'] = $seller_data['firstname'];
       $data['username'] = $seller_data['username'];
       $data['to_email'] = $seller_data['email'];
@@ -99,17 +99,6 @@ class ModelSellerSeller extends Model {
 
       $mail->setTo($data['to_email']);
 
-      // BCC to other emails
-      if(!empty($this->config->get('config_mail_alert_email'))) {
-          $emailArr = explode(',',$this->config->get('config_mail_alert_email'));
-          foreach($emailArr as $em){
-              if(!empty($em)){
-                $mail->setBcc($em);
-              }
-          }
-
-      }
-
       $mail->setFrom($this->config->get('config_email'));
       $mail->setSender(html_entity_decode($data['web_name'], ENT_QUOTES, 'UTF-8'));
       $mail->setSubject(html_entity_decode($data['subject'], ENT_QUOTES, 'UTF-8'));
@@ -117,6 +106,29 @@ class ModelSellerSeller extends Model {
 
       $mail->send();
 
+      // Send a text email to other stakeholders
+      if(!empty($this->config->get('config_mail_alert_email'))) {
+          $bccMsgHtml = "Hi, <br/> New Seller registered! <br/> Seller E-Mail: {$data['username']} <br/> Thanks!";
+          $emailArr = explode(',',$this->config->get('config_mail_alert_email'));
+          foreach($emailArr as $em){
+              if(!empty($em)){
+                $mail = new Mail();
+                $mail->protocol = $this->config->get('config_mail_protocol');
+                $mail->parameter = $this->config->get('config_mail_parameter');
+                $mail->smtp_hostname = $this->config->get('config_mail_smtp_hostname');
+                $mail->smtp_username = $this->config->get('config_mail_smtp_username');
+                $mail->smtp_password = html_entity_decode($this->config->get('config_mail_smtp_password'), ENT_QUOTES, 'UTF-8');
+                $mail->smtp_port = $this->config->get('config_mail_smtp_port');
+                $mail->smtp_timeout = $this->config->get('config_mail_smtp_timeout');
+                $mail->setTo($em);
+                $mail->setFrom($this->config->get('config_email'));
+                $mail->setSender(html_entity_decode($data['web_name'], ENT_QUOTES, 'UTF-8'));
+                $mail->setSubject(html_entity_decode("New Seller | {$data['web_name']}", ENT_QUOTES, 'UTF-8'));
+                $mail->setHtml($bccMsgHtml);
+                $mail->send();
+              }
+          }
+      }
     }
 
     public function addPaymentInfo($data) {
@@ -194,7 +206,7 @@ class ModelSellerSeller extends Model {
         if(strtolower($data['order_status']) == "success")
         {
             // Payment Recieved
-            $data['subject'] = "Seller Payment Success | ".$data['web_name'];
+            $data['subject'] = "Seller Payment Success | {$data['web_name']}";
             $data['receipt_id'] = $postData['payment_id'];
             $data['date'] = date('d-m-Y');
             $data['description'] = "Seller Subscription Fees";
@@ -208,7 +220,7 @@ class ModelSellerSeller extends Model {
 
         } else {
             // Payment Issue ** NOT Recieved **
-            $data['subject'] = "Seller Payment Failed | ".$data['web_name'];
+            $data['subject'] = "Seller Payment Failed | {$data['web_name']}";
             $data['payment_resume_url'] = $this->url->link('seller/payment_process', 'uID=' . base64_encode($postData['user_id']), true);
             $mail->setSubject(html_entity_decode($data['subject'], ENT_QUOTES, 'UTF-8'));
             $mail->setHtml($this->load->view('mail/seller/payment_failed', $data));
