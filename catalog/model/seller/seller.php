@@ -102,7 +102,12 @@ class ModelSellerSeller extends Model {
       // BCC to other emails
       if(!empty($this->config->get('config_mail_alert_email'))) {
           $emailArr = explode(',',$this->config->get('config_mail_alert_email'));
-          $mail->setBcc($emailArr);
+          foreach($emailArr as $em){
+              if(!empty($em)){
+                $mail->setBcc($em);
+              }
+          }
+
       }
 
       $mail->setFrom($this->config->get('config_email'));
@@ -266,7 +271,7 @@ class ModelSellerSeller extends Model {
       $data['login_url'] = $this->url->link('seller/login', '', true);
       $data['support_email'] = 'seller.support@sezplus.com';
       $data['subject'] = "Get Started {$data['firstname']} | {$data['web_name']}";
-      
+
       $mail = new Mail();
       $mail->protocol = $this->config->get('config_mail_protocol');
       $mail->parameter = $this->config->get('config_mail_parameter');
