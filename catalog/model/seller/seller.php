@@ -254,7 +254,7 @@ class ModelSellerSeller extends Model {
     }
 
     public function sendNoPayWelcomeEmail($userId) {
-
+      $data = [];
       $seller_data = $this->getSellerById($userId);
 
       $data['web_url'] = HTTPS_SERVER . "/";
@@ -265,7 +265,8 @@ class ModelSellerSeller extends Model {
       $data['username'] = $seller_data['username'];
       $data['login_url'] = $this->url->link('seller/login', '', true);
       $data['support_email'] = 'seller.support@sezplus.com';
-
+      $data['subject'] = "Get Started {$data['firstname']} | {$data['web_name']}";
+      
       $mail = new Mail();
       $mail->protocol = $this->config->get('config_mail_protocol');
       $mail->parameter = $this->config->get('config_mail_parameter');
