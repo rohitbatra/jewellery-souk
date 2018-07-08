@@ -31,8 +31,7 @@ class ControllerSellerPaymentProcess extends Controller {
 
 		$data['button_continue'] = $this->language->get('button_continue');
 
-    if(isset($this->request->get['uID']) && !empty($this->request->get['uID']))
-    {
+    if(isset($this->request->get['uID']) && !empty($this->request->get['uID'])) {
 
 			$uID = base64_decode($this->request->get['uID']);
 
@@ -97,10 +96,11 @@ class ControllerSellerPaymentProcess extends Controller {
 				}
     }else if(isset($this->request->get['nopay']) && !empty($this->request->get['nopay'])) {
 
+			$uID = base64_decode($this->request->get['uID']);
 			// Condition to Handle the Seller(s) Registration with '0' Subscript Fees
-			$this->model_seller_seller->approveSeller($this->request->get['uId']);
-			$this->model_seller_seller->sendNoPayWelcomeEmail($this->request->get['uId']);
-			$this->response->redirect($this->url->link('seller/payment_success', 'uID=' . base64_encode($this->request->get['uId']) .'&nopay=1' , 'SSL'));
+			$this->model_seller_seller->approveSeller($uID);
+			$this->model_seller_seller->sendNoPayWelcomeEmail($uID);
+			$this->response->redirect($this->url->link('seller/payment_success', 'uID=' . base64_encode($uID) .'&nopay=1' , 'SSL'));
 
 		} else {
 			toError:
