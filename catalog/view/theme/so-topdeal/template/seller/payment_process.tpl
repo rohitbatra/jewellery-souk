@@ -71,7 +71,7 @@ $(document).ready(function()
         $('#btn_submit').click(function(e)
         {
             // Check if the Subscription Fees is 0 or NOT
-            if($.trim($('input[name="amount"]').val()) == '0'){
+            if(parseInt($.trim($('input[name="amount"]').val())) < '1'){
 
                 // Don't Submit the Form instead just redirect to a Different Success page & Different emails to be triggered.
                 // Keep the Old Functionality in-tact just in case we need it later on.
