@@ -431,11 +431,6 @@
                                     <strong>Username:</strong> <?php echo $username; ?>
                                   </td>
                                 </tr>
-                                <tr>
-                                  <td class="attributes_item">
-                                    <strong>E-Mail:</strong> <?php echo $to_email; ?>
-                                  </td>
-                                </tr>
                               </table>
                             </td>
                           </tr>
