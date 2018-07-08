@@ -109,26 +109,22 @@ class ModelSellerSeller extends Model {
       // Send a text email to other stakeholders
       if(!empty($this->config->get('config_mail_alert_email'))) {
           $bccMsgHtml = "Hi, <br/> New Seller registered! <br/> Seller E-Mail: {$data['username']} <br/> Thanks!";
-          $emailArr = explode(',',$this->config->get('config_mail_alert_email'));
-          foreach($emailArr as $em){
-              if(!empty($em)){
-                $mail = new Mail();
-                $mail->protocol = $this->config->get('config_mail_protocol');
-                $mail->parameter = $this->config->get('config_mail_parameter');
-                $mail->smtp_hostname = $this->config->get('config_mail_smtp_hostname');
-                $mail->smtp_username = $this->config->get('config_mail_smtp_username');
-                $mail->smtp_password = html_entity_decode($this->config->get('config_mail_smtp_password'), ENT_QUOTES, 'UTF-8');
-                $mail->smtp_port = $this->config->get('config_mail_smtp_port');
-                $mail->smtp_timeout = $this->config->get('config_mail_smtp_timeout');
-                $mail->setTo($em);
-                $mail->setFrom($this->config->get('config_email'));
-                $mail->setSender(html_entity_decode($data['web_name'], ENT_QUOTES, 'UTF-8'));
-                $mail->setSubject(html_entity_decode("New Seller | {$data['web_name']}", ENT_QUOTES, 'UTF-8'));
-                $mail->setHtml($bccMsgHtml);
-                $mail->send();
-              }
-          }
+          $mail = new Mail();
+          $mail->protocol = $this->config->get('config_mail_protocol');
+          $mail->parameter = $this->config->get('config_mail_parameter');
+          $mail->smtp_hostname = $this->config->get('config_mail_smtp_hostname');
+          $mail->smtp_username = $this->config->get('config_mail_smtp_username');
+          $mail->smtp_password = html_entity_decode($this->config->get('config_mail_smtp_password'), ENT_QUOTES, 'UTF-8');
+          $mail->smtp_port = $this->config->get('config_mail_smtp_port');
+          $mail->smtp_timeout = $this->config->get('config_mail_smtp_timeout');
+          $mail->setTo($this->config->get('config_mail_alert_email'));
+          $mail->setFrom($this->config->get('config_email'));
+          $mail->setSender(html_entity_decode($data['web_name'], ENT_QUOTES, 'UTF-8'));
+          $mail->setSubject(html_entity_decode("New Seller | {$data['web_name']}", ENT_QUOTES, 'UTF-8'));
+          $mail->setHtml($bccMsgHtml);
+          $mail->send();
       }
+      
     }
 
     public function addPaymentInfo($data) {
