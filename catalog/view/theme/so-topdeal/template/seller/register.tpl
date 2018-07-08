@@ -427,11 +427,8 @@
         });
 
         $("select[name='category']").on('change',function(){
-          if ($('#popover_btn').prop('popShown') == undefined) {
-             $('#popover_btn').trigger('click');
-          }
+             $('#popover_btn').popover('show').popover('update');
         });
-
     });
 </script>
 <?php echo $footer; ?>
