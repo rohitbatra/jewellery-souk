@@ -75,7 +75,7 @@ $(document).ready(function()
 
                 // Don't Submit the Form instead just redirect to a Different Success page & Different emails to be triggered.
                 // Keep the Old Functionality in-tact just in case we need it later on.
-                window.location.href = "<?php echo HTTP_SERVER; ?>index.php?route=seller/payment_process&nopay=true&uId=<?php echo $uID; ?>";
+                window.location.href = "<?php echo HTTP_SERVER; ?>index.php?route=seller/payment_process&nopay=true&uId=<?php echo base64_encode($uID); ?>";
 
             }else{
               $('#sellerData').submit();
