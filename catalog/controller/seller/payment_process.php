@@ -96,11 +96,11 @@ class ControllerSellerPaymentProcess extends Controller {
 				}
     }else if(isset($this->request->get['nopay']) && !empty($this->request->get['nopay'])) {
 
-			$uID = base64_decode($this->request->get['uID']);
+			$uID = base64_decode($this->request->get['sID']);
 			// Condition to Handle the Seller(s) Registration with '0' Subscript Fees
 			$this->model_seller_seller->approveSeller($uID);
 			$this->model_seller_seller->sendNoPayWelcomeEmail($uID);
-			$this->response->redirect($this->url->link('seller/payment_success', 'uID=' . base64_encode($uID) .'&nopay=1' , 'SSL'));
+			$this->response->redirect($this->url->link('seller/payment_success', 'uID=' . base64_encode($uID) . '&nopay=1' , 'SSL'));
 
 		} else {
 			toError:
