@@ -208,13 +208,13 @@ $('#button-filter').on('click', function() {
 		url += '&filter_quantity=' + encodeURIComponent(filter_quantity);
 	}
 
-	var filter_status = $('select[name=\'filter_status\']').val();
+	var filter_status = $('select[name=\'filter_status\'] option:selected').val();
 
 	if (filter_status != '*') {
 		url += '&filter_status=' + encodeURIComponent(filter_status);
 	}
 
-  var filter_seller = $('input[name=\'filter_seller\']').val();
+  var filter_seller = $('select[name=\'filter_seller\'] option:selected').val();
 
 	if (filter_seller != '*') {
 		url += '&filter_seller=' + encodeURIComponent(filter_seller);
