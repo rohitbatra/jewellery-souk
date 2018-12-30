@@ -85,8 +85,16 @@ $(document).ready(function()
         $('#seller_support_form').submit();
     });
 
-    function validateForm()
-    {
+    function validateForm() {
+        // Validate the Fields
+        $("#seller_support_form :input").each(function() {
+            if($.trim($(this).val()) == "") {
+                alert('Please fill all the fields');
+                $(this).focus();
+                throw new Error('Field missing');
+            }
+        });
+      /*
       // Name not Blank
       if($.trim($('#input-name').val()) == "")
       {
@@ -110,7 +118,7 @@ $(document).ready(function()
           $('#input-query').focus();
           throw new Exception('Query cannot be Blank');
       }
-
+      */
     }
 
 });

@@ -85,32 +85,40 @@ $(document).ready(function()
         $('#support_form').submit();
     });
 
-    function validateForm()
-    {
-      // Name not Blank
-      if($.trim($('#input-name').val()) == "")
-      {
-          alert('Please enter your Full Name!');
-          $('#input-name').focus();
-          throw new Exception('Name cannot be Blank');
-      }
+    function validateForm() {
+        // Validate the Fields
+        $("#support_form :input").each(function() {
+            if($.trim($(this).val()) == "") {
+                alert('Please fill all the fields');
+                $(this).focus();
+                throw new Error('Field missing');
+            }
+        });
+        /*
+         // Name not Blank
+         if($.trim($('#input-name').val()) == "")
+         {
+         alert('Please enter your Full Name!');
+         $('#input-name').focus();
+         throw new Exception('Name cannot be Blank');
+         }
 
-      // Number not Blank
-      if($.trim($('#input-telephone').val()) == "")
-      {
-          alert('Please enter your Telephone Number!');
-          $('#input-telephone').focus();
-          throw new Exception('Telephone cannot be Blank');
-      }
+         // Number not Blank
+         if($.trim($('#input-telephone').val()) == "")
+         {
+         alert('Please enter your Telephone Number!');
+         $('#input-telephone').focus();
+         throw new Exception('Telephone cannot be Blank');
+         }
 
-      // Query not Blan
-      if($.trim($('#input-query').val()) == "")
-      {
-          alert('Please enter your Query!');
-          $('#input-query').focus();
-          throw new Exception('Query cannot be Blank');
-      }
-
+         // Query not Blan
+         if($.trim($('#input-query').val()) == "")
+         {
+         alert('Please enter your Query!');
+         $('#input-query').focus();
+         throw new Exception('Query cannot be Blank');
+         }
+         */
     }
 
 });
