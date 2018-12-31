@@ -33,6 +33,9 @@ class ControllerExtensionModuleProductEnquiry extends Controller {
         $data['product_link'] = $this->url->link('product/product', 'product_id=' . $data['product_id'], true);
         $data['enquiry_link'] = HTTPS_SERVER.'admin/index.php?route=catalog/product_enquiry/view&enquiry_id='.$data['enquiry_id'];
 
+        $data['web_url'] = HTTPS_SERVER . "/";
+        $data['logo_url'] = HTTPS_SERVER . "image/" .$this->config->get('config_logo');
+
         // Send an HTML email
         $mail = new Mail();
         $mail->protocol = $this->config->get('config_mail_protocol');

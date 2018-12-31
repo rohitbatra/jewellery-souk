@@ -41,7 +41,7 @@
                                     <option value="*"></option>
                                     <?php if (trim($filter_enquiry_status) == '0') { ?>
                                     <option value="0" selected="selected"><?php echo $text_unread; ?></option>
-                                    <?php } else {
+                                    <?php } else { ?>
                                     <option value="0"><?php echo $text_unread; ?></option>
                                     <?php } ?>
                                     <?php if (trim($filter_enquiry_status) == '1') { ?>
