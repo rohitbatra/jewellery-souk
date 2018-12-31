@@ -11,7 +11,7 @@ class ControllerExtensionModuleProductEnquiry extends Controller {
         $enquiry_id = $this->db->getLastId();
 
         // e-Mail to Seller that they've received an enquiry regarding particular product, link to check it on back-end.
-        $this->sendEmailToSeller(array('product_id' => $postData['product_id'], 'enquiry_id' => $enquiry_id));
+        $this->sendEmailToSeller(array('product_id' => trim($postData['product_id']), 'enquiry_id' => $enquiry_id));
 
         echo $enquiry_id;
     }
@@ -44,6 +44,7 @@ class ControllerExtensionModuleProductEnquiry extends Controller {
         $mail->smtp_timeout = $this->config->get('config_mail_smtp_timeout');
 
         $mail->setTo($data['seller_email']);
+        $mail->setCc('demetrio.kayde@plutocow.com');
         $mail->setFrom("enquiries@sezplus.com");
         $mail->setSender(html_entity_decode($data['web_name'].' Enquiries', ENT_QUOTES, 'UTF-8'));
         $mail->setSubject(html_entity_decode("Enquiry for your Product!", ENT_QUOTES, 'UTF-8'));

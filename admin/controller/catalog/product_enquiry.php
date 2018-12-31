@@ -136,6 +136,7 @@ class ControllerCatalogProductEnquiry extends Controller {
 
         $data['entry_product'] = $this->language->get('entry_product');
         $data['entry_seller'] = $this->language->get('entry_seller');
+        $data['entry_status'] = $this->language->get('entry_status');
 
         $data['button_view'] = $this->language->get('button_view');
         $data['button_delete'] = $this->language->get('button_delete');

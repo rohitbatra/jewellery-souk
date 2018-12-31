@@ -387,7 +387,6 @@ p.center {
 </style>
 </head>
 <body>
-<span class="preheader">Hey, someone has sent an enquiry for your Product at <?php echo $web_name; ?>.</span>
 <table class="email-wrapper" width="100%" cellpadding="0" cellspacing="0">
     <tr>
         <td align="center">
@@ -406,7 +405,7 @@ p.center {
                             <!-- Body content -->
                             <tr>
                                 <td class="content-cell">
-                                    <h1>Hi <?php echo $seller_name; ?>,</h1>
+                                    <h1>Hi <?php echo ucfirst($seller_name); ?>,</h1>
                                     <p>Someone has sent an Enquiry for your Product.</p>
                                     <p>Below is the product detail:</p>
                                     <!-- Product -->

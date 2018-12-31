@@ -39,8 +39,16 @@
                                 <label class="control-label" for="input-enquiry-status"><?php echo $entry_status; ?></label>
                                 <select name="filter_enquiry_status" id="input-enquiry-status" class="form-control">
                                     <option value="*"></option>
+                                    <?php if (trim($filter_enquiry_status) == '0') { ?>
+                                    <option value="0" selected="selected"><?php echo $text_unread; ?></option>
+                                    <?php } else {
                                     <option value="0"><?php echo $text_unread; ?></option>
+                                    <?php } ?>
+                                    <?php if (trim($filter_enquiry_status) == '1') { ?>
+                                    <option value="1" selected="selected"><?php echo $text_read; ?></option>
+                                    <?php } else {
                                     <option value="1"><?php echo $text_read; ?></option>
+                                    <?php } ?>
                                 </select>
                             </div>
                         </div>
@@ -80,7 +88,7 @@
                             </thead>
                             <tbody>
                             <?php if ($product_enquiries) { ?>
-                                <?php $i=0; foreach ($product_enquiries as $product_enquiry) { ?>
+                                <?php $i=1; foreach ($product_enquiries as $product_enquiry) { ?>
                                 <tr>
                                     <td class="text-center"><?php echo $i++; ?></td>
                                     <td class="text-left"><a href="<?php echo $product_enquiry['product_link']; ?>" target="_blank"><?php echo $product_enquiry['product_name']; ?></a></td>
