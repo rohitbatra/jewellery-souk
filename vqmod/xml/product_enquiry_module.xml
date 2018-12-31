@@ -181,19 +181,23 @@
                         e.preventDefault();
                         e.stopPropagation();
 
+                        $('#enquiry-form-div').slideUp();
+                        $('#loader-form-div').slideDown();
+                        $('#btn-enquiry-send').attr('disabled','disabled');
+                        $('#btn-enquiry-close').attr('disabled','disabled');
+
                         // Validate the Fields
                         $("#enquiry-form :input").each(function() {
                           if($.trim($(this).val()) == "") {
                             alert('Please fill all the fields');
                             $(this).focus();
+                            $('#enquiry-form-div').slideDown();
+                            $('#loader-form-div').slideUp();
+                            $('#btn-enquiry-send').removeAttr('disabled');
+                            $('#btn-enquiry-close').removeAttr('disabled');
                             throw new Error('Field missing');
                           }
                         });
-
-                        $('#enquiry-form-div').slideUp('slow');
-                        $('#loader-form-div').slideDown('slow');
-                        $('#btn-enquiry-send').attr('disabled','disabled');
-                        $('#btn-enquiry-close').attr('disabled','disabled');
 
                         var fd = $('#enquiry-form').serializeArray();
 
