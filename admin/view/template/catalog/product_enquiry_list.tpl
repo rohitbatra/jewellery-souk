@@ -46,7 +46,7 @@
                                     <?php } ?>
                                     <?php if (trim($filter_enquiry_status) == '1') { ?>
                                     <option value="1" selected="selected"><?php echo $text_read; ?></option>
-                                    <?php } else {
+                                    <?php } else { ?>
                                     <option value="1"><?php echo $text_read; ?></option>
                                     <?php } ?>
                                 </select>
