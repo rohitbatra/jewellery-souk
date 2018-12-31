@@ -1,0 +1,271 @@
+<modification>
+    <id>Product Enquiry Module</id>
+    <version>2.0.0</version>
+    <vqmver>2.3.0</vqmver>
+    <update>0.0.1</update>
+    <author>Rohit Batra</author>
+    <notes>Adds an Send Enquiry Button besides the 'Add to Cart' button. Sends the Enquiry to Store Owner saves it in DB.</notes>
+
+
+    /*
+    CREATE TABLE `product_enquiries` (
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `product_id` int(11) NOT NULL,
+    `sender_name` varchar(255) NOT NULL DEFAULT '',
+    `sender_email` varchar(255) NOT NULL DEFAULT '',
+    `sender_telephone` varchar(255) DEFAULT NULL,
+    `content` longtext,
+    `reply_content` longtext,
+    `read_by_seller` tinyint(1) NOT NULL DEFAULT '0',
+    `dataTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+    */
+
+    <file name="catalog/view/theme/so-topdeal/template/product/product.tpl">
+
+        <operation>
+            <search position="before"><![CDATA[
+              <li class="wishlist">
+          ]]></search>
+            <add><![CDATA[
+            <!-- ENQUIRY BUTTON -->
+            <li class="enquiry">
+                <a class="icon" data-toggle="tooltip" title="Send Enquiry" href="javascript:void(1);" id="anchor-enquiry"><i class="fa fa-envelope"></i></a>
+            </li>
+          ]]></add>
+        </operation>
+
+        <operation>
+            <search position="before"><![CDATA[
+              <?php // Footer Blocks =========================================?>
+          ]]></search>
+            <add><![CDATA[
+            <!-- ENQUIRY MODAL -->
+            <div class="modal fade" id="enquiryModal" tabindex="-1" role="dialog">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Send your Enquiry</h4>
+                  </div>
+                  <div class="modal-body">
+                    <div id="form-submit-response-div" style="display:none;"></div>
+                    <div id="enquiry-form-div">
+                        <form id="enquiry-form" class="form-horizontal">
+                          <div class="form-group required">
+                            <label class="col-sm-2 control-label" for="productPlaceholder">Product</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="productPlaceholder" name="productPlaceholder" value="<?php echo $heading_title;?>" disabled>
+                            </div>
+                            <input type="hidden" class="form-control" id="product_id" name="product_id" value="<?php echo $product['product_id'];?>" />
+                          </div>
+                          <div class="form-group required">
+                            <label class="col-sm-2 control-label" for="sender_name">Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="sender_name" name="sender_name" placeholder="please enter your full name">
+                            </div>
+                          </div>
+                          <div class="form-group required">
+                            <label class="col-sm-2 control-label" for="sender_email">Email</label>
+                            <div class="col-sm-10">
+                                <input type="email" class="form-control" id="sender_email" name="sender_email" placeholder="please enter your Email address">
+                            </div>
+                          </div>
+                          <div class="form-group required">
+                            <label class="col-sm-2 control-label" for="sender_telephone">Telephone</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="sender_telephone" name="sender_telephone" placeholder="please enter your Phone number">
+                            </div>
+                          </div>
+                          <div class="form-group required">
+                            <label class="col-sm-2 control-label" for="content">Message</label>
+                            <div class="col-sm-10">
+                                <textarea name="content" id="enquiry-content" rows="3" cols="100" placeholder="enter your query"></textarea>
+                            </div>
+                          </div>
+                          <?php echo $captcha; ?>
+                        </form>
+                    </div>
+                    <div id="loader-form-div" style="display:none;">
+                    <style>
+                        .loader {
+                          font-size: 10px;
+                          margin: 50px auto;
+                          text-indent: -9999em;
+                          width: 11em;
+                          height: 11em;
+                          border-radius: 50%;
+                          background: #ff89d8;
+                          background: -moz-linear-gradient(left, #ff89d8 10%, rgba(255,137,216, 0) 42%);
+                          background: -webkit-linear-gradient(left, #ff89d8 10%, rgba(255,137,216, 0) 42%);
+                          background: -o-linear-gradient(left, #ff89d8 10%, rgba(255,137,216, 0) 42%);
+                          background: -ms-linear-gradient(left, #ff89d8 10%, rgba(255,137,216, 0) 42%);
+                          background: linear-gradient(to right, #ff89d8 10%, rgba(255,137,216, 0) 42%);
+                          position: relative;
+                          -webkit-animation: load3 1.4s infinite linear;
+                          animation: load3 1.4s infinite linear;
+                          -webkit-transform: translateZ(0);
+                          -ms-transform: translateZ(0);
+                          transform: translateZ(0);
+                        }
+                        .loader:before {
+                          width: 50%;
+                          height: 50%;
+                          background: #ff89d8;
+                          border-radius: 100% 0 0 0;
+                          position: absolute;
+                          top: 0;
+                          left: 0;
+                          content: '';
+                        }
+                        .loader:after {
+                          background: #feffff;
+                          width: 75%;
+                          height: 75%;
+                          border-radius: 50%;
+                          content: '';
+                          margin: auto;
+                          position: absolute;
+                          top: 0;
+                          left: 0;
+                          bottom: 0;
+                          right: 0;
+                        }
+                        @-webkit-keyframes load3 {
+                          0% {
+                            -webkit-transform: rotate(0deg);
+                            transform: rotate(0deg);
+                          }
+                          100% {
+                            -webkit-transform: rotate(360deg);
+                            transform: rotate(360deg);
+                          }
+                        }
+                        @keyframes load3 {
+                          0% {
+                            -webkit-transform: rotate(0deg);
+                            transform: rotate(0deg);
+                          }
+                          100% {
+                            -webkit-transform: rotate(360deg);
+                            transform: rotate(360deg);
+                          }
+                        }
+                        </style>
+                        <div class="loader">Loading...</div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="btn-enquiry-close">Close</button>
+                    <button type="button" class="btn btn-primary" id="btn-enquiry-send">Send</button>
+                  </div>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+            <!-- ENQUIRY MODAL ENDS-->
+
+
+              <script type="text/javascript">
+                $(document).ready(function() {
+
+                    $('#anchor-enquiry').on('click', function(e) {
+
+                        e.preventDefault();
+                        e.stopPropagation();
+                        $('#btn-enquiry-close').trigger('click');
+                        $('#enquiryModal').modal('show');
+                    });
+
+                    $('#btn-enquiry-send').on('click', function(e) {
+
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        // Validate the Fields
+                        $("#enquiry-form :input").each(function() {
+                          if($.trim($(this).val()) == "") {
+                            alert('Please fill all the fields');
+                            $(this).focus();
+                            throw new Error('Field missing');
+                          }
+                        });
+
+                        $('#enquiry-form-div').slideUp('slow');
+                        $('#loader-form-div').slideDown('slow');
+                        $('#btn-enquiry-send').attr('disabled','disabled');
+                        $('#btn-enquiry-close').attr('disabled','disabled');
+
+                        var fd = $('#enquiry-form').serializeArray();
+
+                        // Submit the FORM
+                        $.ajax({
+                            url: 'index.php?route=extension/module/product_enquiry/storeQuery',
+                            type: 'post',
+                            data: fd,
+                            async: false,
+                            success: function(data){
+                                if($.isNumeric($.trim(data))) {
+                                    // Success
+                                    $('#loader-form-div').slideUp();
+                                    $("#enquiry-form")[0].reset();
+                                    $('#enquiry-form-div').slideDown();
+                                    $("#form-submit-response-div").html("<p class=\"bg-success\">Your enquiry has been submitted. We will get in touch with you shortly.</p>").slideDown();
+                                    $('#btn-enquiry-send').removeAttr('disabled');
+                                    $('#btn-enquiry-close').removeAttr('disabled');
+
+                                } else {
+                                    // Error
+                                    $('#loader-form-div').slideUp();
+                                    $('#enquiry-form-div').slideDown();
+                                    $("#form-submit-response-div").html("<p class=\"bg-danger\">Sorry, we couldn't send your query. Please try again in some time.</p>").slideDown();
+                                    $('#btn-enquiry-send').removeAttr('disabled');
+                                    $('#btn-enquiry-close').removeAttr('disabled');
+                                }
+                            },
+                            error: function(jqXhr, textStatus, errorThrown){
+                                //console.log(errorThrown);
+                            }
+                        });
+
+                    });
+
+                    $('#btn-enquiry-close').on('click',function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        $('#btn-enquiry-send').removeAttr('disabled');
+                        $('#btn-enquiry-close').removeAttr('disabled');
+                        $('#enquiry-form-div').slideDown();
+                        $('#loader-form-div').slideUp();
+                        $("#form-submit-response-div").html('').hide();
+                        $("#enquiry-form")[0].reset();
+                        $('#enquiryModal').modal('hide');
+                    });
+                });
+              </script>
+          ]]></add>
+        </operation>
+
+    </file>
+
+    <!-- Add a menu Item for List view on Admin Panel -->
+    <file name="admin/controller/common/column_left.php">
+
+        <operation>
+            <search position="before"><![CDATA[
+              if ($this->user->hasPermission('access', 'catalog/recurring')) {
+          ]]></search>
+            <add><![CDATA[
+            if ($this->user->hasPermission('access', 'catalog/product_enquiry')) {
+				$catalog[] = array(
+					'name'	   => 'Product Enquiries',
+					'href'     => $this->url->link('catalog/product_enquiry', 'token=' . $this->session->data['token'], true),
+					'children' => array()
+				);
+			}
+          ]]></add>
+        </operation>
+
+    </file>
+
+</modification>
