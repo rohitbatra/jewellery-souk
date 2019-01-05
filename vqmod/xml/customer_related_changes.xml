@@ -124,7 +124,7 @@
       </operation>
 
     </file>
-
+<!-- TODO: Commented below as the Checkout page was not working.
     <file name="catalog/view/theme/so-topdeal/template/checkout/checkout.tpl">
 
       <operation>
@@ -190,7 +190,7 @@
           ]]></add>
       </operation>
     </file>
-
+-->
     <file name="catalog/controller/checkout/payment_method.php">
 
       <operation>
