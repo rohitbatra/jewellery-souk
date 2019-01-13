@@ -32,7 +32,7 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td class="text-left"><img class="img-thumbnail" src="https://www.gravatar.com/avatar/<?php echo md5(strtolower(trim($sender_email)));?>" /> <br/> Name: <strong><?php echo $sender_name;?></strong> <?php if(!$is_seller) { ?> <br/> <small>e-Mail: <?php echo $sender_email; ?></small><br/> <small>Telephone: <?php echo $sender_telephone; ?></small> <?php } ?></td>
+                                            <td class="text-left"><img class="img-thumbnail" src="https://www.gravatar.com/avatar/<?php echo md5(strtolower(trim($sender_email)));?>?d=mp&f=y" /> <br/> Name: <strong><?php echo $sender_name;?></strong> <?php if(!$is_seller) { ?> <br/> <small>e-Mail: <?php echo $sender_email; ?></small><br/> <small>Telephone: <?php echo $sender_telephone; ?></small> <?php } ?></td>
                                             <td class="text-left"><a href="<?php echo $product_href; ?>" target="_blank"><?php echo $product_name; ?></a> </td>
                                             <td class="text-left"><?php echo $enquiry; ?></td>
                                             <td class="text-left"><?php echo $enquiry_added; ?></td>
