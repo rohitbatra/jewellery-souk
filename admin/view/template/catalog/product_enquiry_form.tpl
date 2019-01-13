@@ -39,10 +39,10 @@
                                         </tr>
                                         <?php if($enquiry_replied) { ?>
                                             <tr>
-                                                <td class="text-left"><?php $seller['firstname']." ".$seller['lastname']; ?></td>
+                                                <td class="text-left"><?php echo $seller['firstname']." ".$seller['lastname']; ?></td>
                                                 <td class="text-left">-NA-</td>
-                                                <td class="text-left"><?php $reply_content; ?></td>
-                                                <td class="text-left"><?php $reply_added; ?></td>
+                                                <td class="text-left"><?php echo $reply_content; ?></td>
+                                                <td class="text-left"><?php echo $reply_added; ?></td>
                                             </tr>
                                         <?php } ?>
                                     </tbody>
