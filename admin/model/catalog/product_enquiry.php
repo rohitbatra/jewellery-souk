@@ -50,7 +50,7 @@ class ModelCatalogProductEnquiry extends Model {
     }
 
 
-    protected function sendReplyToEnquirer($data) {
+    public function sendReplyToEnquirer($data) {
 
         // Get Seller Id & Product Name from DB Query
         $enquiry_info = $this->getEnquiry($data['enquiry_id']);
