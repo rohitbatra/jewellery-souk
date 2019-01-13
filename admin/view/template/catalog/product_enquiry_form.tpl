@@ -39,7 +39,7 @@
                                         </tr>
                                         <?php if($enquiry_replied) { ?>
                                             <tr>
-                                                <td class="text-left"><?php echo $seller['firstname']." ".$seller['lastname']; ?></td>
+                                                <td class="text-left"><img class="img-thumbnail" src="https://www.gravatar.com/avatar/<?php echo md5(strtolower(trim($seller['email'])));?>?d=mp&" /> <br/> Name: <strong><?php echo $seller['firstname']." ".$seller['lastname'];?></strong></td>
                                                 <td class="text-left">-NA-</td>
                                                 <td class="text-left"><?php echo $reply_content; ?></td>
                                                 <td class="text-left"><?php echo $reply_added; ?></td>
