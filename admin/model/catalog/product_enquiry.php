@@ -88,12 +88,12 @@ class ModelCatalogProductEnquiry extends Model {
         $this->db->query($sql_check);
         if($this->db->countAffected() < 1){
             // Update Query
-            $this->db->query("UPDATE `".DB_PREFIX."product_enquiries` SET `read_by_seller` = '1' AND `read_dataTime` = NOW() WHERE `id` = '{$enquiry_id}' ");
+            $this->db->query("UPDATE `".DB_PREFIX."product_enquiries` SET `read_by_seller` = '1' AND `read_dataTime` = '".date('Y-m-d H:i:s')."' WHERE `id` = '{$enquiry_id}' ");
         }
     }
 
     public function saveReplyToDb($data) {
-        $this->db->query("UPDATE `".DB_PREFIX."product_enquiries` SET `reply_content` = '".$this->db->escape($data['reply_content'])."' AND `reply_dataTime` = NOW() WHERE `id` = '{$data['enquiry_id']}' ");
+        $this->db->query("UPDATE `".DB_PREFIX."product_enquiries` SET `reply_content` = '".$this->db->escape($data['reply_content'])."' AND `reply_dataTime` = '".date('Y-m-d H:i:s')."' WHERE `id` = '{$data['enquiry_id']}' ");
     }
 
 }
