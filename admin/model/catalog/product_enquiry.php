@@ -64,6 +64,10 @@ class ModelCatalogProductEnquiry extends Model {
         $data['web_url'] = HTTPS_CATALOG . "/";
         $data['logo_url'] = HTTPS_CATALOG . "image/" .$this->config->get('config_logo');
 
+        $data['enquirer_name'] = $enquiry_info['sender_name'];
+        $data['enquiry_content'] = $enquiry_info['content'];
+        $data['enquiry_response'] = $enquiry_info['reply_content'];
+
         // Send an HTML email
         $mail = new Mail();
         $mail->protocol = $this->config->get('config_mail_protocol');
