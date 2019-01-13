@@ -84,7 +84,7 @@ class ModelCatalogProductEnquiry extends Model {
     }
 
     public function markEnquiryAsRead($enquiry_id) {
-        $sql_check = "SELECT enquiry_id FROM `".DB_PREFIX."product_enquiries` WHERE id = '{$enquiry_id}' AND `read_by_seller` = '1' ";
+        $sql_check = "SELECT `id` FROM `".DB_PREFIX."product_enquiries` WHERE id = '{$enquiry_id}' AND `read_by_seller` = '1' ";
         $this->db->query($sql_check);
         if($this->db->countAffected() < 1){
             // Update Query
