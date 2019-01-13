@@ -67,7 +67,7 @@ class ControllerCatalogProductEnquiry extends Controller {
         // Get Enquiry
         $this->load->model('catalog/product_enquiry');
         if (isset($this->request->get['enquiry_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-            $enquiry_info = $this->model_catalog_product_enqury->getEnquiry($this->request->get['enquiry_id']);
+            $enquiry_info = $this->model_catalog_product_enquiry->getEnquiry($this->request->get['enquiry_id']);
         }
 
         $data['is_seller'] = false;
