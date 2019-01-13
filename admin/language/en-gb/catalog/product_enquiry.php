@@ -7,6 +7,7 @@ $_['text_success']          = 'Success: You have modified product enquiry!';
 $_['text_list']             = 'Product Enquiries List';
 $_['text_edit']             = 'Edit Product Enquiry';
 $_['text_product_enquiry']  = 'Product Enquiry';
+$_['text_reply_product_enquiry']  = 'Reply to Product Enquiry';
 
 // Column
 $_['column_product']		= 'Product Name';
