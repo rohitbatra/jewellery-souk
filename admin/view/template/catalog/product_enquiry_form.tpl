@@ -56,7 +56,7 @@
                             <?php if($is_seller) { ?>
                                 <fieldset>
                                     <legend><?php echo $text_reply_product_enquiry; ?></legend>
-                                    <form class="form-horizontal" id="reply-form" action="<?php echo $action; ?>">
+                                    <form class="form-horizontal" id="reply-form" action="<?php echo $action; ?>" method="post">
                                         <div class="form-group">
                                             <label class="col-sm-2 control-label" for="input-comment"><?php echo $entry_reply; ?></label>
                                             <div class="col-sm-10">
