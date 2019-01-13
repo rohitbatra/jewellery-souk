@@ -58,7 +58,7 @@ class ControllerCatalogProductEnquiry extends Controller {
 
         $data['breadcrumbs'][] = array(
             'text' => $this->language->get('heading_title'),
-            'href' => $this->url->link('catalog/product_enquiries', 'token=' . $this->session->data['token'], true)
+            'href' => $this->url->link('catalog/product_enquiry', 'token=' . $this->session->data['token'], true)
         );
 
         $data['action'] = $this->url->link('catalog/product_enquiry/view', 'token=' . $this->session->data['token'] ."&enquiry_id=".$this->request->get['enquiry_id'], true);
