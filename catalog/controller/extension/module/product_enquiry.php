@@ -5,8 +5,8 @@ class ControllerExtensionModuleProductEnquiry extends Controller {
         $postData = $this->request->post;
 
         // Save the Post Data in DB
-        $this->db->query("INSERT into `".DB_PREFIX."product_enquiries` (`product_id`,`sender_name`,`sender_email`,`sender_telephone`,`content`)
-                            VALUES ('".$this->db->escape($postData['product_id'])."','".$this->db->escape($postData['sender_name'])."','".$this->db->escape($postData['sender_email'])."','".$this->db->escape($postData['sender_telephone'])."','".$this->db->escape($postData['content'])."') ");
+        $this->db->query("INSERT into `".DB_PREFIX."product_enquiries` (`product_id`,`sender_name`,`sender_email`,`sender_telephone`,`content`, `enquiry_dataTime`)
+                            VALUES ('".$this->db->escape($postData['product_id'])."','".$this->db->escape($postData['sender_name'])."','".$this->db->escape($postData['sender_email'])."','".$this->db->escape($postData['sender_telephone'])."','".$this->db->escape($postData['content'])."', 'NOW()') ");
 
         $enquiry_id = $this->db->getLastId();
 

@@ -2,7 +2,7 @@
 class ModelCatalogProductEnquiry extends Model {
 
     public function getEnquiry($enquiry_id) {
-        $query = $this->db->query("SELECT DISTINCT *, (SELECT pd.name FROM " . DB_PREFIX . "product_description pd WHERE pd.product_id = r.product_id AND pd.language_id = '" . (int)$this->config->get('config_language_id') . "') AS product FROM " . DB_PREFIX . "review r WHERE r.review_id = '" . (int)$review_id . "'");
+        $query = $this->db->query("SELECT pe.*, pd.name as product_name, p.seller_id FROM `" . DB_PREFIX . "product_enquiries` AS pe LEFT JOIN " . DB_PREFIX . "product_description pd ON (pd.product_id = pe.product_id) LEFT JOIN " . DB_PREFIX . "product p ON (p.product_id = pe.product_id) WHERE pd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND pe.id = '". (int)$enquiry_id."'");
 
         return $query->row;
     }
@@ -53,15 +53,16 @@ class ModelCatalogProductEnquiry extends Model {
     protected function sendReplyToEnquirer($data) {
 
         // Get Seller Id & Product Name from DB Query
-        $sql_seller = "SELECT pd.name FROM `".DB_PREFIX."product_description` AS pd WHERE pd.product_id = '{$data['product_id']}' ";
-        $query_result = $this->db->query($sql_seller);
+        $enquiry_info = $this->getEnquiry($data['enquiry_id']);
 
         $data['web_name'] = $this->config->get('config_name');
         $data['support_email'] = "support@sezplus.com";
 
-        $data['product_name'] = $query_result->row['name'];
-        $data['product_link'] = $this->url->link('product/product', 'product_id=' . $data['product_id'], true);
-        $data['enquiry_link'] = HTTPS_SERVER.'admin/index.php?route=catalog/product_enquiry/view&enquiry_id='.$data['enquiry_id'];
+        $data['product_name'] = $enquiry_info['product_name'];
+        $data['product_link'] = HTTPS_CATALOG.'index.php?route=product/product&product_id='.$data['product_id'];
+
+        $data['web_url'] = HTTPS_CATALOG . "/";
+        $data['logo_url'] = HTTPS_CATALOG . "image/" .$this->config->get('config_logo');
 
         // Send an HTML email
         $mail = new Mail();
@@ -73,13 +74,26 @@ class ModelCatalogProductEnquiry extends Model {
         $mail->smtp_port = $this->config->get('config_mail_smtp_port');
         $mail->smtp_timeout = $this->config->get('config_mail_smtp_timeout');
 
-        $mail->setTo($data['seller_email']);
+        $mail->setTo($enquiry_info['sender_email']);
         $mail->setFrom("enquiries@sezplus.com");
         $mail->setSender(html_entity_decode($data['web_name'].' Enquiries', ENT_QUOTES, 'UTF-8'));
         $mail->setSubject(html_entity_decode("Response of your Enquiry!", ENT_QUOTES, 'UTF-8'));
         $mail->setHtml($this->load->view('mail/seller/product_enquiry_response', $data));
         $mail->send();
 
+    }
+
+    public function markEnquiryAsRead($enquiry_id) {
+        $sql_check = "SELECT enquiry_id FROM `".DB_PREFIX."product_enquiries` WHERE id = '{$enquiry_id}' AND `read_by_seller` = '1' ";
+        $this->db->query($sql_check);
+        if($this->db->countAffected() < 1){
+            // Update Query
+            $this->db->query("UPDATE `".DB_PREFIX."product_enquiries` SET `read_by_seller` = '1' AND `read_dataTime` = NOW() WHERE `id` = '{$enquiry_id}' ");
+        }
+    }
+
+    public function saveReplyToDb($data) {
+        $this->db->query("UPDATE `".DB_PREFIX."product_enquiries` SET `reply_content` = '".$this->db->escape($data['reply_content'])."' AND `reply_dataTime` = NOW() WHERE `id` = '{$data['enquiry_id']}' ");
     }
 
 }

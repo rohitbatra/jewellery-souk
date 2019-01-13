@@ -19,12 +19,103 @@ class ControllerCatalogProductEnquiry extends Controller {
 
         $this->load->model('catalog/product_enquiry');
 
+        // If Seller, then Mark Status of Enquiry as Read
+        if($this->user->isSeller()) {
+            $this->model_catalog_product_enquiry->markEnquiryAsRead($this->request->get['enquiry_id']);
+        }
+
+        if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+            $this->model_catalog_product_enquiry->saveReplyToDb(array('reply_content' => $this->request->post['reply_content'], 'enquiry_id' => $this->request->get['enquiry_id']));
+            $this->model_catalog_product_enquiry->sendReplyToEnquirer(array('reply_content' => $this->request->post['reply_content'], 'enquiry_id' => $this->request->get['enquiry_id']));
+
+            $this->session->data['success'] = $this->language->get('text_success');
+
+            $this->response->redirect($this->url->link('catalog/product_enquiry', 'token=' . $this->session->data['token'], true));
+        }
+
         $this->getForm();
     }
 
     protected function getForm() {
+        $data['heading_title'] = $this->language->get('heading_title');
 
+        $data['entry_product'] = $this->language->get('entry_product');
+        $data['entry_sender'] = $this->language->get('entry_sender');
+        $data['entry_enquiry'] = $this->language->get('entry_enquiry');
+        $data['entry_reply'] = $this->language->get('entry_reply');
+        $data['entry_date_added'] = $this->language->get('entry_date_added');
 
+        $data['button_send_reply'] = $this->language->get('button_send_reply');
+        $data['button_cancel'] = $this->language->get('button_cancel');
+
+        $data['breadcrumbs'] = array();
+
+        $data['breadcrumbs'][] = array(
+            'text' => $this->language->get('text_home'),
+            'href' => $this->url->link('common/dashboard', 'token=' . $this->session->data['token'], true)
+        );
+
+        $data['breadcrumbs'][] = array(
+            'text' => $this->language->get('heading_title'),
+            'href' => $this->url->link('catalog/product_enquiries', 'token=' . $this->session->data['token'], true)
+        );
+
+        $data['action'] = $this->url->link('catalog/product_enquiry/view', 'token=' . $this->session->data['token'] ."&enquiry_id=".$this->request->get['enquiry_id'], true);
+
+        $data['cancel'] = $this->url->link('catalog/product_enquiry', 'token=' . $this->session->data['token'], true);
+
+        // Get Enquiry
+        $this->load->model('catalog/product_enquiry');
+        if (isset($this->request->get['enquiry_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
+            $enquiry_info = $this->model_catalog_product_enqury->getEnquiry($this->request->get['enquiry_id']);
+        }
+
+        $data['is_seller'] = false;
+        if($this->user->isSeller()) {
+            $data['is_seller'] = true;
+        }
+
+        $data['token'] = $this->session->data['token'];
+
+        $this->load->model('user/user');
+        $data['seller'] = $this->model_user_user->getUser($enquiry_info['seller_id']);
+
+        $data['product_name'] = $enquiry_info['product_name'];
+        $data['product_id'] = $enquiry_info['product_id'];
+        $data['product_href'] = HTTPS_CATALOG.'index.php?route=product/product&product_id='.$data['product_id'];
+
+        $data['sender_name'] = $enquiry_info['sender_name'];
+        $data['sender_email'] = $enquiry_info['sender_email'];
+        $data['sender_telephone'] = $enquiry_info['sender_telephone'];
+
+        $data['enquiry'] = $enquiry_info['content'];
+        $data['enquiry_added'] = $enquiry_info['enquiry_dataTime'];
+
+        $data['reply_content'] = $enquiry_info['reply_content'];
+        $data['reply_added'] = $enquiry_info['reply_dataTime'];
+        $data['enquiry_replied'] = false;
+        if(!empty($data['reply_added']) && !empty($data['reply_content'])) {
+            $data['enquiry_replied'] = true;
+        }
+
+        $data['header'] = $this->load->controller('common/header');
+        $data['column_left'] = $this->load->controller('common/column_left');
+        $data['footer'] = $this->load->controller('common/footer');
+
+        $this->response->setOutput($this->load->view('catalog/product_enquiry_form', $data));
+
+    }
+
+    protected function validateForm() {
+        if (!$this->user->hasPermission('modify', 'catalog/product_enquiry')) {
+            $this->error['warning'] = $this->language->get('error_permission');
+        }
+
+        if ((utf8_strlen($this->request->post['reply_content']) < 3)) {
+            $this->error['reply_content'] = $this->language->get('error_reply_content');
+        }
+
+        return !$this->error;
     }
 
     protected function getList() {

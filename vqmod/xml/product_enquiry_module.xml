@@ -15,24 +15,49 @@
     `sender_email` varchar(255) NOT NULL DEFAULT '',
     `sender_telephone` varchar(255) DEFAULT NULL,
     `content` longtext,
+    `enquiry_dataTime` timestamp NULL DEFAULT NULL,
     `reply_content` longtext,
+    `reply_dataTime` timestamp NULL DEFAULT NULL,
     `read_by_seller` tinyint(1) NOT NULL DEFAULT '0',
+    `read_dataTime` timestamp NULL DEFAULT NULL,
     `dataTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
-    ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+    ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
     */
 
     <file name="catalog/view/theme/so-topdeal/template/product/product.tpl">
 
         <operation>
             <search position="before"><![CDATA[
-              <li class="wishlist">
+                <div class="add-to-links wish_comp">
           ]]></search>
             <add><![CDATA[
+            <style>
+            .product-view .content-product-right .box-info-product .enquiry input {
+                box-shadow: none;
+                color: #fff;
+                font-size: 12px;
+                font-weight: 600;
+                text-transform: capitalize;
+                border: none;
+                border-radius: 20px;
+                padding: 0 25px 0 45px;
+                background: #dd3c7f url("catalog/view/theme/so-topdeal/images/icon/message-outline-16.png") no-repeat left 19px center;
+                height: 35px;
+                line-height: 35px;
+                margin: 0 5px;
+                outline: none;
+                transition: 0.3s all ease 0s;
+                position: relative;
+            }
+            .product-view .content-product-right .box-info-product .enquiry input:hover {
+              background-color: #c42265;
+            }
+            </style>
             <!-- ENQUIRY BUTTON -->
-            <li class="enquiry">
-                <a class="icon" data-toggle="tooltip" title="Send Enquiry" href="javascript:void(1);" id="anchor-enquiry"><i class="fa fa-envelope"></i></a>
-            </li>
+            <div class="enquiry" style="overflow:hidden;float:left;margin-right:5px;">
+                <input type="button" data-toggle="tooltip" title="Send Enquiry" value="Send Enquiry" href="javascript:void(1);" id="anchor-enquiry" data-loading-text="<?php echo $text_loading; ?>" class="btn btn-mega btn-lg" />
+            </div>
           ]]></add>
         </operation>
 
@@ -62,19 +87,19 @@
                           <div class="form-group required">
                             <label class="col-sm-2 control-label" for="sender_name">Name</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="sender_name" name="sender_name" placeholder="please enter your full name">
+                                <input type="text" class="form-control" id="sender_name" name="sender_name" placeholder="please enter your full name" value="<?php echo $sender_name; ?>">
                             </div>
                           </div>
                           <div class="form-group required">
                             <label class="col-sm-2 control-label" for="sender_email">Email</label>
                             <div class="col-sm-10">
-                                <input type="email" class="form-control" id="sender_email" name="sender_email" placeholder="please enter your Email address">
+                                <input type="email" class="form-control" id="sender_email" name="sender_email" placeholder="please enter your Email address" value="<?php echo $sender_email; ?>">
                             </div>
                           </div>
                           <div class="form-group required">
                             <label class="col-sm-2 control-label" for="sender_telephone">Telephone</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="sender_telephone" name="sender_telephone" placeholder="please enter your Phone number">
+                                <input type="text" class="form-control" id="sender_telephone" name="sender_telephone" placeholder="please enter your Phone number" value="<?php echo $sender_telephone; ?>">
                             </div>
                           </div>
                           <div class="form-group required">
@@ -247,6 +272,27 @@
                     });
                 });
               </script>
+          ]]></add>
+        </operation>
+
+    </file>
+
+    <file name="catalog/controller/product/product.php">
+
+        <operation>
+            <search position="after"><![CDATA[
+              $data['manufacturer'] = $product_info['manufacturer'];
+          ]]></search>
+            <add><![CDATA[
+            if($this->customer->isLogged()) {
+              $data['sender_name'] = $this->customer->getFirstName();
+              $data['sender_email'] = $this->customer->getEmail();
+              $data['sender_telephone'] = $this->customer->getTelephone();
+          } else {
+             $data['sender_name'] = '';
+             $data['sender_email'] = '';
+             $data['sender_telephone'] = '';
+          }
           ]]></add>
         </operation>
 
