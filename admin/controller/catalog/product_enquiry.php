@@ -38,6 +38,7 @@ class ControllerCatalogProductEnquiry extends Controller {
 
     protected function getForm() {
         $data['heading_title'] = $this->language->get('heading_title');
+        $data['text_product_enquiry'] = $this->language->get('text_product_enquiry');
 
         $data['entry_product'] = $this->language->get('entry_product');
         $data['entry_sender'] = $this->language->get('entry_sender');
