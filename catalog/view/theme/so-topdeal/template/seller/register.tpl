@@ -320,21 +320,28 @@
             $('.individual').removeAttr('disabled');
             $('.company').removeAttr('disabled');
 
+            $('input[name="pan_number"]').closest('div.form-group').removeClass('hidden');
+            $('input[name="address_1"]').closest('div.form-group').removeClass('hidden');
+            $('input[name="address_2"]').closest('div.form-group').removeClass('hidden');
+
             var checkedSellerType = $(this).val();
 
-            if(checkedSellerType == 'individual')
-            {
+            if(checkedSellerType == 'individual') {
                 $('#individual_details').slideDown('slow');
                 $('#address_details').slideDown('slow');
                 $('#your_address_legend').show();
                 $('#btns').slideDown('slow');
 
+                // Hide few fields
+                $('input[name="pan_number"]').closest('div.form-group').addClass('hidden');
+                $('input[name="address_1"]').closest('div.form-group').addClass('hidden');
+                $('input[name="address_2"]').closest('div.form-group').addClass('hidden');
+
                 // Disable the fields to prevent them being sent in form post
                 $('.company').attr('disabled','disabled');
                 $('.individual').removeAttr('disabled');
 
-            }else if(checkedSellerType == 'company')
-            {
+            } else if(checkedSellerType == 'company') {
                 $('#company_details').slideDown('slow');
                 $('#address_details').slideDown('slow');
                 $('#company_address_legend').show();
@@ -360,19 +367,17 @@
         {
 
           // Check for Seller EMail
-          if($('#input-email').val() == "")
-          {
+          if($('#input-email').val() == "") {
             // Break error
             alert('Please enter your E-Mail!');
             $('#input-email').focus();
             throw new Error("Seller E-Mail not found");
-          }else{
+          } else {
             $('input[name="username"]').val($('#input-email').val());
           }
 
           // Check for Seller username
-          if($('#input-username').val() == "")
-          {
+          if($('#input-username').val() == "") {
             // Break error
             alert('Please enter your desired username!');
             $('input[name="username"]').focus();
@@ -380,8 +385,7 @@
           }
 
           // Check for Seller telephone
-          if($('#input-telephone').val() == "")
-          {
+          if($('#input-telephone').val() == "") {
             // Break error
             alert('Please enter your Telephone Number!');
             $('input[name="telephone"]').focus();
@@ -389,16 +393,14 @@
           }
 
           // Check for Seller type & category fields only
-          if($('input[name="seller_type"]:checked').val() == "undefined")
-          {
+          if($('input[name="seller_type"]:checked').val() == "undefined") {
             // Break error
             alert('Please Select any one Seller Type!');
             $('input[name="seller_type"]').focus();
             throw new Error("Seller Type not selected error");
           }
 
-          if($('select[name="category"] option:selected').val() == "*")
-          {
+          if($('select[name="category"] option:selected').val() == "*") {
             // Break error
             alert('Please Select one Category!');
             $('select[name="category"]').focus();
@@ -410,14 +412,12 @@
         var s_t = $.trim("<?php echo $seller_type; ?>");
         var cat = $.trim("<?php echo $category; ?>");
 
-        if(s_t !== "")
-        {
+        if(s_t !== "") {
             // Seller Type Select & Trigger
             $('input:radio[name="seller_type"][value="' + $.trim(s_t) + '"]').prop('checked', true).trigger('click');
         }
 
-        if(cat !== "")
-        {
+        if(cat !== "") {
             // Category Value
             $("select[name='category']").val($.trim(cat));
         }
