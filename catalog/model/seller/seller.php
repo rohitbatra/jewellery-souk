@@ -311,16 +311,13 @@ class ModelSellerSeller extends Model {
 
         $sql .= " ORDER BY p.viewed DESC";
 
-        if (isset($data['start']) || isset($data['limit'])) {
-            if ($data['start'] < 0) {
-                $data['start'] = 0;
-            }
+        if (isset($data['limit'])) {
 
             if ($data['limit'] < 1) {
                 $data['limit'] = 20;
             }
 
-            $sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
+            $sql .= " LIMIT " .(int)$data['limit'];
         }
 
         $product_data = array();

@@ -115,10 +115,7 @@ else $getColumn='full';
                                         <div class="left-block">
                                             <div class="product-image-container">
                                                 <a href="<?php echo $product['href']; ?>">
-                                                    <img  src="<?php echo $product['thumb']; ?>" alt="<?php echo $product['name']; ?>" title="<?php echo $product['name']; ?>" class="img-1 img-responsive" />
-                                                    <?php if( $secondimg =='2' && isset($product['thumb2']) && !empty($product['thumb2'])) :?>
-                                                    <img data-src="<?php echo $product['thumb2']; ?>" src="<?php echo lazyload($product['thumb2']); ?>"  alt="<?php echo $product['name']; ?>" title="<?php echo $product['name']; ?>" class="img-2 img-responsive" />
-                                                    <?php endif;?>
+                                                    <img src="<?php echo $product['thumb']; ?>" alt="<?php echo $product['name']; ?>" title="<?php echo $product['name']; ?>" class="img-1 img-responsive" />
                                                 </a>
                                             </div>
                                             <div class="button-group">
