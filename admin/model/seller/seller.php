@@ -148,4 +148,57 @@ class ModelSellerSeller extends Model {
 
 	}
 
+    public function formatData($data) {
+
+        $retArr = array();
+
+        $this->load->model('localisation/country');
+
+        switch ($data['seller_type']) {
+
+            case 'individual':
+                $retArr['name'] = $data['firstname'].' '.$data['lastname'];
+                $retArr['email'] = $data['email'];
+                $retArr['contact_person'] = $retArr['name'];
+                $retArr['seller_type'] = 'Individual';
+                break;
+
+            case 'company':
+                $retArr['name'] = $data['company_name'];
+                $retArr['email'] = $data['email'];
+                $retArr['contact_person'] = $data['company_p_firstname'].' '.$data['company_p_lastname'];
+                $retArr['seller_type'] = 'Company';
+                break;
+
+        }
+
+        $retArr['category'] = $data['user_group_name'];
+        $retArr['postcode'] = $data['postcode'];
+        $retArr['city'] = $data['city'];
+        $retArr['country_info'] = $this->model_localisation_country->getCountry($data['country_id']);
+        $retArr['telephone'] = $data['telephone'];
+        if(isset($data['address_1']) && !empty($data['address_1'])) {
+            $retArr['address'] = $data['address_1'] ." ".$data['address_2'];
+        }
+
+        $retArr['img'] = "https://www.gravatar.com/avatar/".md5(strtolower(trim($retArr['email'])))."?s=348&d=robohash";
+
+        return $retArr;
+    }
+
+    public function getSellerEmail($user_id) {
+        $q = $this->db->query("SELECT `email` FROM `" . DB_PREFIX . "user` WHERE `user_id` = '{$user_id}'");
+        return $q->row['email'];
+    }
+
+    public function getSellerName($user_id,$full_name=false) {
+        $str = "firstname";
+        if($full_name)
+        {
+            $str = "CONCAT(firstname,' ',lastname)";
+        }
+        $q = $this->db->query("SELECT {$str} as `name` FROM `" . DB_PREFIX . "user` WHERE `user_id` = '{$user_id}'");
+        return $q->row['name'];
+    }
+
 }

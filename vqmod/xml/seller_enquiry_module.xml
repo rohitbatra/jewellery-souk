@@ -1,0 +1,44 @@
+<modification>
+    <id>Seller Enquiry Module</id>
+    <version>2.0.0</version>
+    <vqmver>2.3.0</vqmver>
+    <update>0.0.1</update>
+    <author>Rohit Batra</author>
+
+    /*
+    CREATE TABLE `seller_enquiries` (
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `sender_name` varchar(255) NOT NULL DEFAULT '',
+    `sender_email` varchar(255) NOT NULL DEFAULT '',
+    `sender_telephone` varchar(255) DEFAULT NULL,
+    `content` longtext,
+    `reply_content` longtext,
+    `reply_dataTime` timestamp NULL DEFAULT NULL,
+    `read_by_seller` tinyint(1) NOT NULL DEFAULT '0',
+    `read_dataTime` timestamp NULL DEFAULT NULL,
+    `dataTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+    */
+
+    <!-- Add a menu Item for List view on Admin Panel -->
+    <file name="admin/controller/common/column_left.php">
+
+        <operation>
+            <search position="before"><![CDATA[
+              if ($this->user->hasPermission('access', 'catalog/recurring')) {
+          ]]></search>
+            <add><![CDATA[
+            if ($this->user->hasPermission('access', 'catalog/seller_enquiry')) {
+				$catalog[] = array(
+					'name'	   => 'Seller Enquiries',
+					'href'     => $this->url->link('catalog/seller_enquiry', 'token=' . $this->session->data['token'], true),
+					'children' => array()
+				);
+			}
+          ]]></add>
+        </operation>
+
+    </file>
+
+</modification>

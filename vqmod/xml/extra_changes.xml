@@ -669,7 +669,10 @@
               <?php if ($manufacturer): ?>
           ]]></search>
           <add><![CDATA[
-            <?php if ($seller_type && !empty($seller_type)){ ?>
+            <?php if ($seller_href && !empty($seller_href)) { ?>
+              <div class="brand"><span><?php echo $text_sold_by; ?></span><a href="<?php echo $seller_href; ?>" target="_blank"><?php echo ucfirst($seller_name); ?></a></div>
+            <?php } ?>
+            <?php if ($seller_type && !empty($seller_type)) { ?>
               <div class="brand"><span><?php echo $text_seller_type; ?></span><?php echo $seller_type; ?></div>
             <?php } ?>
             <?php if ($location): ?>
@@ -709,10 +712,11 @@
               $_['text_year']                = 'year';
           ]]></search>
           <add><![CDATA[
-              $_['text_location']                = 'Location:';
-              $_['text_seller_type']                = 'Seller Type:';
-              $_['text_dimensions']                = 'Dimensions (L x W x H):';
-              $_['text_weight']                = 'Weight:';
+              $_['text_location']               = 'Location:';
+              $_['text_sold_by']                = 'Sold By:';
+              $_['text_seller_type']            = 'Seller Type:';
+              $_['text_dimensions']             = 'Dimensions (L x W x H):';
+              $_['text_weight']                 = 'Weight:';
           ]]></add>
         </operation>
 
@@ -740,8 +744,24 @@
               foreach ($query->rows as $row) {
                  $seller_type = $row['name'];
               }
-
               $data['seller_type'] = $seller_type;
+
+              $data['seller_id'] = $data['seller_name'] = $data['seller_href'] = "";
+              $sql_seller = "SELECT seller_id FROM product WHERE product_id = '{$product_info['product_id']}'";
+              $squery = $this->db->query($sql_seller);
+              foreach ($squery->rows as $row) {
+                 $data['seller_id'] = $product_info['seller_id'] = $seller_id = $row['seller_id'];
+              }
+
+              if(!empty($data['seller_id'])) {
+                $this->load->model('seller/seller');
+                $seller_raw_data = $this->model_seller_seller->getSellerById($data['seller_id']);
+                $seller_data = $this->model_seller_seller->formatData($seller_raw_data);
+                $data['seller_data'] = $seller_data;
+                $data['seller_name'] = $seller_data['name'];
+                $data['seller_href'] = $this->url->link('seller/profile', 'seller='.base64_encode($data['seller_id']));
+              }
+
           ]]></add>
         </operation>
 
@@ -750,6 +770,7 @@
               $data['text_write'] = $this->language->get('text_write');
           ]]></search>
           <add><![CDATA[
+              $data['text_sold_by'] = $this->language->get('text_sold_by');
               $data['text_seller_type'] = $this->language->get('text_seller_type');
               $data['text_location'] = $this->language->get('text_location');
               $data['text_dimensions'] = $this->language->get('text_dimensions');

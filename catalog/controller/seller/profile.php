@@ -16,10 +16,10 @@ class ControllerSellerProfile extends Controller {
         $this->load->model('tool/image');
 
         if (isset($this->request->get['seller'])) {
-            $seller_id = (int) base64_decode($this->request->get['seller']);
+            $data['seller_id'] = $seller_id = (int) base64_decode($this->request->get['seller']);
             $seller_id_encoded = $this->request->get['seller'];
         } else {
-            $seller_id = 0;
+            $data['seller_id'] = $seller_id = 0;
             $seller_id_encoded = 0;
         }
 
@@ -66,6 +66,13 @@ class ControllerSellerProfile extends Controller {
                 'text' => $seller_fd['name'],
                 'href' => $this->url->link('seller/profile', 'seller=' . $seller_id_encoded)
             );
+
+            // Captcha
+            if ($this->config->get($this->config->get('config_captcha') . '_status') && in_array('register', (array)$this->config->get('config_captcha_page'))) {
+                $data['captcha'] = $this->load->controller('extension/captcha/' . $this->config->get('config_captcha'), $this->error);
+            } else {
+                $data['captcha'] = '';
+            }
 
             $this->document->setTitle($seller_fd['name']." @ ".$this->config->get('config_name'));
             $this->document->addLink($this->url->link('seller/profile', 'seller=' . $seller_id_encoded), 'canonical');

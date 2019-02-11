@@ -101,7 +101,7 @@ else $getColumn='full';
         <div class="tabsslider col-xs-12 bottom-product clearfix">
             <ul class="nav nav-tabs">
                 <li class="active"><a data-toggle="tab" href="#seller-products"><?php echo $text_products; ?></a></li>
-                <li class="hidden"><a data-toggle="tab" href="#seller-enquiry"><?php echo $text_enquiry; ?></a></li>
+                <li class=""><a data-toggle="tab" href="#seller-enquiry"><?php echo $text_enquiry; ?></a></li>
             </ul>
             <div class="tab-content">
                 <div id="seller-products" class="tab-pane fade in active">
@@ -206,7 +206,174 @@ else $getColumn='full';
                     <?php } ?>
                 </div>
                 <div id="seller-enquiry" class="tab-pane fade">
-                    <?php echo $content_bottom; ?>
+                    <div id="form-submit-response-div" style="display:none;"></div>
+                    <div id="enquiry-form-div">
+                        <form id="enquiry-form" class="form-horizontal">
+                            <div class="form-group required">
+                                <label class="col-sm-2 control-label" for="sender_name">Name</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" id="sender_name" name="sender_name" placeholder="please enter your full name" value="<?php echo $sender_name; ?>">
+                                    <input type="hidden" id="seller_id" name="seller_id" value="<?php echo $seller_id; ?>">
+                                </div>
+                            </div>
+                            <div class="form-group required">
+                                <label class="col-sm-2 control-label" for="sender_email">Email</label>
+                                <div class="col-sm-4">
+                                    <input type="email" class="form-control" id="sender_email" name="sender_email" placeholder="please enter your Email address" value="<?php echo $sender_email; ?>">
+                                </div>
+                            </div>
+                            <div class="form-group required">
+                                <label class="col-sm-2 control-label" for="sender_telephone">Telephone</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" id="sender_telephone" name="sender_telephone" placeholder="please enter your Phone number" value="<?php echo $sender_telephone; ?>">
+                                </div>
+                            </div>
+                            <div class="form-group required">
+                                <label class="col-sm-2 control-label" for="content">Enquiry</label>
+                                <div class="col-sm-6">
+                                    <textarea name="content" id="enquiry-content" rows="3" cols="50" placeholder="please enter your query here"></textarea>
+                                </div>
+                            </div>
+
+                            <?php echo $captcha; ?>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"></label>
+                                <div class="col-sm-6">
+                                    <a href="javascript:void(1)" class="btn btn-default" id="btn-enquiry-send"><i class="fa fa-paper-plane" aria-hidden="true"></i>Send</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="loader-form-div" style="display:none;">
+                        <style>
+                            .loader {
+                                font-size: 10px;
+                                margin: 50px auto;
+                                text-indent: -9999em;
+                                width: 11em;
+                                height: 11em;
+                                border-radius: 50%;
+                                background: #ff89d8;
+                                background: -moz-linear-gradient(left, #ff89d8 10%, rgba(255,137,216, 0) 42%);
+                                background: -webkit-linear-gradient(left, #ff89d8 10%, rgba(255,137,216, 0) 42%);
+                                background: -o-linear-gradient(left, #ff89d8 10%, rgba(255,137,216, 0) 42%);
+                                background: -ms-linear-gradient(left, #ff89d8 10%, rgba(255,137,216, 0) 42%);
+                                background: linear-gradient(to right, #ff89d8 10%, rgba(255,137,216, 0) 42%);
+                                position: relative;
+                                -webkit-animation: load3 1.4s infinite linear;
+                                animation: load3 1.4s infinite linear;
+                                -webkit-transform: translateZ(0);
+                                -ms-transform: translateZ(0);
+                                transform: translateZ(0);
+                            }
+                            .loader:before {
+                                width: 50%;
+                                height: 50%;
+                                background: #ff89d8;
+                                border-radius: 100% 0 0 0;
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                content: '';
+                            }
+                            .loader:after {
+                                background: #feffff;
+                                width: 75%;
+                                height: 75%;
+                                border-radius: 50%;
+                                content: '';
+                                margin: auto;
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                bottom: 0;
+                                right: 0;
+                            }
+                            @-webkit-keyframes load3 {
+                                0% {
+                                    -webkit-transform: rotate(0deg);
+                                    transform: rotate(0deg);
+                                }
+                                100% {
+                                    -webkit-transform: rotate(360deg);
+                                    transform: rotate(360deg);
+                                }
+                            }
+                            @keyframes load3 {
+                                0% {
+                                    -webkit-transform: rotate(0deg);
+                                    transform: rotate(0deg);
+                                }
+                                100% {
+                                    -webkit-transform: rotate(360deg);
+                                    transform: rotate(360deg);
+                                }
+                            }
+                        </style>
+                        <div class="loader">Loading...</div>
+                    </div>
+
+                <script type="text/javascript">
+                    $(document).ready(function() {
+
+                        function dryValidate() {
+                            // Validate the Fields
+                            $("#enquiry-form :input").each(function() {
+                                if($.trim($(this).val()) == "") {
+                                    alert('Please fill all the fields');
+                                    $(this).focus();
+                                    $('#loader-form-div').slideUp();
+                                    $('#enquiry-form-div').slideDown();
+                                    $('#btn-enquiry-send').removeAttr('disabled');
+                                    throw new Error('Field missing');
+                                }
+                            });
+                        }
+
+                        $('#btn-enquiry-send').on('click', function(e) {
+
+                            e.preventDefault();
+
+                            $('#btn-enquiry-send').attr('disabled','disabled');
+                            $('#enquiry-form-div').slideUp();
+                            $('#loader-form-div').slideDown();
+
+                            dryValidate();
+                            var fd = $('#enquiry-form').serializeArray();
+
+                            // Submit the FORM
+                            $.ajax({
+                                url: 'index.php?route=extension/module/seller_enquiry/storeQuery',
+                                type: 'post',
+                                data: fd,
+                                async: false,
+                                success: function(data){
+                                    if($.isNumeric($.trim(data))) {
+                                        // Success
+                                        $("#enquiry-form")[0].reset();
+                                        $('#loader-form-div').slideUp();
+                                        $('#enquiry-form-div').slideDown();
+                                        $("#form-submit-response-div").html("<p class=\"bg-success\">Your enquiry has been submitted. We will get in touch with you shortly.</p>").slideDown();
+                                        $('#btn-enquiry-send').removeAttr('disabled');
+
+                                    } else {
+                                        // Error
+                                        $('#loader-form-div').slideUp();
+                                        $('#enquiry-form-div').slideDown();
+                                        $("#form-submit-response-div").html("<p class=\"bg-danger\">Sorry, we couldn't send your query. Please try again in some time.</p>").slideDown();
+                                        $('#btn-enquiry-send').removeAttr('disabled');
+                                    }
+                                },
+                                error: function(jqXhr, textStatus, errorThrown){
+                                    //console.log(errorThrown);
+                                }
+                            });
+
+                        });
+                    });
+                </script>
                 </div>
             </div>
         </div>
