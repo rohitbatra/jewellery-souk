@@ -447,8 +447,6 @@ p.center {
                                     <p class="sub align-center">&copy; <?php echo date('Y'); ?> <?php echo $web_name; ?>. All rights reserved.</p>
                                     <p class="sub align-center">
                                         RK SEZPLUS Services Pvt. Ltd.
-                                        <br>M.I.D.C, Andheri East
-                                        <br>Mumbai - 400093
                                     </p>
                                 </td>
                             </tr>
