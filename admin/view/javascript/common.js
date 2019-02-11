@@ -23,6 +23,10 @@ function getURLVar(key) {
 }
 
 $(document).ready(function() {
+
+    // Menu should be open always
+    localStorage.setItem('column-left', 'active');
+
 	//Form Submit for IE Browser
 	$('button[type=\'submit\']').on('click', function() {
 		$("form[id*='form-']").submit();
