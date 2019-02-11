@@ -39,7 +39,11 @@
                                         </tr>
                                         <?php if($enquiry_replied) { ?>
                                             <tr>
-                                                <td class="text-left"><img class="img-thumbnail" src="https://www.gravatar.com/avatar/<?php echo md5(strtolower(trim($seller['email'])));?>?d=mp&" /> <br/> Name: <strong><?php echo $seller['firstname']." ".$seller['lastname'];?></strong></td>
+                                                <?php if(!$is_seller) { ?>
+                                                    <td class="text-left"><img class="img-thumbnail" src="https://www.gravatar.com/avatar/<?php echo md5(strtolower(trim($seller['email'])));?>?d=mp&" /> <br/> Name: <a href="<?php echo $seller_href; ?>" target="_blank"><strong><?php echo $seller_name;?></strong></a></td>
+                                                <?php } else { ?>
+                                                    <td class="text-left"><img class="img-thumbnail" src="https://www.gravatar.com/avatar/<?php echo md5(strtolower(trim($seller['email'])));?>?d=mp&" /> <br/> Name: <strong><?php echo $seller_name;?></strong></td>
+                                                <?php } ?>
                                                 <td class="text-left">-NA-</td>
                                                 <td class="text-left"><?php echo $reply_content; ?></td>
                                                 <td class="text-left"><?php echo $reply_added; ?></td>

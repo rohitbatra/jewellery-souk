@@ -79,8 +79,14 @@ class ControllerCatalogProductEnquiry extends Controller {
 
         $data['token'] = $this->session->data['token'];
 
-        $this->load->model('user/user');
-        $data['seller'] = $this->model_user_user->getUser($enquiry_info['seller_id']);
+        $this->load->model('seller/seller');
+        $seller_data = $this->model_seller_seller->getSellerDetails($enquiry_info['seller_id']);
+        $data['seller'] = $this->model_seller_seller->formatData($seller_data);
+        $data['seller_href'] = 'javascript:void(1);';
+        if($this->user->isSeller() == false) {
+            $data['seller_href'] = $this->url->link('seller/seller/edit','&token='.$this->session->data['token'].'&user_id='.$enquiry_info['seller_id'],true);
+        }
+        $data['seller_name'] = ucwords($data['seller']['name']);
 
         $data['product_name'] = $enquiry_info['product_name'];
         $data['product_id'] = $enquiry_info['product_id'];
