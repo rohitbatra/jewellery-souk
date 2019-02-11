@@ -11,7 +11,7 @@
 							// Simple Blog
 			$simpleblog = array();
 			$simpleblogsettings = array();
-			if(!$this->user->isSeller())
+			if($this->user->isSeller() != true)
 			{
 
 				if ($this->user->hasPermission('access', 'simple_blog/author')) {
@@ -68,25 +68,25 @@
 					'children' => array()
 				);
 
-			}
 
-			if ($simpleblogsettings) {
-			$simpleblog[] = array(
-				'name'	   => $this->language->get('text_simple_blog_setting'),
-				'href'     => '',
-				'children' => $simpleblogsettings
-			);
-			}
+                if ($simpleblogsettings) {
+                $simpleblog[] = array(
+                    'name'	   => $this->language->get('text_simple_blog_setting'),
+                    'href'     => '',
+                    'children' => $simpleblogsettings
+                );
+                }
 
-			if ($simpleblog) {
-			$data['menus'][] = array(
-				'id'       => 'menu-simpleblog',
-				'icon'	   => 'fa-file-text-o',
-				'name'	   => $this->language->get('text_simple_blogs'),
-				'href'     => '',
-				'children' => $simpleblog
-			);
-			}
+                if ($simpleblog) {
+                $data['menus'][] = array(
+                    'id'       => 'menu-simpleblog',
+                    'icon'	   => 'fa-file-text-o',
+                    'name'	   => $this->language->get('text_simple_blogs'),
+                    'href'     => '',
+                    'children' => $simpleblog
+                );
+                }
+            }
 
 			]]></add>
         </operation>
