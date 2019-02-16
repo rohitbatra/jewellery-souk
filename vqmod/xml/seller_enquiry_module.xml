@@ -41,4 +41,21 @@
 
     </file>
 
+
+    <!-- Model Changes for Shop -->
+    <file name="catalog/model/catalog/product.php">
+
+        <operation>
+            <search position="before"><![CDATA[
+              if (!empty($data['filter_manufacturer_id'])) {
+          ]]></search>
+            <add><![CDATA[
+            if (isset($data['filter_seller_id']) && !empty($data['filter_seller_id'])) {
+                $sql .= " AND p.seller_id = '" . (int)$data['filter_seller_id'] . "'";
+            }
+          ]]></add>
+        </operation>
+
+    </file>
+
 </modification>
