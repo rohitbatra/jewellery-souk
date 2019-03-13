@@ -1,0 +1,119 @@
+<modification>
+    <id>Seller Login Cookie Detection - SOUK</id>
+    <version>1.0.0</version>
+    <vqmver>2.3.0</vqmver>
+    <update>0.0.1</update>
+    <author>Rohit Batra</author>
+
+    <file name="admin/controller/common/login.php">
+
+        <operation>
+            <search position="before"><![CDATA[
+              if (isset($this->request->post['redirect']) && (strpos($this->request->post['redirect'], HTTP_SERVER) === 0 || strpos($this->request->post['redirect'], HTTPS_SERVER) === 0)) {
+          ]]></search>
+            <add><![CDATA[
+               if(isset($this->request->post['redirect'])) {
+                    $this->request->post['redirect'] = htmlspecialchars_decode(rawurldecode($this->request->post['redirect']));
+               }
+          ]]></add>
+        </operation>
+
+        <operation>
+            <search position="after"><![CDATA[
+              $this->session->data['token'] = token(32);
+          ]]></search>
+            <add><![CDATA[
+                // Set a cookie when logging in.
+                $ck_name = "SEZ_ATKN";
+                $ck_value = $this->session->data['token'];
+                $ck_expiry = time() + (86400);
+                setcookie($ck_name, $ck_value, $ck_expiry, "/");
+          ]]></add>
+        </operation>
+
+    </file>
+
+    <file name="admin/controller/common/logout.php">
+
+        <operation>
+            <search position="after"><![CDATA[
+              unset($this->session->data['token']);
+          ]]></search>
+            <add><![CDATA[
+                // Expire the cookie when logging out.
+                $ck_name = "SEZ_ATKN";
+                $ck_value = '';
+                $ck_expiry = time() - 3600;
+                setcookie($ck_name, $ck_value, $ck_expiry, "/");
+          ]]></add>
+        </operation>
+
+    </file>
+
+
+    <file name="catalog/controller/seller/login.php">
+
+        <operation>
+            <search position="before"><![CDATA[
+              $this->load->language('seller/login');
+          ]]></search>
+            <add><![CDATA[
+                // Check for Cookie
+                $ck_name = "SEZ_ATKN";
+                if(isset($_COOKIE[$ck_name])) {
+                    // Redirect to Admin with TOKEN & Update cookie expiry
+                    $ck_value = $_COOKIE[$ck_name];
+                    $ck_expiry = time() + (86400);
+                    setcookie($ck_name, $ck_value, $ck_expiry, "/");
+
+                    if(isset($this->request->get['redirect']) && !empty($this->request->get['redirect'])) {
+                        $tmpStr = htmlspecialchars_decode(rawurldecode($this->request->get['redirect']));
+
+                        $dashboardURL = HTTPS_SERVER."admin/index.php?token=".$_COOKIE[$ck_name]."&route=".$tmpStr;
+                    } else {
+                        $dashboardURL = HTTPS_SERVER."admin/index.php?route=common/dashboard&token=".$_COOKIE[$ck_name];
+                    }
+
+                    header('Location: '.$dashboardURL);
+                    exit;
+                }
+          ]]></add>
+        </operation>
+
+    </file>
+
+    <file name="catalog/view/theme/*/template/seller/login.tpl">
+
+        <operation>
+            <search position="after"><![CDATA[
+              <input type="password" name="password" value="<?php echo $password; ?>" placeholder="<?php echo $entry_password; ?>" id="input-password" class="form-control" />
+          ]]></search>
+            <add><![CDATA[
+               <input type="hidden" name="redirect" value="<?php echo $redirect; ?>" class="form-control" />
+          ]]></add>
+        </operation>
+
+    </file>
+
+    <file name="catalog/controller/seller/login.php">
+
+        <operation>
+            <search position="before"><![CDATA[
+              if (isset($this->request->post['password'])) {
+          ]]></search>
+            <add><![CDATA[
+            if (isset($this->request->get['redirect'])) {
+                $data['redirect'] = rawurlencode(HTTPS_SERVER."admin/index.php?route=".$this->request->get['redirect']);
+            } else {
+                $data['redirect'] = '';
+            }
+          ]]></add>
+        </operation>
+
+    </file>
+
+
+
+</modification>
+
+
