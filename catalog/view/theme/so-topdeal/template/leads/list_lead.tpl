@@ -118,7 +118,15 @@
                 <!-- Pagination -->
                 <div class="product-filter product-filter-bottom filters-panel" >
                     <div class="row">
-                        <div class="short-by-show text-center <?php echo $short_by;?>">
+                        <div class="box-list col-md-2">
+                            <div class="view-mode">
+                                <div class="list-view hidden">
+                                    <button class="btn btn-default grid active" data-toggle="tooltip" title="" data-original-title="Grid"><i class="fa fa-th-large"></i></button>
+                                    <button class="btn btn-default list " data-toggle="tooltip" title="" data-original-title="List"><i class="fa fa-bars"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="short-by-show text-center col-md-6 col-sm-8 col-xs-12">
                             <div class="form-group" style="margin:0px"><?php echo $results; ?></div>
                         </div>
                         <?php if (!empty($pagination)){ ?>

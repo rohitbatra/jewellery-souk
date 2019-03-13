@@ -63,13 +63,9 @@ class ModelLeadsBuy extends Model {
     }
 
     public function  getTotalLeads($data) {
-        $sql = "SELECT COUNT(DISTINCT(l.lead_id)) FROM `" . DB_PREFIX . "leads` AS l  ";
+        $sql = "SELECT COUNT(DISTINCT(l.lead_id)) as total FROM `" . DB_PREFIX . "leads` AS l  ";
 
         $sql .= " WHERE l.status LIKE 'approved' ";
-
-        $sql .= " GROUP BY l.lead_id";
-
-        $sql .= " ORDER BY UNIX_TIMESTAMP(l.date_added) DESC";
 
         $query = $this->db->query($sql);
 
