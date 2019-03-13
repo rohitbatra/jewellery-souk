@@ -1,0 +1,89 @@
+<modification>
+    <id>Buy Leads Module - SOUK</id>
+    <version>1.0.0</version>
+    <vqmver>2.3.0</vqmver>
+    <update>0.0.1</update>
+    <author>Rohit Batra</author>
+
+    <!--
+        SQL Tables:
+
+        CREATE TABLE `leads` (
+          `lead_id` int(11) NOT NULL AUTO_INCREMENT,
+          `title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Lead Title',
+          `image_path` longtext COLLATE utf8mb4_general_ci,
+          `description` longtext COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Description for the lead',
+          `quantity` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+          `contact_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+          `contact_email` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+          `contact_phone` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+          `location` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+          `status` enum('pending','approved','rejected','expired') COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'pending',
+          `reason` text COLLATE utf8mb4_general_ci,
+          `views` bigint(11) NOT NULL DEFAULT '0',
+          `date_added` timestamp NULL DEFAULT NULL,
+          `dataTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          PRIMARY KEY (`lead_id`),
+          UNIQUE KEY `lead_id_UNIQUE` (`lead_id`)
+        ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+    -->
+
+    <!-- Add a menu Item for List view on Admin Panel -->
+    <file name="admin/controller/common/column_left.php">
+
+        <operation>
+            <search position="before"><![CDATA[
+              if ($this->user->hasPermission('access', 'catalog/recurring')) {
+          ]]></search>
+            <add><![CDATA[
+            // Leads
+			$leads = array();
+
+			if ($this->user->hasPermission('access', 'leads/action')) {
+				$leads[] = array(
+					'name'     => $this->language->get('text_all_leads'),
+					'href'     => $this->url->link('leads/action/all', 'token=' . $this->session->data['token'], true)
+				);
+			}
+
+			if ($this->user->hasPermission('access', 'leads/action')) {
+				$leads[] = array(
+					'name'	   => $this->language->get('text_purchased_leads'),
+					'href'     => $this->url->link('leads/action/purchased', 'token=' . $this->session->data['token'], true)
+				);
+			}
+
+			if ($leads) {
+				$catalog[] = array(
+					'name'	   => $this->language->get('text_leads'),
+					'href'     => '',
+					'children' => $leads
+				);
+			}
+          ]]></add>
+        </operation>
+
+    </file>
+
+
+
+    <file name="admin/language/en-gb/common/column_left.php">
+
+        <operation>
+            <search position="after"><![CDATA[
+              $_['text_other_status']              = 'Other Statuses';
+          ]]></search>
+            <add><![CDATA[
+                $_['text_leads']                     = 'Leads';
+                $_['text_all_leads']                 = 'All Leads';
+                $_['text_purchased_leads']           = 'Purchased Leads';
+          ]]></add>
+        </operation>
+
+    </file>
+
+
+</modification>
+
+
