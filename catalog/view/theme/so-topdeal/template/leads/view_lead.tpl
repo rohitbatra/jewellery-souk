@@ -235,8 +235,8 @@
                     e.preventDefault();
                     e.stopPropagation();
                     var urlHref = $(e.currentTarget).attr('data-href');
-                    console.log(urlHref);
-                    alertify.confirm('Buy Lead', 'Are you sure you want to buy this Lead?', function(){ location = urlHref; }
+
+                    alertify.confirm('Buy Lead', 'Are you sure you want to buy this Lead?', function(){ /* location = urlHref; */ window.open(urlHref, '_blank'); }
                             , function(){ alertify.error('Operation Canceled!')});
                 });
             });
