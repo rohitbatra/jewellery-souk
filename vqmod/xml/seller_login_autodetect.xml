@@ -8,6 +8,19 @@
     <file name="admin/controller/common/login.php">
 
         <operation>
+            <search position="after"><![CDATA[
+              $this->session->data['token'] = token(32);
+          ]]></search>
+            <add><![CDATA[
+                // Create a cookie when user logs in.
+                $ck_name = "SEZ_ATKN";
+                $ck_value = $this->session->data['token'];
+                $ck_expiry = time() + (3600 * 2);
+                setcookie($ck_name, $ck_value, $ck_expiry, "/");
+          ]]></add>
+        </operation>
+
+        <operation>
             <search position="before"><![CDATA[
               if (isset($this->request->post['redirect']) && (strpos($this->request->post['redirect'], HTTP_SERVER) === 0 || strpos($this->request->post['redirect'], HTTPS_SERVER) === 0)) {
           ]]></search>
@@ -24,84 +37,30 @@
           ]]></search>
             <add><![CDATA[
                $ck_name = "SEZ_ATKN";
-               if(isset($_COOKIE[$ck_name])) {
-                    // Redirect to Admin with TOKEN & Update cookie expiry
-                    $ck_value = $_COOKIE[$ck_name];
-                    $ck_expiry = time() + (86400);
-                    setcookie($ck_name, $ck_value, $ck_expiry, "/");
+               if(isset($_COOKIE[$ck_name]) && ($_COOKIE[$ck_name] != false) && !isset($this->request->get['url'])) {
 
                     if(isset($this->request->get['redirect']) && !empty($this->request->get['redirect'])) {
 
                         $tmpStr = htmlspecialchars_decode(rawurldecode($this->request->get['redirect']));
-                        $url = HTTPS_SERVER."admin/index.php?token=".$_COOKIE[$ck_name]."&route=".$tmpStr;
+                        $url = HTTPS_SERVER."index.php?token=".$_COOKIE[$ck_name]."&route=".$tmpStr."&url=final";
 
                     } else if(isset($this->request->get['route']) && !empty($this->request->get['route'])) {
 
                          // Make the URL & then Redirect
                         $url = HTTPS_SERVER.'index.php';
-                        $url .= "?token=".$_COOKIE[$ck_name];
+                        $url .= "?token=".$_COOKIE[$ck_name]."&url=final";
                         foreach($this->request->get as $key => $value) {
-                            $url .= "&{$key}={$value}";
+                            if(trim($key) != 'token') {
+                                $url .= "&{$key}={$value}";
+                            }
                         }
-                    } else {
-                        $url = HTTPS_SERVER."admin/index.php?route=common/dashboard&token=".$_COOKIE[$ck_name];
+                    }  else {
+                        $url = HTTPS_SERVER."index.php?route=common/dashboard&token=".$_COOKIE[$ck_name]."&url=final";
                     }
 
-                    $this->response->redirect($url);
+                    header('Location: '.$url);
+                    exit;
                }
-          ]]></add>
-        </operation>
-
-        <operation>
-            <search position="replace" index="1"><![CDATA[
-              $this->response->redirect($this->url->link('common/dashboard', 'token=' . $this->session->data['token'], true));
-          ]]></search>
-            <add><![CDATA[
-               if(isset($this->request->get['route'])) {
-
-                    // Make the URL & then Redirect
-                    $url = HTTPS_SERVER.'index.php';
-                    $url .= "&token=".$this->session->data['token'];
-                    foreach($this->request->get as $key => $value) {
-                        $url .= "&{$key}={$value}";
-                    }
-                    $this->response->redirect($url);
-               } else {
-                    $this->response->redirect($this->url->link('common/dashboard', 'token=' . $this->session->data['token'], true));
-               }
-          ]]></add>
-        </operation>
-
-        <operation>
-            <search position="replace" index="2"><![CDATA[
-              $this->response->redirect($this->url->link('common/dashboard', 'token=' . $this->session->data['token'], true));
-          ]]></search>
-            <add><![CDATA[
-               if(isset($this->request->get['route'])) {
-
-                    // Make the URL & then Redirect
-                    $url = HTTPS_SERVER.'index.php';
-                    $url .= "?token=".$this->session->data['token'];
-                    foreach($this->request->get as $key => $value) {
-                        $url .= "&{$key}={$value}";
-                    }
-                    $this->response->redirect($url);
-               } else {
-                    $this->response->redirect($this->url->link('common/dashboard', 'token=' . $this->session->data['token'], true));
-               }
-          ]]></add>
-        </operation>
-
-        <operation>
-            <search position="after"><![CDATA[
-              $this->session->data['token'] = token(32);
-          ]]></search>
-            <add><![CDATA[
-                // Set a cookie when logging in.
-                $ck_name = "SEZ_ATKN";
-                $ck_value = $this->session->data['token'];
-                $ck_expiry = time() + (86400);
-                setcookie($ck_name, $ck_value, $ck_expiry, "/");
           ]]></add>
         </operation>
 
@@ -114,43 +73,14 @@
               unset($this->session->data['token']);
           ]]></search>
             <add><![CDATA[
+            $ck_name = "SEZ_ATKN";
+            if(isset($_COOKIE[$ck_name])) {
                 // Expire the cookie when logging out.
-                $ck_name = "SEZ_ATKN";
-                $ck_value = '';
-                $ck_expiry = time() - 3600;
+                $ck_value = false;
+                $ck_expiry = time() - 7200;
+                unset($_COOKIE[$ck_name]);
                 setcookie($ck_name, $ck_value, $ck_expiry, "/");
-          ]]></add>
-        </operation>
-
-    </file>
-
-
-    <file name="catalog/controller/seller/login.php">
-
-        <operation>
-            <search position="before"><![CDATA[
-              $this->load->language('seller/login');
-          ]]></search>
-            <add><![CDATA[
-                // Check for Cookie
-                $ck_name = "SEZ_ATKN";
-                if(isset($_COOKIE[$ck_name])) {
-                    // Redirect to Admin with TOKEN & Update cookie expiry
-                    $ck_value = $_COOKIE[$ck_name];
-                    $ck_expiry = time() + (86400);
-                    setcookie($ck_name, $ck_value, $ck_expiry, "/");
-
-                    if(isset($this->request->get['redirect']) && !empty($this->request->get['redirect'])) {
-                        $tmpStr = htmlspecialchars_decode(rawurldecode($this->request->get['redirect']));
-
-                        $dashboardURL = HTTPS_SERVER."admin/index.php?token=".$_COOKIE[$ck_name]."&route=".$tmpStr;
-                    } else {
-                        $dashboardURL = HTTPS_SERVER."admin/index.php?route=common/dashboard&token=".$_COOKIE[$ck_name];
-                    }
-
-                    header('Location: '.$dashboardURL);
-                    exit;
-                }
+            }
           ]]></add>
         </operation>
 
@@ -184,9 +114,29 @@
           ]]></add>
         </operation>
 
+        <operation>
+            <search position="before"><![CDATA[
+              $this->load->language('seller/login');
+          ]]></search>
+            <add><![CDATA[
+                // Check for Valid cookie
+                $ck_name = "SEZ_ATKN";
+                if(isset($_COOKIE[$ck_name]) && !empty($_COOKIE[$ck_name])) {
+                    // Redirect to Admin with TOKEN
+                    if(isset($this->request->get['redirect']) && !empty($this->request->get['redirect'])) {
+                        // Decode redirect params
+                        $tmpStr = htmlspecialchars_decode(rawurldecode($this->request->get['redirect']));
+                        $dashboardURL = HTTPS_SERVER."admin/index.php?token=".$_COOKIE[$ck_name]."&route=".$tmpStr;
+                    } else {
+                        $dashboardURL = HTTPS_SERVER."admin/index.php?route=common/dashboard&token=".$_COOKIE[$ck_name];
+                    }
+
+                    $this->response->redirect($dashboardURL);
+                }
+          ]]></add>
+        </operation>
+
     </file>
-
-
 
 </modification>
 
