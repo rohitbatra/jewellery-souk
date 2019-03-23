@@ -404,7 +404,7 @@ class ControllerSellerRegister extends Controller {
     }
 
     /**
-    * Required Fields - Email, Password, Confirm Password, username, address_1, country, city, postcode, telephone
+    * Required Fields - Email, Password, Confirm Password, username, country, city, postcode, telephone
     * Conditional Required Fields - company_name, firstname, lastname
     * email & username should be unique
     */
@@ -470,9 +470,11 @@ class ControllerSellerRegister extends Controller {
             }
         }
 
+        /*
         if ((utf8_strlen(trim($this->request->post['address_1'])) < 3) || (utf8_strlen(trim($this->request->post['address_1'])) > 128)) {
           $this->error['address_1'] = $this->language->get('error_address_1');
         }
+        */
 
         if ((utf8_strlen(trim($this->request->post['city'])) < 2) || (utf8_strlen(trim($this->request->post['city'])) > 128)) {
           $this->error['city'] = $this->language->get('error_city');
