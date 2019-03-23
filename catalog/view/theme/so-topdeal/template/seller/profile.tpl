@@ -76,6 +76,7 @@ else $getColumn='full';
                         <div class="model"><span><?php echo $text_category; ?></span> <?php echo ucfirst($category); ?></div>
                         <div class="model"><span><?php echo $text_city; ?></span> <?php echo ucfirst($city); ?></div>
                         <div class="model"><span><?php echo $text_country; ?></span> <?php echo $country; ?></div>
+                        <!--
                         <?php if($customer_logged) { ?>
                             <div class="model"><span><?php echo $text_contact_person; ?></span> <?php echo ucfirst($contact_person); ?></div>
                             <div class="model"><span><?php echo $text_telephone; ?></span> <?php echo $telephone; ?></div>
@@ -83,6 +84,7 @@ else $getColumn='full';
                         <?php } else { ?>
                             <div class="model"><span> *** <?php echo $text_hidden; ?> ***</span></div>
                         <?php } ?>
+                        -->
                     </div>
                 </div>
 
