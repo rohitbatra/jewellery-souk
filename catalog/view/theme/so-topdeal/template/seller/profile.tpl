@@ -58,14 +58,14 @@ else $getColumn='full';
             <div class="sidebar-overlay "></div>
             <div class="product-view product-info clearfix">
                 <div class="product-view-inner clearfix">
-                    <div class="content-product-left col-md-4 col-sm-12 col-xs-12">
+                    <div class="content-product-left col-md-4 col-sm-4 col-xs-4">
                         <div class="large-image">
-                            <img src="<?php echo $seller_img; ?>" title="<?php echo $heading_title; ?>" alt="<?php echo $heading_title; ?>"/>
+                            <img src="<?php echo $seller_img; ?>" title="<?php echo $heading_title; ?>" alt="<?php echo $heading_title; ?>" />
                         </div>
                     </div>
 
                 <?php //Product info Block -------?>
-                <div class="content-product-right col-md-8 col-sm-12 col-xs-12">
+                <div class="content-product-right col-md-8 col-sm-8 col-xs-8">
                 <div class="title-product">
                     <h1><?php echo $heading_title; ?></h1>
                 </div>
@@ -392,7 +392,7 @@ else $getColumn='full';
                     center: false,
                     nav: true,
                     dots: false,
-                    loop: false,
+                    loop: true,
                     margin: 30,
                     navText: ['<i class="fa fa-angle-left"></i>','<i class="fa fa-angle-right"></i>'],
                     slideBy: 1,
@@ -402,7 +402,28 @@ else $getColumn='full';
                     autoplayHoverPause: true,
                     autoplaySpeed: 800,
                     startPosition: 0,
-                    items: 4
+                    items: 4,
+                    responsive: {
+                        0:{
+                            items:1,
+                            nav:true,
+                            loop:true,
+                            autoplay:true
+                        },
+                        400:{
+                            items:2,
+                            nav:true,
+                            loop:true,
+                            autoplay:true
+                        },
+                        700:{
+                            items:4,
+                            nav:true,
+                            loop:false,
+                            autoplay:false
+                        }
+                    },
+                    responsiveClass: true
                 });
             });
             // ]]></script>

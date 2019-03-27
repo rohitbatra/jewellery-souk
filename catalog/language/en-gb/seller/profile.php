@@ -12,7 +12,7 @@ $_['text_country']          = 'Country:';
 $_['text_contact_person']   = 'Contact Person:';
 $_['text_telephone']        = 'Telephone:';
 $_['text_address']          = 'Address:';
-$_['text_products']         = 'Products';
+$_['text_products']         = 'Products & Services';
 $_['text_popular']          = 'Popular Products';
 $_['text_enquiry']          = 'Send Enquiry';
 $_['text_hidden']           = 'Please <a href="%s" target="_blank">Register</a> / <a href="%s" target="_blank">Login</a> to view the Contact Details of seller!';
