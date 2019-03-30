@@ -125,9 +125,9 @@
 				<?php if(isset($direction) && $direction =='rtl')  echo 'rtl: true,' ;?>
 				navText: ['<i class="fa fa-angle-left"></i>','<i class="fa fa-angle-right"> </i>'],
 				responsive:{
-					0:{items:1},
-					600:{items:1},
-					1000:{items:1}
+					0:{items:1,loop:true,autoplay:true},
+					600:{items:1,loop:true,autoplay:true},
+					1000:{items:1,loop:true,autoplay:true}
 				}
 			});
 		})
