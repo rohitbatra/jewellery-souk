@@ -165,13 +165,15 @@
         function dryValidateForm() {
 
             $("#post_lead_form :input").each(function() {
-                if($.trim($(this).val()) == "") {
-                    alert('Please fill all the fields');
-                    $(this).focus();
-                    $('#loader-form-div').slideUp();
-                    $('#post_lead_form').slideDown();
-                    $('btn_submit').removeAttr('disabled');
-                    throw new Error('Field missing');
+                if($(this).attr('type') !== 'file') {
+                    if ($.trim($(this).val()) == "") {
+                        alert('Please fill all the fields');
+                        $(this).focus();
+                        $('#loader-form-div').slideUp();
+                        $('#post_lead_form').slideDown();
+                        $('btn_submit').removeAttr('disabled');
+                        throw new Error('Field missing');
+                    }
                 }
             });
         }
