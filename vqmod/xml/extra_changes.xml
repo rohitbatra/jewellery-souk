@@ -670,7 +670,7 @@
           ]]></search>
           <add><![CDATA[
             <?php if ($seller_href && !empty($seller_href)) { ?>
-              <div class="brand"><span><?php echo $text_sold_by; ?></span><a href="<?php echo $seller_href; ?>" target="_blank"><?php echo ucfirst($seller_name); ?></a></div>
+              <div class="brand"><span><?php echo $text_sold_by; ?></span><a href="<?php echo $seller_href; ?>" target="_blank"><?php /* echo ucfirst($seller_name); */ echo 'View All'; ?></a></div>
             <?php } ?>
             <?php if ($seller_type && !empty($seller_type)) { ?>
               <div class="brand"><span><?php echo $text_seller_type; ?></span><?php echo $seller_type; ?></div>
@@ -678,10 +678,34 @@
             <?php if ($location): ?>
               <div class="brand"><span><?php echo $text_location; ?></span><?php echo $location; ?></div>
             <?php endif; ?>
-            <?php if (1==1): ?>
+            <?php if (strtolower($seller_type) !== 'service'): ?>
               <div class="brand"><span><?php echo $text_dimensions; ?></span><?php echo number_format($length,2); ?> x <?php echo number_format($width,2); ?> x <?php echo number_format($height,2); ?> <?php echo ($length_class); ?></div>
               <div class="brand"><span><?php echo $text_weight; ?></span><?php echo number_format($weight,2); ?> <?php echo ($weight_class); ?></div>
             <?php endif; ?>
+          ]]></add>
+        </operation>
+
+        <operation>
+          <search position="replace"><![CDATA[
+              <input type="button" data-toggle="tooltip" title="<?php echo $button_cart; ?>" value="<?php echo $button_cart; ?>" data-loading-text="<?php echo $text_loading; ?>" id="button-cart" class="btn btn-mega btn-lg" />
+          ]]></search>
+          <add><![CDATA[
+              <?php if(strtolower($seller_type) !== 'service'): ?>
+                <input type="button" data-toggle="tooltip" title="<?php echo $button_cart; ?>" value="<?php echo $button_cart; ?>" data-loading-text="<?php echo $text_loading; ?>" id="button-cart" class="btn btn-mega btn-lg" />
+              <?php endif; ?>
+          ]]></add>
+        </operation>
+
+        <operation>
+          <search position="replace"><![CDATA[
+              <div class="option quantity">
+          ]]></search>
+          <add><![CDATA[
+              <?php if(strtolower($seller_type) == 'service') { ?>
+                <div class="option quantity hidden">
+              <?php } else { ?>
+                <div class="option quantity">
+              <?php } ?>
           ]]></add>
         </operation>
 
@@ -713,7 +737,7 @@
           ]]></search>
           <add><![CDATA[
               $_['text_location']               = 'Location:';
-              $_['text_sold_by']                = 'Sold By:';
+              $_['text_sold_by']                = 'Seller Store:';
               $_['text_seller_type']            = 'Seller Type:';
               $_['text_dimensions']             = 'Dimensions (L x W x H):';
               $_['text_weight']                 = 'Weight:';
