@@ -3,15 +3,12 @@ class ModelSellerSeller extends Model {
     public function addSeller($data) {
 
         // Check for seller_type
-        if(isset($data['seller_type']))
-        {
-            if($data['seller_type'] == 'company')
-            {
+        if(isset($data['seller_type'])) {
+            if($data['seller_type'] == 'company') {
                 $firstname = $data['company_p_firstname'];
                 $lastname = $data['company_p_lastname'];
 
-            }else if($data['seller_type'] == 'individual')
-            {
+            } else if($data['seller_type'] == 'individual') {
                 $firstname = $data['firstname'];
                 $lastname = $data['lastname'];
 
@@ -24,30 +21,31 @@ class ModelSellerSeller extends Model {
         // Check for Category to determine which user_group to choose
         $associativeUG = array('manufacturer' => array('jewellery_manufacturer'), 'wholeseller' => array('jewellery_wholeseller'), 'retailer' => array('jewellery_retailer'), 'service' => array('jewellery_institute','cam_processing'), 'others' => array('others'), 'freelance' => array('freelancer'), 'used_item_seller' => array('used_machinery_seller'), 'diamond_seller' => array('diamond_seller'), 'gemstone_seller' => array('gemstone_seller'),'tools_&_machinery' => array('tools_&_machinery'));
 
-        foreach($associativeUG as $user_group => $possibleCategories)
-        {
-          if(in_array($data['category'], $possibleCategories))
-          {
+        foreach($associativeUG as $user_group => $possibleCategories) {
+          if(in_array($data['category'], $possibleCategories)) {
             $data['user_group'] = str_replace('_', ' ', $user_group);
           }
         }
 
         $query_ug = $this->db->query("SELECT ug.user_group_id FROM " . DB_PREFIX . "user_group AS ug WHERE LOWER(ug.name) LIKE '{$data['user_group']}' ");
-        if($this->db->countAffected() > 0)
-        {
+        if($this->db->countAffected() > 0) {
           $data['user_group_id'] = $query_ug->row['user_group_id'];
         }
 
-        $this->db->query("INSERT INTO " . DB_PREFIX . "user SET username = '" . $this->db->escape($data['username']) . "', user_group_id = '". (int)$data['user_group_id'] ."', firstname = '" . $this->db->escape($firstname) . "', lastname = '" . $this->db->escape($lastname) . "', email = '" . $this->db->escape($data['email']) . "', salt = '" . $this->db->escape($salt = token(9)) . "', password = '" . $this->db->escape(sha1($salt . sha1($salt . sha1($data['password'])))) . "',  ip = '" . $this->db->escape($this->request->server['REMOTE_ADDR']) . "', status = '0',  date_added = NOW()");
+        if(empty($data['image'])) {
+            $imageUrl = "https://www.gravatar.com/avatar/".md5(strtolower(trim($data['email'])))."?s=348&d=robohash";
+        } else {
+            $imageUrl = HTTPS_SERVER . $data['image'];
+        }
+
+        $this->db->query("INSERT INTO " . DB_PREFIX . "user SET username = '" . $this->db->escape($data['username']) . "', user_group_id = '". (int)$data['user_group_id'] ."', firstname = '" . $this->db->escape($firstname) . "', lastname = '" . $this->db->escape($lastname) . "', email = '" . $this->db->escape($data['email']) . "', salt = '" . $this->db->escape($salt = token(9)) . "', password = '" . $this->db->escape(sha1($salt . sha1($salt . sha1($data['password'])))) . "',  ip = '" . $this->db->escape($this->request->server['REMOTE_ADDR']) . "', `image` = '".$this->db->escape($imageUrl)."', status = '0',  date_added = NOW()");
 
         $seller_id = $this->db->getLastId();
 
-        $ignore = ['username', 'firstname', 'lastname', 'email', 'password','confirm','agree'];
+        $ignore = ['username', 'firstname', 'lastname', 'email', 'password', 'confirm', 'agree'];
         // Add the Additional Info to Seller Info Table
-        foreach($data as $dt => $dv)
-        {
-            if(!in_array($dt, $ignore))
-            {
+        foreach($data as $dt => $dv) {
+            if(!in_array($dt, $ignore)) {
               $this->db->query("INSERT INTO " . DB_PREFIX . "seller_info SET user_id = '{$seller_id}', `key` = '". $this->db->escape($dt) ."' , `value` = '". $this->db->escape($dv) ."' ;");
             }
         }
@@ -61,7 +59,7 @@ class ModelSellerSeller extends Model {
         return $seller_id;
     }
 
-    protected function makeImageFolder($seller_id){
+    protected function makeImageFolder($seller_id) {
       $directory = DIR_IMAGE .'/catalog/seller';
       $folder = "sez_{$seller_id}";
       mkdir($directory . '/' . $folder, 0777);
@@ -71,7 +69,7 @@ class ModelSellerSeller extends Model {
 
     }
 
-    protected function sendWelcomeEmailToSeller($seller_id){
+    protected function sendWelcomeEmailToSeller($seller_id) {
 
       $seller_data = $this->getSellerById($seller_id);
 
@@ -134,11 +132,8 @@ class ModelSellerSeller extends Model {
 
     }
 
-    public function getSellerById($uID)
-    {
-      $retArr = array();
-
-      $sql = "SELECT u.username, u.firstname, u.lastname, u.email, ug.user_group_id, ug.name as user_group_name, ug.permission FROM " . DB_PREFIX . "user AS u LEFT OUTER JOIN user_group ug ON (ug.user_group_id = u.user_group_id) WHERE u.user_id = '{$uID}' ";
+    public function getSellerById($uID) {
+      $sql = "SELECT u.username, u.firstname, u.lastname, u.email, ug.user_group_id, ug.name as user_group_name, ug.permission, u.image FROM " . DB_PREFIX . "user AS u LEFT OUTER JOIN user_group ug ON (ug.user_group_id = u.user_group_id) WHERE u.user_id = '{$uID}' ";
       $query = $this->db->query($sql);
 
       $retArr = $query->row;
@@ -153,19 +148,16 @@ class ModelSellerSeller extends Model {
       return $retArr;
     }
 
-    public function approveSeller($seller_id)
-    {
+    public function approveSeller($seller_id) {
         $this->db->query("UPDATE " . DB_PREFIX . "user SET status = '1'  WHERE user_id = '{$seller_id}' ");
     }
 
-    public function getSellerEmail($user_id)
-    {
+    public function getSellerEmail($user_id) {
         $q = $this->db->query("SELECT email FROM " . DB_PREFIX . "user WHERE user_id = '{$user_id}'");
         return $q->row['email'];
     }
 
-    public function getSellerName($user_id,$full_name=false)
-    {
+    public function getSellerName($user_id,$full_name=false) {
         $str = "firstname";
         if($full_name)
         {
@@ -175,8 +167,7 @@ class ModelSellerSeller extends Model {
         return $q->row['name'];
     }
 
-    public function emailPaymentReceipt($postData)
-    {
+    public function emailPaymentReceipt($postData) {
         $seller_data = $this->getSellerById($postData['seller_id']);
 
         $data['order_status'] = $data['payment_status'] = strtolower($postData['order_status']);
@@ -199,8 +190,7 @@ class ModelSellerSeller extends Model {
         $mail->setFrom($this->config->get('config_email'));
         $mail->setSender(html_entity_decode($data['web_name'], ENT_QUOTES, 'UTF-8'));
 
-        if(strtolower($data['order_status']) == "success")
-        {
+        if(strtolower($data['order_status']) == "success") {
             // Payment Recieved
             $data['subject'] = "Seller Payment Success | {$data['web_name']}";
             $data['receipt_id'] = $postData['payment_id'];
@@ -225,41 +215,35 @@ class ModelSellerSeller extends Model {
         $mail->send();
     }
 
-    public function getUserByUsername($username)
-    {
+    public function getUserByUsername($username) {
       $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "user WHERE LOWER(username) = '" . $this->db->escape(utf8_strtolower($username)) . "'");
 
       return $query->row;
     }
 
-    public function checkForEmail($email)
-    {
+    public function checkForEmail($email) {
         $query = $this->db->query("SELECT user_id FROM " . DB_PREFIX . "user WHERE email LIKE '" . $this->db->escape($email) . "'");
 
         return $query->rows;
     }
 
-    public function checkForUsername($username)
-    {
+    public function checkForUsername($username) {
         $query = $this->db->query("SELECT user_id FROM " . DB_PREFIX . "user WHERE LOWER(username) LIKE '" . $this->db->escape(utf8_strtolower($username)) . "'");
 
         return $query->rows;
     }
 
-    public function getSubscriptionFeesByUserGroup($userGroupId)
-    {
+    public function getSubscriptionFeesByUserGroup($userGroupId) {
       $query = $this->db->query("SELECT subscription_fees FROM " . DB_PREFIX . "user_group WHERE user_group_id = '" . (int)$userGroupId . "'");
 
       return $query->row['subscription_fees'];
     }
 
-    public function getAllSellerPricingForUI()
-    {
+    public function getAllSellerPricingForUI() {
       $retArr = array();
       $query = $this->db->query("SELECT name, subscription_fees AS fees FROM " . DB_PREFIX . "user_group WHERE LOWER(name) NOT LIKE 'administrator' AND LOWER(name) NOT LIKE 'moderator' ");
 
-      foreach($query->rows as $row)
-      {
+      foreach($query->rows as $row) {
         $retArr[] = $row;
       }
 
@@ -365,7 +349,11 @@ class ModelSellerSeller extends Model {
             $retArr['address'] = $data['address_1'] ." ".$data['address_2'];
         }
 
-        $retArr['img'] = "https://www.gravatar.com/avatar/".md5(strtolower(trim($retArr['email'])))."?s=348&d=robohash";
+        if(empty($data['image'])) {
+            $retArr['img'] = "https://www.gravatar.com/avatar/".md5(strtolower(trim($retArr['email'])))."?s=348&d=robohash";
+        } else {
+            $retArr['img'] = $data['image'];
+        }
 
         return $retArr;
     }

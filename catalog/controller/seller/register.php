@@ -14,16 +14,21 @@ class ControllerSellerRegister extends Controller {
 
         $this->load->model('seller/seller');
 
-        if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate())
-        {
-            $seller_id = $this->model_seller_seller->addSeller($this->request->post);
+        if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 
-            if(is_numeric($seller_id))
-            {
+            $imageUrl = $this->saveImage();
+
+            if($imageUrl === false) {
+                $imageUrl = "";
+            }
+            $dataArr = array_merge($this->request->post,array('image' => $imageUrl));
+
+            $seller_id = $this->model_seller_seller->addSeller($dataArr);
+            if(is_numeric($seller_id)) {
                 // Redirect to Payment Processing Page -- DUMMY PAGE
                 $this->response->redirect($this->url->link('seller/payment_process', '&uID='. base64_encode($seller_id), true));
-            }else {
-                $this->session->data['error'] = "There's a problem with your Registration, please email us at <a href='mailto:seller.support@sezplus.com'>seller.support@sezplus.com</a>'";
+            } else {
+                $this->session->data['warning'] = "There's a problem with your Registration, please email us at <a href='mailto:seller.support@sezplus.com'>seller.support@sezplus.com</a>'";
             }
        }
 
@@ -408,11 +413,9 @@ class ControllerSellerRegister extends Controller {
     * Conditional Required Fields - company_name, firstname, lastname
     * email & username should be unique
     */
-    private function validate()
-    {
+    private function validate() {
         // Check for Exist
-        if($this->emailExists($this->request->post['email']))
-        {
+        if($this->emailExists($this->request->post['email'])) {
             $this->error['email'] = $this->language->get('error_exists');
         }
 
@@ -420,8 +423,7 @@ class ControllerSellerRegister extends Controller {
             $this->error['email'] = $this->language->get('error_email');
         }
 
-        if($this->usernameExists($this->request->post['username']))
-        {
+        if($this->usernameExists($this->request->post['username'])) {
             $this->error['username'] = $this->language->get('error_username_exists');
         }
 
@@ -442,8 +444,7 @@ class ControllerSellerRegister extends Controller {
             $this->error['telephone'] = $this->language->get('error_telephone');
         }
 
-        if($this->request->post['seller_type'] == 'individual')
-        {
+        if($this->request->post['seller_type'] == 'individual') {
             // Individual Fields Validation
             if ((utf8_strlen(trim($this->request->post['firstname'])) < 1) || (utf8_strlen(trim($this->request->post['firstname'])) > 32)) {
                 $this->error['firstname'] = $this->language->get('error_firstname');
@@ -454,8 +455,7 @@ class ControllerSellerRegister extends Controller {
             }
         }
 
-        if($this->request->post['seller_type'] == 'company')
-        {
+        if($this->request->post['seller_type'] == 'company') {
             // Company Fields Validation
             if ((utf8_strlen(trim($this->request->post['company_name'])) < 1) ) {
                 $this->error['company_name'] = $this->language->get('error_company_name');
@@ -512,8 +512,7 @@ class ControllerSellerRegister extends Controller {
         return !$this->error;
     }
 
-    protected function emailExists($email)
-    {
+    protected function emailExists($email) {
         $emailArr = array();
         $this->load->model('seller/seller');
         $emailArr =  $this->model_seller_seller->checkForEmail($email);
@@ -526,8 +525,7 @@ class ControllerSellerRegister extends Controller {
         }
     }
 
-    protected function usernameExists($username)
-    {
+    protected function usernameExists($username) {
         $usernameArr = array();
         $this->load->model('seller/seller');
         $usernameArr =  $this->model_seller_seller->checkForUsername($username);
@@ -538,6 +536,68 @@ class ControllerSellerRegister extends Controller {
         }else {
             return false;
         }
+    }
+
+    protected function saveImage() {
+
+        $json = array();
+
+        $uDir = 'profile';
+
+        // Make sure we have the correct directory
+        $directory = DIR_IMAGE . $uDir;
+
+        // Check its a directory
+        if (!is_dir($directory) || substr(str_replace('\\', '/', realpath($directory)), 0, strlen(DIR_IMAGE . $uDir)) != DIR_IMAGE . $uDir) {
+            mkdir($directory);
+        }
+
+        $file = $this->request->files['profile-image'];
+
+        if (is_file($file['tmp_name'])) {
+            // Sanitize the filename
+            $filename = mt_rand(1,1000).'_'.basename(html_entity_decode($file['name'], ENT_QUOTES, 'UTF-8'));
+
+            // Allowed file extension types
+            $allowed = array(
+                'jpg',
+                'jpeg',
+                'gif',
+                'png'
+            );
+
+            if (!in_array(utf8_strtolower(utf8_substr(strrchr($filename, '.'), 1)), $allowed)) {
+                $json['error'] = $this->language->get('error_filetype');
+            }
+
+            // Allowed file mime types
+            $allowed = array(
+                'image/jpeg',
+                'image/pjpeg',
+                'image/png',
+                'image/x-png',
+                'image/gif'
+            );
+
+            if (!in_array($file['type'], $allowed)) {
+                $json['error'] = $this->language->get('error_filetype');
+            }
+
+            // Return any upload error
+            if ($file['error'] != UPLOAD_ERR_OK) {
+                $json['error'] = $this->language->get('error_upload_' . $file['error']);
+            }
+        } else {
+            $json['error'] = $this->language->get('error_upload');
+        }
+
+        if (!$json) {
+            move_uploaded_file($file['tmp_name'], $directory . '/' . $filename);
+            return $directory . '/' . $filename;
+        } else {
+            return false;
+        }
+
     }
 
 

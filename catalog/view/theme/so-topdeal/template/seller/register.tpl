@@ -36,7 +36,7 @@
       <div class="well">
               <h1><?php echo $heading_title; ?></h1>
               <p><?php echo $text_account_already; ?></p>
-              <form action="<?php echo $action; ?>" method="post" class="form-horizontal" id="seller_register_form" name="seller_register_form">
+              <form action="<?php echo $action; ?>" method="post" class="form-horizontal" id="seller_register_form" name="seller_register_form" enctype="multipart/form-data">
                   <fieldset id="account">
                       <legend><?php echo $text_your_details; ?></legend>
                       <div class="form-group required">
@@ -104,6 +104,14 @@
                               <?php if ($error_category) { ?>
                               <div class="text-danger"><?php echo $error_category; ?></div>
                               <?php } ?>
+                          </div>
+                      </div>
+
+                      <div class="form-group">
+                          <label class="col-sm-2 control-label" for="input-image"><?php echo 'Profile Image'; ?></label>
+                          <div class="col-sm-10">
+                              <input type="file" class="custom-file-input" id="image" name="profile-image" accept="image/*">
+                              <p class="help-block"><?php echo 'Please upload an image for your Seller Profile'; ?></p>
                           </div>
                       </div>
 
@@ -363,8 +371,7 @@
           $('#seller_register_form').submit();
         });
 
-        function dryValidateForm()
-        {
+        function dryValidateForm() {
 
           // Check for Seller EMail
           if($('#input-email').val() == "") {
