@@ -13,16 +13,19 @@ class ControllerSellerRegister extends Controller {
         $this->document->addStyle('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.css');
 
         $this->load->model('seller/seller');
+        //var_dump($this->request->server['REQUEST_METHOD']);
+        //var_dump($this->validate());
+        //die();
 
         if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-
             $imageUrl = $this->saveImage();
 
             if($imageUrl === false) {
                 $imageUrl = "";
             }
-            $dataArr = array_merge($this->request->post,array('image' => $imageUrl));
 
+            $dataArr = array_merge($this->request->post,array('image' => $imageUrl));
+            //var_dump($dataArr);die();
             $seller_id = $this->model_seller_seller->addSeller($dataArr);
             if(is_numeric($seller_id)) {
                 // Redirect to Payment Processing Page -- DUMMY PAGE
@@ -427,9 +430,11 @@ class ControllerSellerRegister extends Controller {
             $this->error['username'] = $this->language->get('error_username_exists');
         }
 
+        /*
         if ((utf8_strlen($this->request->post['username']) < 3) || (utf8_strlen($this->request->post['username']) > 25)) {
             $this->error['username'] = $this->language->get('error_username');
         }
+        */
 
         // Mandatory Conditions
         if ((utf8_strlen($this->request->post['password']) < 4) || (utf8_strlen($this->request->post['password']) > 20)) {
@@ -508,7 +513,7 @@ class ControllerSellerRegister extends Controller {
                 $this->error['warning'] = sprintf($this->language->get('error_agree'), $information_info['title']);
             }
         }
-
+        //var_dump($this->error);
         return !$this->error;
     }
 
@@ -593,7 +598,7 @@ class ControllerSellerRegister extends Controller {
 
         if (!$json) {
             move_uploaded_file($file['tmp_name'], $directory . '/' . $filename);
-            return $directory . '/' . $filename;
+            return 'image/' . $uDir . '/' . $filename;
         } else {
             return false;
         }
